@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>4369C35D-A2C0-4DC7-A7A9-B5E416DF1136</string>
+	<key>IDESourceControlProjectName</key>
+	<string>iNoco</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>0448AB26-4F72-4E49-8AD3-E06A0203BBA1</key>
+		<string>https://github.com/gizmhail/iNoco.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>iNoco/iNoco.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>0448AB26-4F72-4E49-8AD3-E06A0203BBA1</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/gizmhail/iNoco.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>0448AB26-4F72-4E49-8AD3-E06A0203BBA1</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>0448AB26-4F72-4E49-8AD3-E06A0203BBA1</string>
+			<key>IDESourceControlWCCName</key>
+			<string>iNoco</string>
+		</dict>
+	</array>
+</dict>
+</plist>
