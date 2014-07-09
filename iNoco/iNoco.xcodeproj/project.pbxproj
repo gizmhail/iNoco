@@ -94,7 +94,6 @@
 		4FEECD6E1949D683002514CE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEECD6D1949D683002514CE /* AppDelegate.m */; };
 		4FEECD711949D683002514CE /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FEECD6F1949D683002514CE /* Main_iPhone.storyboard */; };
 		4FEECD741949D683002514CE /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FEECD721949D683002514CE /* Main_iPad.storyboard */; };
-		4FEECD771949D683002514CE /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEECD761949D683002514CE /* FirstViewController.m */; };
 		4FEECD7C1949D683002514CE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FEECD7B1949D683002514CE /* Images.xcassets */; };
 		4FEECD831949D683002514CE /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FEECD821949D683002514CE /* XCTest.framework */; };
 		4FEECD841949D683002514CE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FEECD5D1949D683002514CE /* Foundation.framework */; };
@@ -208,7 +207,6 @@
 		4F636A7619577726004C0A18 /* UIImageView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+WebCache.m"; sourceTree = "<group>"; };
 		4F636A861957859B004C0A18 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		4F636A881957878E004C0A18 /* noco.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noco.png; sourceTree = "<group>"; };
-		4F636A8A1958B57E004C0A18 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		4F636A931958BB83004C0A18 /* Octicons-calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-calendar.png"; sourceTree = "<group>"; };
 		4F636A941958BB83004C0A18 /* Octicons-calendar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-calendar@2x.png"; sourceTree = "<group>"; };
 		4F636A971958BBD6004C0A18 /* Octicons-info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-info.png"; sourceTree = "<group>"; };
@@ -241,8 +239,6 @@
 		4FEECD6D1949D683002514CE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		4FEECD701949D683002514CE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		4FEECD731949D683002514CE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
-		4FEECD751949D683002514CE /* FirstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
-		4FEECD761949D683002514CE /* FirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
 		4FEECD7B1949D683002514CE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4FEECD811949D683002514CE /* iNocoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iNocoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FEECD821949D683002514CE /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -515,11 +511,8 @@
 				4FEECD6D1949D683002514CE /* AppDelegate.m */,
 				4FEECD6F1949D683002514CE /* Main_iPhone.storyboard */,
 				4FEECD721949D683002514CE /* Main_iPad.storyboard */,
-				4FEECD751949D683002514CE /* FirstViewController.h */,
-				4FEECD761949D683002514CE /* FirstViewController.m */,
 				4FEECD7B1949D683002514CE /* Images.xcassets */,
 				4FEECD641949D683002514CE /* Supporting Files */,
-				4F636A8A1958B57E004C0A18 /* README.md */,
 				4F2175CB196D3D890005EB14 /* oss.html */,
 			);
 			path = TestNoco;
@@ -717,7 +710,6 @@
 				4F1254B91951E60C003FEEA5 /* NLTOAuthController.m in Sources */,
 				4F636A8519577726004C0A18 /* UIImageView+WebCache.m in Sources */,
 				4F636A7A19577726004C0A18 /* SDWebImageCompat.m in Sources */,
-				4FEECD771949D683002514CE /* FirstViewController.m in Sources */,
 				4F636A7B19577726004C0A18 /* SDWebImageDecoder.m in Sources */,
 				4F636AAB1958CD6E004C0A18 /* ShowViewController.m in Sources */,
 				4F636A8219577726004C0A18 /* UIImage+MultiFormat.m in Sources */,
