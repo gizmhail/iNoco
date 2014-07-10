@@ -227,6 +227,7 @@
 		4FA802FA1962017900E820B9 /* WatchListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WatchListViewController.h; sourceTree = "<group>"; };
 		4FA802FB1962017900E820B9 /* WatchListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WatchListViewController.m; sourceTree = "<group>"; };
 		4FA802FD19621E7000E820B9 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		4FBD2B50196E72A40012A2E6 /* credentials.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = credentials.h; sourceTree = "<group>"; };
 		4FEECD5A1949D683002514CE /* iNoco.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iNoco.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FEECD5D1949D683002514CE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4FEECD5F1949D683002514CE /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -525,6 +526,7 @@
 				4FEECD661949D683002514CE /* InfoPlist.strings */,
 				4FEECD691949D683002514CE /* main.m */,
 				4FEECD6B1949D683002514CE /* iNoco-Prefix.pch */,
+				4FBD2B50196E72A40012A2E6 /* credentials.h */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
