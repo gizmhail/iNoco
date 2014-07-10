@@ -1,0 +1,34 @@
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_5_0
+#warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+#endif
+
+// credentials.h should contains your API token info, like the sample below
+// #define nolibtv_client_id @"xxxxxxxx"
+// #define nolibtv_client_secret @"xxxxxxxxxxxxxxxxxxx"
+// #define nolibtv_redirect_uri @"http://xxxxxxxxxx"
+#include "credentials.h"
+
+#define ALL_SUBSCRIPTED_CATALOG @"ALLSUBSCRIPTED_CATALOG"
+#define ALL_NOCO_CATALOG @"ALL_NOCO_CATALOG"
+#define DEFAULT_CATALOG ALL_NOCO_CATALOG
+
+//#define THEME_COLOR [UIColor colorWithRed:0.275126 green:0.604248 blue:0.91546 alpha:1]
+#define THEME_COLOR [UIColor colorWithRed:0x0/255.0 green:0x88/255.0 blue:0xCC/255.0f alpha:1]
+#define SELECTED_VALID_COLOR [UIColor colorWithRed:0x9E/255.0 green:0xC7/255.0 blue:0x0F/255.0f alpha:1]
+
+#ifdef DEBUG
+#define DEBUG_NLT_CALL 1
+#endif
