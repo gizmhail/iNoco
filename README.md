@@ -7,7 +7,9 @@ noco.tv (fr) presentation here:
 http://noco.tv/decouvrir-noco
 
 #Licence
-MIT Licence
+The code is licenced under the MIT Licence.
+
+Please see below for assets which are provided by third parties.
 
 #Third-party components
 
@@ -23,6 +25,9 @@ MIT license
 
 ##Images
 
+If unspecified, all other assets are the property of Noco and used in iNoco with their agreement.
+You have to contact Noco (noco.tv) before reusing them, and before any new release using these assets.
+
 ###Wikimedia commons
 Octicons Set : 
 - http://commons.wikimedia.org/wiki/Category:Octicons?uselang=fr
@@ -32,7 +37,7 @@ Heart icons :
 - http://commons.wikimedia.org/wiki/File:Human-emblem-favorite-black-blue-128.png
 - http://commons.wikimedia.org/wiki/File:Human-emblem-favorite-black-128.png
 
-###NolifeTV
+###Nolife
 Noco logo : 
 - https://api.noco.tv/cdata/images/noco-splash.png
 
