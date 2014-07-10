@@ -1,4 +1,7 @@
-iOS App for Noco.tv
+#iOS App for Noco.tv
+
+#Licence
+MIT Licence
 
 #Third-party components
 
