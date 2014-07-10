@@ -1,5 +1,11 @@
 #iOS App for Noco.tv
 
+iNoco presentation here:
+https://docs.google.com/presentation/d/1tw7RrW9s3RpRn5lBYydaU907UnloidSDrs8LVzwdBCQ/edit?usp=sharing
+
+noco.tv presentation here:
+http://noco.tv/decouvrir-noco
+
 #Licence
 MIT Licence
 
