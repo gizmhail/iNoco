@@ -426,13 +426,11 @@
     }
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ShowsCell" forIndexPath:indexPath];
+- (void)loadShowCell:(UICollectionViewCell*)cell withShow:(NLTShow*)show{
     cell.layer.borderColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.4].CGColor;
     [cell.layer setCornerRadius:5.0f];
     cell.layer.borderWidth= 1;
     
-    NLTShow* show = [self showAtIndex:indexPath.row];
     UIImageView* imageView = (UIImageView*)[cell viewWithTag:100];
     UILabel* title = (UILabel*)[cell viewWithTag:110];
     UILabel* subtitle = (UILabel*)[cell viewWithTag:120];
@@ -456,8 +454,8 @@
     [readBackground.layer setCornerRadius:5.0f];
     [watchListButton.layer setCornerRadius:2.0f];
     [readButton.layer setCornerRadius:2.0f];
-
-
+    
+    
     title.text = @"Chargement ...";
     subtitle.text = @"";
     time.text = @"";
@@ -465,20 +463,20 @@
     imageView.backgroundColor = [UIColor whiteColor];
     
     /*
-    BOOL gradientPresent = FALSE;
-    for (CALayer* layer in [cell.layer sublayers]) {
-        if([layer isKindOfClass:[CAGradientLayer class]]){
-            gradientPresent = TRUE;
-        }
-    }
-    if(!gradientPresent){
-        CAGradientLayer *gradient = [CAGradientLayer layer];
-        gradient.frame = cell.bounds;
-        UIColor *firstColor = [UIColor whiteColor];
-        UIColor *secondColor = THEME_COLOR ;
-        gradient.colors = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
-        [cell.layer insertSublayer:gradient atIndex:0];
-    }
+     BOOL gradientPresent = FALSE;
+     for (CALayer* layer in [cell.layer sublayers]) {
+     if([layer isKindOfClass:[CAGradientLayer class]]){
+     gradientPresent = TRUE;
+     }
+     }
+     if(!gradientPresent){
+     CAGradientLayer *gradient = [CAGradientLayer layer];
+     gradient.frame = cell.bounds;
+     UIColor *firstColor = [UIColor whiteColor];
+     UIColor *secondColor = THEME_COLOR ;
+     gradient.colors = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
+     [cell.layer insertSublayer:gradient atIndex:0];
+     }
      */
     
     if(show){
@@ -526,6 +524,11 @@
             [imageView sd_setImageWithURL:[NSURL URLWithString:show.screenshot_512x288] placeholderImage:[UIImage imageNamed:@"noco.png"]];
         }
     }
+}
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+    NLTShow* show = [self showAtIndex:indexPath.row];
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ShowsCell" forIndexPath:indexPath];
+    [self loadShowCell:cell withShow:show];
     return cell;
 }
 

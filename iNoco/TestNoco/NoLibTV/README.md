@@ -1,7 +1,7 @@
 NoLibTV
 =======
 
-NolifeTV API iOS library
+Nolife API iOS library
 
 This library allows to use http://noco.tv API (https://api.noco.tv/1.1/documentation/) easily, by handling the OAuth2 authentification
 #Usage

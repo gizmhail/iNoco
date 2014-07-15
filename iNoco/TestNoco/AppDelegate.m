@@ -10,6 +10,7 @@
 #import "NLTOAuth.h"
 #import "NLTAPI.h"
 #import <AVFoundation/AVFoundation.h>
+#import "NocoDownloadsManager.h"
 
 void uncaughtExceptionHandler(NSException *exception) {
     NSLog(@"CRASH: %@", exception);
@@ -111,5 +112,16 @@ void uncaughtExceptionHandler(NSException *exception) {
     }
 }
 
+#pragma mark NSURLSession
+
+- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler{
+    NSURLSessionConfiguration *backgroundConfigObject = [NSURLSessionConfiguration backgroundSessionConfiguration: identifier];
+    
+    [NSURLSession sessionWithConfiguration: backgroundConfigObject delegate: [NocoDownloadsManager sharedInstance] delegateQueue: [NSOperationQueue mainQueue]];
+    
+    NSLog(@"Rejoining NSURLSession %@\n", identifier);
+    
+    [[NocoDownloadsManager sharedInstance] addCompletionHandler: completionHandler forSession: identifier];
+}
 
 @end

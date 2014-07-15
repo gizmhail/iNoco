@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 
-@interface ShowViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UIActionSheetDelegate,RemoteControlEventHandlerProtocol>
+@interface ShowViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UIActionSheetDelegate,RemoteControlEventHandlerProtocol,UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *famillyLabel;
 @property (weak, nonatomic) IBOutlet UILabel *episodeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
@@ -33,6 +33,8 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *chapterActivity;
 @property (weak, nonatomic) IBOutlet UIView *infoBackground;
+@property (weak, nonatomic) IBOutlet UILabel *downloadedVersionLabel;
+@property (weak, nonatomic) IBOutlet UIView *downloadedVersionBackground;
 
 - (IBAction)play:(id)sender;
 - (IBAction)favoriteFamillyClick:(id)sender;

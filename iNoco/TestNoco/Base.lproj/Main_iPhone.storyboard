@@ -511,6 +511,25 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </view>
+                                            <view tag="200" contentMode="scaleToFill" id="BRG-CZ-p6n">
+                                                <rect key="frame" x="159" y="110" width="128" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <view alpha="0.64999997615814209" tag="205" contentMode="scaleToFill" id="OCC-2B-g2T">
+                                                        <rect key="frame" x="0.0" y="0.0" width="123" height="21"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </view>
+                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="version téléchargée" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="M0G-Pw-kNg">
+                                                        <rect key="frame" x="4" y="0.0" width="119" height="21"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </view>
                                             <view contentMode="scaleToFill" id="X2p-9G-K96">
                                                 <rect key="frame" x="4" y="156" width="148" height="18"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -602,15 +621,15 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                         <rect key="frame" x="2" y="359" width="316" height="159"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="5" minimumInteritemSpacing="3" id="Rmh-Zq-zub">
+                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="30" minimumInteritemSpacing="3" id="Rmh-Zq-zub">
                                             <size key="itemSize" width="156" height="159"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <inset key="sectionInset" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
                                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ShowsCell" id="7Kk-yP-U0V">
-                                                <rect key="frame" x="0.0" y="0.0" width="156" height="159"/>
+                                                <rect key="frame" x="10" y="0.0" width="156" height="159"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                     <rect key="frame" x="0.0" y="0.0" width="156" height="159"/>
@@ -749,6 +768,8 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                         <outlet property="chapterLabel" destination="xdM-Ud-g9e" id="Azc-ke-bev"/>
                         <outlet property="collectionView" destination="bFa-3M-ivt" id="bU1-ue-HMf"/>
                         <outlet property="descriptionText" destination="kKg-ud-Kzo" id="lSQ-02-9Yg"/>
+                        <outlet property="downloadedVersionBackground" destination="OCC-2B-g2T" id="f4X-YH-0FI"/>
+                        <outlet property="downloadedVersionLabel" destination="M0G-Pw-kNg" id="SJf-ud-kTh"/>
                         <outlet property="durationBackground" destination="GLH-V0-GMM" id="iQa-2c-M64"/>
                         <outlet property="durationLabel" destination="eUF-Pq-aXe" id="y90-I4-XQq"/>
                         <outlet property="famillyLabel" destination="5oy-F9-grQ" id="ORR-xw-Dh6"/>
@@ -833,7 +854,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                 <nil key="highlightedColor"/>
                             </label>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="u8E-hp-gpu">
-                                <rect key="frame" x="14" y="283" width="300" height="29"/>
+                                <rect key="frame" x="14" y="296" width="300" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <segments>
                                     <segment title="Nolife"/>
@@ -866,6 +887,13 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                     <action selector="thirdPartyClick:" destination="5XC-dH-r0F" eventType="touchUpInside" id="hTu-eJ-VFq"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choisissez les catalogues Noco à afficher :" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="GSZ-Zu-fvI">
+                                <rect key="frame" x="15" y="272" width="298" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -953,7 +981,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
             </objects>
             <point key="canvasLocation" x="-113" y="2026"/>
         </scene>
-        <!--NolifeEPG View Controller Table View Controller - Programmes NolifeTV-->
+        <!--NolifeEPG View Controller Table View Controller - Programmes Nolife-->
         <scene sceneID="YGv-qC-1xa">
             <objects>
                 <tableViewController id="byt-Az-g9A" customClass="NolifeEPGViewControllerTableViewController" sceneMemberID="viewController">
@@ -1015,7 +1043,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                             <outlet property="delegate" destination="byt-Az-g9A" id="Naf-PC-IcR"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Programmes NolifeTV" id="YaD-8x-RKY"/>
+                    <navigationItem key="navigationItem" title="Programmes Nolife" id="YaD-8x-RKY"/>
                     <connections>
                         <segue destination="E8O-zX-w2W" kind="push" identifier="DisplayRecentShow" id="sfA-Fu-WAQ"/>
                         <segue destination="RK0-ZH-Mg8" kind="push" identifier="WebViewDetails" id="hys-TJ-elC"/>
@@ -1295,7 +1323,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="Zd2-bH-dfy"/>
         <segue reference="SK6-5m-Pcy"/>
-        <segue reference="NRb-n4-HGn"/>
     </inferredMetricsTieBreakers>
 </document>

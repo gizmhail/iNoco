@@ -29,4 +29,5 @@
 - (void)loadResultAtIndex:(int)resultIndex;
 - (void)resetResult;
 - (void)removeResultAtIndex:(long)index;
+- (void)loadShowCell:(UICollectionViewCell*)cell withShow:(NLTShow*)show;
 @end

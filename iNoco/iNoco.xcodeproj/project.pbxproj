@@ -86,6 +86,10 @@
 		4F636AB6195EA39E004C0A18 /* mark-read.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F636AB5195EA39E004C0A18 /* mark-read.png */; };
 		4FA802FC1962017900E820B9 /* WatchListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA802FB1962017900E820B9 /* WatchListViewController.m */; };
 		4FA802FE19621E7000E820B9 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FA802FD19621E7000E820B9 /* AVFoundation.framework */; };
+		4FEB0C6919703AE400A84A39 /* NocoDownloadsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEB0C6819703AE400A84A39 /* NocoDownloadsManager.m */; };
+		4FEB0C6F1972D50700A84A39 /* download.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FEB0C6C1972D50700A84A39 /* download.png */; };
+		4FEB0C701972D50700A84A39 /* downloadPending.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FEB0C6D1972D50700A84A39 /* downloadPending.png */; };
+		4FEB0C711972D50700A84A39 /* ok.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FEB0C6E1972D50700A84A39 /* ok.png */; };
 		4FEECD5E1949D683002514CE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FEECD5D1949D683002514CE /* Foundation.framework */; };
 		4FEECD601949D683002514CE /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FEECD5F1949D683002514CE /* CoreGraphics.framework */; };
 		4FEECD621949D683002514CE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FEECD611949D683002514CE /* UIKit.framework */; };
@@ -228,6 +232,11 @@
 		4FA802FB1962017900E820B9 /* WatchListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WatchListViewController.m; sourceTree = "<group>"; };
 		4FA802FD19621E7000E820B9 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4FBD2B50196E72A40012A2E6 /* credentials.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = credentials.h; sourceTree = "<group>"; };
+		4FEB0C6719703AE400A84A39 /* NocoDownloadsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NocoDownloadsManager.h; sourceTree = "<group>"; };
+		4FEB0C6819703AE400A84A39 /* NocoDownloadsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NocoDownloadsManager.m; sourceTree = "<group>"; };
+		4FEB0C6C1972D50700A84A39 /* download.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = download.png; sourceTree = "<group>"; };
+		4FEB0C6D1972D50700A84A39 /* downloadPending.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downloadPending.png; sourceTree = "<group>"; };
+		4FEB0C6E1972D50700A84A39 /* ok.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ok.png; sourceTree = "<group>"; };
 		4FEECD5A1949D683002514CE /* iNoco.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iNoco.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FEECD5D1949D683002514CE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4FEECD5F1949D683002514CE /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -308,6 +317,8 @@
 			children = (
 				4F37F366196612FE00D0AACC /* FavoriteProgramManager.h */,
 				4F37F367196612FE00D0AACC /* FavoriteProgramManager.m */,
+				4FEB0C6719703AE400A84A39 /* NocoDownloadsManager.h */,
+				4FEB0C6819703AE400A84A39 /* NocoDownloadsManager.m */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -407,6 +418,9 @@
 				4F37F36D1969E3EE00D0AACC /* heart_on.png */,
 				4F2175C6196CACB10005EB14 /* avatar-round.png */,
 				4F2175C8196CAFD60005EB14 /* fond02.png */,
+				4FEB0C6C1972D50700A84A39 /* download.png */,
+				4FEB0C6D1972D50700A84A39 /* downloadPending.png */,
+				4FEB0C6E1972D50700A84A39 /* ok.png */,
 			);
 			path = img;
 			sourceTree = "<group>";
@@ -599,7 +613,7 @@
 					4FEECD591949D683002514CE = {
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};
@@ -644,6 +658,7 @@
 				4F37F36F1969E3EE00D0AACC /* heart_on.png in Resources */,
 				4F459504196324BA0061381E /* iTunesArtwork.png in Resources */,
 				4F4594FA196324BA0061381E /* Icon-72.png in Resources */,
+				4FEB0C6F1972D50700A84A39 /* download.png in Resources */,
 				4F3DE0A3196CA47C00D2A0B7 /* nolife.png in Resources */,
 				4F45950D196328C60061381E /* Octicons-clock.png in Resources */,
 				4F459510196328C60061381E /* Octicons-search@2x.png in Resources */,
@@ -657,6 +672,7 @@
 				4F636A4B1955C5F5004C0A18 /* EL_S14s25_1085838.jpg in Resources */,
 				4F37F36E1969E3EE00D0AACC /* heart_off.png in Resources */,
 				4F3DE0A1196C9A6600D2A0B7 /* Default@2x.png in Resources */,
+				4FEB0C711972D50700A84A39 /* ok.png in Resources */,
 				4F636AB6195EA39E004C0A18 /* mark-read.png in Resources */,
 				4F459502196324BA0061381E /* Icon.png in Resources */,
 				4F4594FE196324BA0061381E /* Icon-Small-50.png in Resources */,
@@ -678,6 +694,7 @@
 				4FEECD711949D683002514CE /* Main_iPhone.storyboard in Resources */,
 				4F4594FC196324BA0061381E /* Icon-76.png in Resources */,
 				4FEECD681949D683002514CE /* InfoPlist.strings in Resources */,
+				4FEB0C701972D50700A84A39 /* downloadPending.png in Resources */,
 				4F4594F6196324BA0061381E /* Icon-40.png in Resources */,
 				4F2175C3196CA7290005EB14 /* fond01.png in Resources */,
 			);
@@ -716,6 +733,7 @@
 				4F636AAB1958CD6E004C0A18 /* ShowViewController.m in Sources */,
 				4F636A8219577726004C0A18 /* UIImage+MultiFormat.m in Sources */,
 				4F636A8319577726004C0A18 /* UIImage+WebP.m in Sources */,
+				4FEB0C6919703AE400A84A39 /* NocoDownloadsManager.m in Sources */,
 				4F636A7D19577726004C0A18 /* SDWebImageDownloaderOperation.m in Sources */,
 				4F636A7C19577726004C0A18 /* SDWebImageDownloader.m in Sources */,
 				4F636A8119577726004C0A18 /* UIImage+GIF.m in Sources */,

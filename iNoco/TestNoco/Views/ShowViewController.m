@@ -17,6 +17,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "FavoriteProgramManager.h"
 #import "RecentShowViewController.h"
+#import "NocoDownloadsManager.h"
 
 @interface ShowViewController (){
     int unreadCalls;
@@ -25,11 +26,16 @@
 }
 @property (retain, nonatomic) MPMoviePlayerController* moviePlayer;
 @property (retain, nonatomic) NSMutableArray* chapters;
+@property (retain, nonatomic) UIAlertView* downloadAlert;
 @property (retain, nonatomic) UIAlertView* readAlert;
 @property (retain, nonatomic) UIAlertView* statusAlert;
 @property (retain, nonatomic) UIAlertView* progressAlert;
 @property (retain, nonatomic) UIActionSheet* readSheet;
 @property (retain, nonatomic) UIActionSheet* statusSheet;
+@property (retain, nonatomic) UIProgressView* downloadProgress;
+@property (retain, nonatomic) UIButton* downloadTextButton;
+@property (retain, nonatomic) UIButton* downloadImageButton;
+@property (retain, nonatomic) UIView* downloadView;
 @property (retain, nonatomic) NSError* readError;
 @end
 
@@ -59,6 +65,7 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     //UI customization
     [self.infoBackground.layer setCornerRadius:10.0f];
     [self.durationBackground.layer setCornerRadius:5.0f];
+    [self.downloadedVersionBackground.layer setCornerRadius:5.0f];
     [self.readImageButton.layer setCornerRadius:2.0f];
     [self.watchListButton.layer setCornerRadius:2.0f];
     [self.watchListBackground.layer setCornerRadius:5.0f];
@@ -75,6 +82,30 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     self.timeLabel.text = @"";
     self.favoriteFamilly.selected = FALSE;
     self.imageView.image = [UIImage imageNamed:@"noco.png"];
+    
+    if(ALLOW_DOWNLOADS){
+        self.downloadView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 230, 40)];
+        self.downloadTextButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.downloadTextButton.frame = CGRectMake(0, 0, 200, 30);
+        self.downloadTextButton.titleLabel.font = [UIFont systemFontOfSize:10];
+        [self.downloadTextButton setTitle:@"télécharger" forState:UIControlStateNormal];
+        [self.downloadTextButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        [self.downloadTextButton addTarget:self action:@selector(downloadClick) forControlEvents:UIControlEventTouchUpInside];
+        [self.downloadTextButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
+        [self.downloadView addSubview:self.downloadTextButton];
+        self.downloadImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.downloadImageButton.frame = CGRectMake(self.downloadView.frame.size.width - 20, 5, 20, 20);
+        self.downloadImageButton.contentMode = UIViewContentModeScaleAspectFit;
+        [self.downloadImageButton setImage:[UIImage imageNamed:@"download.png"] forState:UIControlStateNormal];
+        [self.downloadImageButton addTarget:self action:@selector(downloadClick) forControlEvents:UIControlEventTouchUpInside];
+        [self.downloadView addSubview:self.downloadImageButton];
+        float progressWidth = 155;
+        self.downloadProgress = [[UIProgressView alloc] initWithFrame:CGRectMake(self.downloadView.frame.size.width - progressWidth, self.downloadView.frame.size.height - 12, progressWidth, 5)];
+        self.downloadProgress.progress = 0;
+        self.downloadProgress.hidden = TRUE;
+        [self.downloadView addSubview:self.downloadProgress];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.downloadView];
+    }
 
     self.durationLabel.text = [self.show durationString];
     
@@ -151,7 +182,23 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     
     //Favorite
     self.favoriteFamilly.selected = [[FavoriteProgramManager sharedInstance] isFavoriteForFamilyKey:self.show.family_key withPartnerKey:self.show.partner_key];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationNocoDownloadsNotificationFinishDownloading:) name:@"NocoDownloadsNotificationFinishDownloading" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationNocoDownloadsNotificationProgress:) name:@"NocoDownloadsNotificationProgress" object:nil];
 }
+
+- (void)notificationNocoDownloadsNotificationFinishDownloading:(NSNotification*)notification{
+    if([notification.object intValue] == self.show.id_show){
+        [self updateInterctiveUI];
+    }
+}
+
+- (void)notificationNocoDownloadsNotificationProgress:(NSNotification*)notification{
+    if([notification.object intValue] == self.show.id_show){
+        self.downloadProgress.progress = [[notification.userInfo objectForKey:@"progress"] floatValue];
+        [self updateInterctiveUI];
+    }
+}
+
 
 - (void)familyTap{
     [[NLTAPI sharedInstance] familyWithFamilyKey:self.show.family_key withPartnerKey:self.show.partner_key withResultBlock:^(NLTFamily* family, NSError *error) {
@@ -297,6 +344,7 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
         }
         return;
     }
+#warning TODO Add preference for prefered quality
     NSString* urlStr = [NSString stringWithFormat:@"/shows/%i/video/LQ/fr", self.show.id_show];
     __weak ShowViewController* weakSelf = self;
     [self.videoActivity startAnimating];
@@ -305,7 +353,15 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
             if([(NSString*)[result objectForKey:@"file"] compare:@"not found"]!=NSOrderedSame){
                 userEndedPlay = FALSE;
                 NSString* file = [result objectForKey:@"file"];
-                weakSelf.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:file]];
+                NSURL* url = [NSURL URLWithString:file];
+                if([[NocoDownloadsManager sharedInstance] isDownloaded:self.show]){
+                    file = [[NocoDownloadsManager sharedInstance] downloadFilePathForShow:self.show];
+                    if(file){
+                        url = [NSURL fileURLWithPath:file];
+                    }
+
+                }
+                weakSelf.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:url];
                 weakSelf.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
                 weakSelf.moviePlayer.view.frame = weakSelf.imageView.frame;
                 [weakSelf.imageView.superview addSubview:weakSelf.moviePlayer.view];
@@ -351,9 +407,57 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
         self.watchListButton.backgroundColor = THEME_COLOR;
     }
     [self.collectionView reloadData];
+    
+    //Download zone
+    self.downloadedVersionLabel.hidden = TRUE;
+    self.downloadedVersionBackground.hidden = TRUE;
+    if([[NocoDownloadsManager sharedInstance] isDownloaded:self.show]){
+        [self.downloadTextButton setTitle:@"téléchargé" forState:UIControlStateNormal];
+        [self.downloadImageButton setImage:[UIImage imageNamed:@"ok.png"] forState:UIControlStateNormal];
+        self.downloadImageButton.frame = CGRectMake(self.downloadView.frame.size.width - 20, 5, 15, 20);
+        self.downloadProgress.hidden = TRUE;
+        if([[NocoDownloadsManager sharedInstance] downloadFilePathForShow:self.show]){
+            self.downloadedVersionLabel.hidden = FALSE;
+            self.downloadedVersionBackground.hidden = FALSE;
+        }
+#warning TODO
+    }else{
+            if([[NocoDownloadsManager sharedInstance] isDownloadPending:self.show]){
+                [self.downloadTextButton setTitle:@"téléchargement en cours..." forState:UIControlStateNormal];
+                [self.downloadImageButton setImage:[UIImage imageNamed:@"downloadPending.png"] forState:UIControlStateNormal];
+                self.downloadImageButton.frame = CGRectMake(self.downloadView.frame.size.width - 20, 5, 16, 20);
+                self.downloadProgress.hidden = FALSE;
+#warning TODO
+            }else{
+                [self.downloadTextButton setTitle:@"télécharger" forState:UIControlStateNormal];
+                [self.downloadImageButton setImage:[UIImage imageNamed:@"download.png"] forState:UIControlStateNormal];
+                self.downloadImageButton.frame = CGRectMake(self.downloadView.frame.size.width - 20, 5, 20, 20);
+                self.downloadProgress.hidden = TRUE;
+            }
+    }
 }
 
 #pragma mark Interactions
+
+- (void)downloadClick{
+    if([[NocoDownloadsManager sharedInstance] isDownloaded:self.show]){
+#warning TODO Propose to erase download
+        self.downloadAlert = [[UIAlertView alloc] initWithTitle:@"Mode hors ligne" message:@"Effacer la vidéo téléchargée ?" delegate:self cancelButtonTitle:@"Non" otherButtonTitles:@"Oui", nil];
+        [self.downloadAlert show];
+    }else{
+        if([[NocoDownloadsManager sharedInstance] isDownloadPending:self.show]){
+#warning TODO Propose to cancel download
+            self.downloadAlert = [[UIAlertView alloc] initWithTitle:@"Mode hors ligne" message:@"Annuler le téléchargement en cours ?" delegate:self cancelButtonTitle:@"Non" otherButtonTitles:@"Oui", nil];
+            [self.downloadAlert show];
+
+        }else{
+#warning TODO Propose to launch download
+            self.downloadAlert = [[UIAlertView alloc] initWithTitle:@"Mode hors ligne" message:@"Lancer le téléchargement de cette vidéo ?" delegate:self cancelButtonTitle:@"Non" otherButtonTitles:@"Oui", nil];
+            [self.downloadAlert show];
+        }
+    }
+}
+
 - (IBAction)favoriteFamillyClick:(id)sender {
     self.favoriteFamilly.selected = !self.favoriteFamilly.selected;
     [[FavoriteProgramManager sharedInstance] setFavorite:self.favoriteFamilly.selected forFamilyKey:self.show.family_key withPartnerKey:self.show.partner_key];
@@ -420,6 +524,28 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
 }
 
 #pragma mark - Status messages
+
+#pragma mark Alert view delegate
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if(buttonIndex != alertView.cancelButtonIndex){
+        if(alertView == self.downloadAlert){
+            if([[NocoDownloadsManager sharedInstance] isDownloaded:self.show]){
+                [[NocoDownloadsManager sharedInstance] eraseDownloadForShow:self.show];
+                [self updateInterctiveUI];
+            }else{
+                if([[NocoDownloadsManager sharedInstance] isDownloadPending:self.show]){
+                    [[NocoDownloadsManager sharedInstance] cancelDownloadForShow:self.show];
+                    [self updateInterctiveUI];
+                }else{
+#warning TODO Add preference for prefered quality
+                    [[NocoDownloadsManager sharedInstance] planDownloadForShow:self.show withQuality:@"LQ"];
+                    [self updateInterctiveUI];
+                }
+            }
+        }
+    }
+}
 
 #pragma mark Action sheet delegate
 

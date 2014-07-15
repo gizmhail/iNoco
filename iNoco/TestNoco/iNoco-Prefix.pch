@@ -29,6 +29,8 @@
 #define THEME_COLOR [UIColor colorWithRed:0x0/255.0 green:0x88/255.0 blue:0xCC/255.0f alpha:1]
 #define SELECTED_VALID_COLOR [UIColor colorWithRed:0x9E/255.0 green:0xC7/255.0 blue:0x0F/255.0f alpha:1]
 
+#define ALLOW_DOWNLOADS 1
+
 #ifdef DEBUG
 #define DEBUG_NLT_CALL 1
 #endif
