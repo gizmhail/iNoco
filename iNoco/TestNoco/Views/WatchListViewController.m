@@ -22,6 +22,7 @@
     BOOL initialAuthentCheckDone;
 }
 @property (retain,nonatomic)NSMutableArray* watchlistIds;
+@property (retain,nonatomic)NSArray* resumePlayInfo;
 @end
 @implementation WatchListViewController
 
@@ -32,6 +33,24 @@
     self.title = @"à voir";
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [self refreshResumePlay];
+}
+#pragma mark Resue play
+
+- (void)refreshResumePlay{
+    NSString* urlStr = @"/users/resume_play";
+    __weak WatchListViewController* weakSelf = self;
+    [[NLTAPI sharedInstance] callAPI:urlStr withResultBlock:^(id result, NSError *error) {
+        self.resumePlayInfo = [NSArray array];
+        if(!error&&[result isKindOfClass:[NSArray class]]){
+            weakSelf.resumePlayInfo = result;
+        }
+        [weakSelf.collectionView reloadData];
+    } withKey:self withCacheDuration:0];
+
+}
 #pragma mark ConnectionViewControllerDelegate
 
 - (void)refreshControlSetup{
@@ -117,6 +136,41 @@
     return show;
 }
 
+- (NLTShow*)resumePlayShowAtIndex:(long)showIndex{
+    NLTShow* show = nil;
+    if(showIndex < [self.resumePlayInfo count]){
+        NSDictionary* resumePlay = [self.resumePlayInfo objectAtIndex:showIndex];
+        NSNumber* idNumber =  [resumePlay objectForKey:@"id_show"];
+        if([[NLTAPI sharedInstance].showsById objectForKey:idNumber]){
+            show = [[NLTAPI sharedInstance].showsById objectForKey:idNumber];
+        }else{
+            //We wait a bit to be sure the call is still needed
+            __weak WatchListViewController* weakSelf = self;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                UICollectionViewCell* cell = [weakSelf.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:showIndex inSection:[self resumePlaySection] ]];
+                if([[weakSelf.collectionView visibleCells] containsObject:cell]){
+                    [[NLTAPI sharedInstance] showWithId:[idNumber integerValue] withResultBlock:^(id result, NSError *error) {
+                        if(!error){
+                            if([[NLTAPI sharedInstance].showsById objectForKey:idNumber]){
+                                [weakSelf.collectionView reloadData];
+                            }else{
+                                //Problem with this id: ignoring it
+                                if(showIndex < [weakSelf.resumePlayInfo count]){
+                                    [self.watchlistIds removeObject:resumePlay];
+                                }
+                            }
+                        }
+                    } withKey:weakSelf];
+                }else{
+                    //Loading not needed anymore
+                    NSLog(@"Loading not needed");
+                }
+            });
+        }
+    }
+    return show;
+}
+
 
 - (NLTFamily*)familyAtIndex:(long)familyIndex{
     NSString* familyMergedKey = [[[FavoriteProgramManager sharedInstance] favoriteFamilies] objectAtIndex:familyIndex];
@@ -124,7 +178,7 @@
     if([[NLTAPI sharedInstance].familiesByKey objectForKey:familyMergedKey]){
         family = [[NLTAPI sharedInstance].familiesByKey objectForKey:familyMergedKey];
     }else{
-        //We want a bit to be sure the call call is still needed
+        //We wait a bit to be sure the call is still needed
         __weak WatchListViewController* weakSelf = self;
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -199,6 +253,10 @@
         NLTShow* show = [self downloadedShowAtIndex:indexPath.row];
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ShowsCell" forIndexPath:indexPath];
         [self loadShowCell:cell withShow:show];
+    }else if( indexPath.section == [self resumePlaySection] ){
+        NLTShow* show = [self resumePlayShowAtIndex:indexPath.row];
+        cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ShowsCell" forIndexPath:indexPath];
+        [self loadShowCell:cell withShow:show];
     }
     return cell;
 }
@@ -213,15 +271,17 @@
         return [[[FavoriteProgramManager sharedInstance] favoriteFamilies] count];
     }else if(section == [self downloadsSection]){
         return [[[NocoDownloadsManager sharedInstance] downloadInfos] count];
+    }else if(section == [self resumePlaySection]){
+        return [self.resumePlayInfo count];
     }
     return 0;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     if(ALLOW_DOWNLOADS){
-        return 3;
+        return 4;
     }
-    return 2;
+    return 3;
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -237,7 +297,11 @@
         if(show && show.id_show){
             [self performSegueWithIdentifier:@"DisplayRecentShow" sender:show];
         }
-
+    }else if(indexPath.section == [self resumePlaySection]){
+        NLTShow* show = [self resumePlayShowAtIndex:indexPath.row];
+        if(show && show.id_show){
+            [self performSegueWithIdentifier:@"DisplayRecentShow" sender:show];
+        }
     }
 }
 
@@ -253,24 +317,20 @@
             headerView.imageView.backgroundColor = [UIColor clearColor];
             headerView.label.text = @"Programmes favoris";
         }else if(indexPath.section == [self downloadsSection]){
-            headerView.imageView.image = [UIImage imageNamed:@"download.png"];
+            headerView.imageView.image = [[UIImage imageNamed:@"download.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             headerView.imageView.backgroundColor = [UIColor clearColor];
             headerView.label.text = @"Emissions téléchargées";
+        }else if(indexPath.section == [self resumePlaySection]){
+            headerView.imageView.image = [[UIImage imageNamed:@"downloadPending.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            headerView.imageView.backgroundColor = [UIColor clearColor];
+            headerView.label.text = @"Emissions commencées";
         }
+        headerView.imageView.tintColor = [UIColor whiteColor];
         headerView.label.textColor = [UIColor whiteColor];
         //headerView.backgroundColor = [UIColor lightGrayColor];
         return headerView;
     }
     return nil;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if(section == [self downloadsSection]){
-        if([[[NocoDownloadsManager sharedInstance] downloadInfos] count] == 0){
-            return 0;
-        }
-    }
-    return 30;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{

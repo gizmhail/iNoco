@@ -894,6 +894,10 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="noco-app-logo.png" id="WB3-Mn-a1q">
+                                <rect key="frame" x="239" y="469" width="73" height="43"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -1315,6 +1319,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
         <image name="heart_off.png" width="128" height="128"/>
         <image name="heart_on.png" width="128" height="128"/>
         <image name="mark-read.png" width="15" height="15"/>
+        <image name="noco-app-logo.png" width="627" height="288"/>
         <image name="noco.png" width="460" height="160"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

@@ -86,6 +86,7 @@
 		4F636AB6195EA39E004C0A18 /* mark-read.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F636AB5195EA39E004C0A18 /* mark-read.png */; };
 		4FA802FC1962017900E820B9 /* WatchListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA802FB1962017900E820B9 /* WatchListViewController.m */; };
 		4FA802FE19621E7000E820B9 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FA802FD19621E7000E820B9 /* AVFoundation.framework */; };
+		4FD0848E19756AA100A99958 /* noco-app-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD0848D19756AA100A99958 /* noco-app-logo.png */; };
 		4FEB0C6919703AE400A84A39 /* NocoDownloadsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEB0C6819703AE400A84A39 /* NocoDownloadsManager.m */; };
 		4FEB0C6F1972D50700A84A39 /* download.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FEB0C6C1972D50700A84A39 /* download.png */; };
 		4FEB0C701972D50700A84A39 /* downloadPending.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FEB0C6D1972D50700A84A39 /* downloadPending.png */; };
@@ -232,6 +233,7 @@
 		4FA802FB1962017900E820B9 /* WatchListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WatchListViewController.m; sourceTree = "<group>"; };
 		4FA802FD19621E7000E820B9 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4FBD2B50196E72A40012A2E6 /* credentials.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = credentials.h; sourceTree = "<group>"; };
+		4FD0848D19756AA100A99958 /* noco-app-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "noco-app-logo.png"; sourceTree = "<group>"; };
 		4FEB0C6719703AE400A84A39 /* NocoDownloadsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NocoDownloadsManager.h; sourceTree = "<group>"; };
 		4FEB0C6819703AE400A84A39 /* NocoDownloadsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NocoDownloadsManager.m; sourceTree = "<group>"; };
 		4FEB0C6C1972D50700A84A39 /* download.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = download.png; sourceTree = "<group>"; };
@@ -421,6 +423,7 @@
 				4FEB0C6C1972D50700A84A39 /* download.png */,
 				4FEB0C6D1972D50700A84A39 /* downloadPending.png */,
 				4FEB0C6E1972D50700A84A39 /* ok.png */,
+				4FD0848D19756AA100A99958 /* noco-app-logo.png */,
 			);
 			path = img;
 			sourceTree = "<group>";
@@ -669,6 +672,7 @@
 				4F636AA11958C56A004C0A18 /* Octicons-bookmark.png in Resources */,
 				4F45950E196328C60061381E /* Octicons-clock@2x.png in Resources */,
 				4F636A951958BB83004C0A18 /* Octicons-calendar.png in Resources */,
+				4FD0848E19756AA100A99958 /* noco-app-logo.png in Resources */,
 				4F636A4B1955C5F5004C0A18 /* EL_S14s25_1085838.jpg in Resources */,
 				4F37F36E1969E3EE00D0AACC /* heart_off.png in Resources */,
 				4F3DE0A1196C9A6600D2A0B7 /* Default@2x.png in Resources */,
