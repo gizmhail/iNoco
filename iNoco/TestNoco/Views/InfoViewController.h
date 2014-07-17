@@ -15,10 +15,17 @@
 @property (weak, nonatomic) IBOutlet UIButton *connectionButton;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 @property (weak, nonatomic) IBOutlet UIButton *accountButton;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *qualitySegmentedControl;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *languageSegementedControl;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *subtitleSegementedControl;
+@property (weak, nonatomic) IBOutlet UIView *settingsZone;
 
 - (IBAction)disconnect:(id)sender;
 - (IBAction)catalogueChanged:(id)sender;
 - (IBAction)accountClick:(id)sender;
 - (IBAction)thirdPartyClick:(id)sender;
+- (IBAction)qualityChanged:(id)sender;
+- (IBAction)languageChanged:(id)sender;
+- (IBAction)subtitleChanged:(id)sender;
 
 @end

@@ -35,6 +35,8 @@
 @property (weak, nonatomic) IBOutlet UIView *infoBackground;
 @property (weak, nonatomic) IBOutlet UILabel *downloadedVersionLabel;
 @property (weak, nonatomic) IBOutlet UIView *downloadedVersionBackground;
+@property (weak, nonatomic) IBOutlet UIImageView *csaImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *partnerImageView;
 
 - (IBAction)play:(id)sender;
 - (IBAction)favoriteFamillyClick:(id)sender;

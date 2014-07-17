@@ -125,6 +125,10 @@
             [weakSelf.refreshControl endRefreshing];
         }else{
             [weakSelf connectedToNoco];
+            //Fetch partners logo
+            [[NLTAPI sharedInstance] partnersWithResultBlock:^(id result, NSError *error) {
+                [self.collectionView reloadData];
+            } withKey:self];
         }
     }];
 }
@@ -136,7 +140,6 @@
 }
 - (void)connectedToNoco{
     [self loadResultAtIndex:0];
-
 }
 
 - (long)greatestFetchedPage{
@@ -462,24 +465,16 @@
     imageView.image = [UIImage imageNamed:@"noco.png"];
     imageView.backgroundColor = [UIColor whiteColor];
     
-    /*
-     BOOL gradientPresent = FALSE;
-     for (CALayer* layer in [cell.layer sublayers]) {
-     if([layer isKindOfClass:[CAGradientLayer class]]){
-     gradientPresent = TRUE;
-     }
-     }
-     if(!gradientPresent){
-     CAGradientLayer *gradient = [CAGradientLayer layer];
-     gradient.frame = cell.bounds;
-     UIColor *firstColor = [UIColor whiteColor];
-     UIColor *secondColor = THEME_COLOR ;
-     gradient.colors = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
-     [cell.layer insertSublayer:gradient atIndex:0];
-     }
-     */
+    UIImageView* partnerImageView = (UIImageView*)[cell viewWithTag:600];
+    partnerImageView.image = nil;
     
     if(show){
+        if([[NLTAPI sharedInstance].partnersByKey objectForKey:show.partner_key]){
+            NSDictionary* partnerInfo = [[NLTAPI sharedInstance].partnersByKey objectForKey:show.partner_key];
+            if([partnerInfo objectForKey:@"icon_128x72"]){
+                [partnerImageView sd_setImageWithURL:[NSURL URLWithString:[partnerInfo objectForKey:@"icon_128x72"]] placeholderImage:nil];
+            }
+        }
         readView.hidden = FALSE;
         readButton.selected = show.mark_read;
         if(readButton.selected){

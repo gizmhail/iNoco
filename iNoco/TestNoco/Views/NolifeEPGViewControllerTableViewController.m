@@ -166,7 +166,7 @@
                 [self performSegueWithIdentifier:@"DisplayRecentShow" sender:result];
             }
         } withKey:self];
-    }else{
+    }else if([[show objectForKey:@"type"]isKindOfClass:[NSString class]]&&[(NSString*)[show objectForKey:@"type"] compare:@"Clip"]==NSOrderedSame){
         [self performSegueWithIdentifier:@"WebViewDetails" sender:show];
     
     }

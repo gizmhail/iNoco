@@ -129,46 +129,38 @@
                                @"quality":quality
                                }];
     [self.downloadInfos addObject:downloadInfo];
-#warning TODO Launch NSURLSession
     [self saveCache];
     
-    NSString* urlStr = [NSString stringWithFormat:@"/shows/%i/video/%@/fr", show.id_show, quality];
     __weak NocoDownloadsManager* weakSelf = self;
-#warning TODO Check availability of video
-    [[NLTAPI sharedInstance] callAPI:urlStr withResultBlock:^(id result, NSError *error) {
-        if(result&&[result objectForKey:@"file"]&&[result objectForKey:@"file"]!=[NSNull null]){
-            if([(NSString*)[result objectForKey:@"file"] compare:@"not found"]!=NSOrderedSame){
-                
-                weakSelf.completionHandlerDictionary = [NSMutableDictionary dictionaryWithCapacity:0];
-
-
-                NSURL *url = [NSURL URLWithString: [result objectForKey:@"file"] ];
-                
-                NSURLSessionDownloadTask *downloadTask = [self.backgroundSession downloadTaskWithURL: url];
-                downloadTask.taskDescription = [self taskDescriptionForShow:show];
-                [self.tasks setObject:downloadTask forKey:downloadTask.taskDescription];
-                
-                [downloadInfo setObject:[result objectForKey:@"file"] forKey:@"urlStr"];
-                [downloadInfo setObject:[NSNumber numberWithUnsignedLong:downloadTask.taskIdentifier] forKey:@"taskIdentifier"];
-                [downloadInfo setObject:downloadTask.taskDescription forKey:@"taskDescription"];
-                NSLog(@"Launching download of %@ (task: %@)", [result objectForKey:@"file"], [NSNumber numberWithUnsignedLong:downloadTask.taskIdentifier]);
-                [self saveCache];
-                [downloadTask resume];
-            }else{
-#warning TODO See if we should remove message (backgroudn cases, ...
-                if([result objectForKey:@"popmessage"]&&[[result objectForKey:@"popmessage"] objectForKey:@"message"]){
-                    [[[UIAlertView alloc] initWithTitle:@"Erreur" message:[[result objectForKey:@"popmessage"] objectForKey:@"message"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
-                }
-                [self.downloadInfos removeObject:downloadInfo];
-#warning TODO Add error notif instead of finished
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"NocoDownloadsNotificationFinishDownloading" object:[NSNumber numberWithLong:show.id_show] userInfo:downloadInfo];
-
-            }
+    [[NLTAPI sharedInstance] videoUrlForShow:show withResultBlock:^(id result, NSError *error) {
+        if(result){
+            weakSelf.completionHandlerDictionary = [NSMutableDictionary dictionaryWithCapacity:0];
+            
+            
+            NSURL *url = [NSURL URLWithString: [result objectForKey:@"file"] ];
+            
+            NSURLSessionDownloadTask *downloadTask = [self.backgroundSession downloadTaskWithURL: url];
+            downloadTask.taskDescription = [self taskDescriptionForShow:show];
+            [self.tasks setObject:downloadTask forKey:downloadTask.taskDescription];
+            
+            [downloadInfo setObject:[result objectForKey:@"file"] forKey:@"urlStr"];
+            [downloadInfo setObject:[NSNumber numberWithUnsignedLong:downloadTask.taskIdentifier] forKey:@"taskIdentifier"];
+            [downloadInfo setObject:downloadTask.taskDescription forKey:@"taskDescription"];
+            [self saveCache];
+            NSLog(@"Launching download of %@ (task: %@)", [result objectForKey:@"file"], [NSNumber numberWithUnsignedLong:downloadTask.taskIdentifier]);
+            [downloadTask resume];
         }else{
-#warning Handle error
+            if(error.code == NLTAPI_ERROR_VIDEO_UNAVAILABLE_WITH_POPMESSAGE && [error.userInfo objectForKey:@"popmessage"]&&[[error.userInfo objectForKey:@"popmessage"] objectForKey:@"message"]){
+#warning TODO See if we should remove message (background cases, ...)
+                [[[UIAlertView alloc] initWithTitle:@"Erreur" message:[[error.userInfo objectForKey:@"popmessage"] objectForKey:@"message"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+            }else{
+#warning Handle other errors
+            }
+            [self.downloadInfos removeObject:downloadInfo];
+#warning TODO Add error notif instead of finished
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"NocoDownloadsNotificationFinishDownloading" object:[NSNumber numberWithLong:show.id_show] userInfo:downloadInfo];
         }
     } withKey:self];
-    
 }
 
 - (void)cancelDownloadForShow:(NLTShow*)show{

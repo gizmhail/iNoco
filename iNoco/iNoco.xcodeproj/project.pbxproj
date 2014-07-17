@@ -87,6 +87,10 @@
 		4FA802FC1962017900E820B9 /* WatchListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA802FB1962017900E820B9 /* WatchListViewController.m */; };
 		4FA802FE19621E7000E820B9 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FA802FD19621E7000E820B9 /* AVFoundation.framework */; };
 		4FD0848E19756AA100A99958 /* noco-app-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD0848D19756AA100A99958 /* noco-app-logo.png */; };
+		4FD084931978778800A99958 /* csa_10_black.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD0848F1978778800A99958 /* csa_10_black.png */; };
+		4FD084941978778800A99958 /* csa_12_black.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD084901978778800A99958 /* csa_12_black.png */; };
+		4FD084951978778800A99958 /* csa_16_black.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD084911978778800A99958 /* csa_16_black.png */; };
+		4FD084961978778800A99958 /* csa_18_black.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD084921978778800A99958 /* csa_18_black.png */; };
 		4FEB0C6919703AE400A84A39 /* NocoDownloadsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEB0C6819703AE400A84A39 /* NocoDownloadsManager.m */; };
 		4FEB0C6F1972D50700A84A39 /* download.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FEB0C6C1972D50700A84A39 /* download.png */; };
 		4FEB0C701972D50700A84A39 /* downloadPending.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FEB0C6D1972D50700A84A39 /* downloadPending.png */; };
@@ -234,6 +238,10 @@
 		4FA802FD19621E7000E820B9 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4FBD2B50196E72A40012A2E6 /* credentials.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = credentials.h; sourceTree = "<group>"; };
 		4FD0848D19756AA100A99958 /* noco-app-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "noco-app-logo.png"; sourceTree = "<group>"; };
+		4FD0848F1978778800A99958 /* csa_10_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = csa_10_black.png; sourceTree = "<group>"; };
+		4FD084901978778800A99958 /* csa_12_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = csa_12_black.png; sourceTree = "<group>"; };
+		4FD084911978778800A99958 /* csa_16_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = csa_16_black.png; sourceTree = "<group>"; };
+		4FD084921978778800A99958 /* csa_18_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = csa_18_black.png; sourceTree = "<group>"; };
 		4FEB0C6719703AE400A84A39 /* NocoDownloadsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NocoDownloadsManager.h; sourceTree = "<group>"; };
 		4FEB0C6819703AE400A84A39 /* NocoDownloadsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NocoDownloadsManager.m; sourceTree = "<group>"; };
 		4FEB0C6C1972D50700A84A39 /* download.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = download.png; sourceTree = "<group>"; };
@@ -424,6 +432,10 @@
 				4FEB0C6D1972D50700A84A39 /* downloadPending.png */,
 				4FEB0C6E1972D50700A84A39 /* ok.png */,
 				4FD0848D19756AA100A99958 /* noco-app-logo.png */,
+				4FD0848F1978778800A99958 /* csa_10_black.png */,
+				4FD084901978778800A99958 /* csa_12_black.png */,
+				4FD084911978778800A99958 /* csa_16_black.png */,
+				4FD084921978778800A99958 /* csa_18_black.png */,
 			);
 			path = img;
 			sourceTree = "<group>";
@@ -649,6 +661,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FD084941978778800A99958 /* csa_12_black.png in Resources */,
 				4F636AA71958CB19004C0A18 /* Starred_icon.png in Resources */,
 				4F636A891957878E004C0A18 /* noco.png in Resources */,
 				4F4594FF196324BA0061381E /* Icon-Small-50@2x.png in Resources */,
@@ -661,6 +674,7 @@
 				4F37F36F1969E3EE00D0AACC /* heart_on.png in Resources */,
 				4F459504196324BA0061381E /* iTunesArtwork.png in Resources */,
 				4F4594FA196324BA0061381E /* Icon-72.png in Resources */,
+				4FD084951978778800A99958 /* csa_16_black.png in Resources */,
 				4FEB0C6F1972D50700A84A39 /* download.png in Resources */,
 				4F3DE0A3196CA47C00D2A0B7 /* nolife.png in Resources */,
 				4F45950D196328C60061381E /* Octicons-clock.png in Resources */,
@@ -688,6 +702,7 @@
 				4F2175C7196CACB10005EB14 /* avatar-round.png in Resources */,
 				4F459505196324BA0061381E /* iTunesArtwork@2x.png in Resources */,
 				4FEECD741949D683002514CE /* Main_iPad.storyboard in Resources */,
+				4FD084931978778800A99958 /* csa_10_black.png in Resources */,
 				4F4594FD196324BA0061381E /* Icon-76@2x.png in Resources */,
 				4FEECD7C1949D683002514CE /* Images.xcassets in Resources */,
 				4F4594F9196324BA0061381E /* Icon-60@2x.png in Resources */,
@@ -700,6 +715,7 @@
 				4FEECD681949D683002514CE /* InfoPlist.strings in Resources */,
 				4FEB0C701972D50700A84A39 /* downloadPending.png in Resources */,
 				4F4594F6196324BA0061381E /* Icon-40.png in Resources */,
+				4FD084961978778800A99958 /* csa_18_black.png in Resources */,
 				4F2175C3196CA7290005EB14 /* fond01.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

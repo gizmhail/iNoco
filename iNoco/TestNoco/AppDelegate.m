@@ -37,12 +37,13 @@ void uncaughtExceptionHandler(NSException *exception) {
     
     [[NLTOAuth sharedInstance] configureWithClientId:nolibtv_client_id withClientSecret:nolibtv_client_secret withRedirectUri:nolibtv_redirect_uri];
     
+    //NLTAPI conf
+    
     NSString* catalog = DEFAULT_CATALOG;
     NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
     if([settings objectForKey:@"SELECTED_CATALOG"]){
         catalog = [settings objectForKey:@"SELECTED_CATALOG"];
     }
-    
     [[NLTAPI sharedInstance] setSubscribedOnly:false];
     [[NLTAPI sharedInstance] setPartnerKey:nil];
     if([catalog compare:ALL_SUBSCRIPTED_CATALOG]==NSOrderedSame){
@@ -57,6 +58,21 @@ void uncaughtExceptionHandler(NSException *exception) {
   
     [[NLTAPI sharedInstance] setHandleNetworkActivityIndicator:TRUE];
     
+    [NLTAPI sharedInstance].preferedLanguage = DEFAULT_LANGUAGE;//Use VO
+    if([settings objectForKey:@"preferedLanguage"]){
+        [NLTAPI sharedInstance].preferedLanguage = [settings objectForKey:@"preferedLanguage"];
+    }
+    [NLTAPI sharedInstance].preferedSubtitleLanguage = DEFAULT_SUBTITLE_LANGUAGE;
+    if([settings objectForKey:@"preferedSubtitleLanguage"]){
+        [NLTAPI sharedInstance].preferedSubtitleLanguage = [settings objectForKey:@"preferedSubtitleLanguage"];
+    }
+    [NLTAPI sharedInstance].preferedQuality = DEFAULT_QUALITY;
+    if([settings objectForKey:@"preferedQuality"]){
+        [NLTAPI sharedInstance].preferedQuality = [settings objectForKey:@"preferedQuality"];
+    }
+
+
+    //Lock screen audio events
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
 
 

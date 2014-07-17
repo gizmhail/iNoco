@@ -241,7 +241,17 @@
         title.text = @"Chargement ...";
         subtitle.text = @"";
         NLTFamily* family = [self familyAtIndex:indexPath.row];
+        
+        UIImageView* partnerImageView = (UIImageView*)[cell viewWithTag:600];
+        partnerImageView.image = nil;
+        
         if(family){
+            if([[NLTAPI sharedInstance].partnersByKey objectForKey:family.partner_key]){
+                NSDictionary* partnerInfo = [[NLTAPI sharedInstance].partnersByKey objectForKey:family.partner_key];
+                if([partnerInfo objectForKey:@"icon_128x72"]){
+                    [partnerImageView sd_setImageWithURL:[NSURL URLWithString:[partnerInfo objectForKey:@"icon_128x72"]] placeholderImage:nil];
+                }
+            }
             title.text = family.family_TT;
             subtitle.text = family.theme_name;
             if(family.icon_512x288){

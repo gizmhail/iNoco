@@ -13,6 +13,9 @@
 #import "WebViewDetailsViewController.h"
 
 @interface InfoViewController ()
+@property(retain, nonatomic) NSArray* languageSegmentedEntriesValues;
+@property(retain, nonatomic) NSArray* subtitleSegmentedEntriesValues;
+@property(retain, nonatomic) NSArray* qualitySegmentedEntriesValues;
 
 @end
 
@@ -30,6 +33,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+#warning TODO Fetch value from backend and fill segmented controls accordingly
+    self.languageSegmentedEntriesValues = @[@"V.O.", @"en", @"fr", @"ja"];
+    self.subtitleSegmentedEntriesValues = @[@"none", @"en", @"fr", @"ja"];
+    self.qualitySegmentedEntriesValues = @[@"LQ", @"HQ", @"TV", @"HD_720", @"HD_1080"];
+
+    
     // Do any additional setup after loading the view.
 }
 
@@ -73,7 +82,6 @@
 }
 
 - (IBAction)catalogueChanged:(id)sender {
-    NSLog(@"%i",self.segmentedControl.selectedSegmentIndex);
     NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
     if(self.segmentedControl.selectedSegmentIndex == 0){
         //Only nolife
@@ -90,6 +98,48 @@
         [[NLTAPI sharedInstance] setSubscribedOnly:TRUE];
     }
     [settings synchronize];
+}
+
+- (IBAction)qualityChanged:(id)sender {
+    if([self.qualitySegmentedEntriesValues count]>self.qualitySegmentedControl.selectedSegmentIndex){
+        NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
+        NSString* value = [self.qualitySegmentedEntriesValues objectAtIndex:self.qualitySegmentedControl.selectedSegmentIndex];
+        [NLTAPI sharedInstance].preferedQuality = value;
+        [settings setObject:value forKey:@"preferedQuality"];
+        [settings synchronize];
+    }else{
+#ifdef DEBUG
+        NSLog(@"Problem with segemented control");
+#endif
+    }
+}
+
+- (IBAction)languageChanged:(id)sender {
+    if([self.languageSegmentedEntriesValues count]>self.languageSegementedControl.selectedSegmentIndex){
+        NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
+        NSString* value = [self.languageSegmentedEntriesValues objectAtIndex:self.languageSegementedControl.selectedSegmentIndex];
+        [NLTAPI sharedInstance].preferedLanguage = value;
+        [settings setObject:value forKey:@"preferedLanguage"];
+        [settings synchronize];
+    }else{
+#ifdef DEBUG
+        NSLog(@"Problem with segemented control");
+#endif
+    }
+}
+
+- (IBAction)subtitleChanged:(id)sender {
+    if([self.subtitleSegmentedEntriesValues count]>self.subtitleSegementedControl.selectedSegmentIndex){
+        NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
+        NSString* value = [self.subtitleSegmentedEntriesValues objectAtIndex:self.subtitleSegementedControl.selectedSegmentIndex];
+        [NLTAPI sharedInstance].preferedSubtitleLanguage = value;
+        [settings setObject:value forKey:@"preferedSubtitleLanguage"];
+        [settings synchronize];
+    }else{
+#ifdef DEBUG
+        NSLog(@"Problem with segemented control");
+#endif
+    }
 }
 
 - (IBAction)accountClick:(id)sender {
@@ -110,18 +160,17 @@
     self.headerImageView.image = nil;
     self.avatarImageView.image = [UIImage imageNamed:@"noco.png"];
     self.accountName.text = nil;
-    self.segmentedControl.hidden = TRUE;
+    self.settingsZone.hidden = TRUE;
     [self.connectionButton setTitle:@"se connecter" forState:UIControlStateNormal];
     [[NLTOAuth sharedInstance] isAuthenticatedAfterRefreshTokenUse:^(BOOL authenticated) {
         if(authenticated){
-            self.segmentedControl.hidden = FALSE;
-            
-            NSString* catalog = DEFAULT_CATALOG;
+            self.settingsZone.hidden = FALSE;
             NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
+            //Catalog
+            NSString* catalog = DEFAULT_CATALOG;
             if([settings objectForKey:@"SELECTED_CATALOG"]){
                 catalog = [settings objectForKey:@"SELECTED_CATALOG"];
-            }
-            
+            }            
             if([catalog compare:ALL_SUBSCRIPTED_CATALOG]==NSOrderedSame){
                 self.segmentedControl.selectedSegmentIndex = 2;
             }else if([catalog compare:ALL_NOCO_CATALOG]==NSOrderedSame){
@@ -129,13 +178,33 @@
             }else if(catalog != nil){
                 self.segmentedControl.selectedSegmentIndex = 0;
             }
+            
+            //Language
+            NSString* preferedLanguage = DEFAULT_LANGUAGE;//Use VO
+            if([settings objectForKey:@"preferedLanguage"]){
+                preferedLanguage = [settings objectForKey:@"preferedLanguage"];
+            }
+            self.languageSegementedControl.selectedSegmentIndex = [self.languageSegmentedEntriesValues indexOfObject:preferedLanguage];
+            
+            //Subtitle
+            NSString* preferedSubtitleLanguage = DEFAULT_SUBTITLE_LANGUAGE;
+            if([settings objectForKey:@"preferedSubtitleLanguage"]){
+                preferedSubtitleLanguage = [settings objectForKey:@"preferedSubtitleLanguage"];
+            }
+            self.subtitleSegementedControl.selectedSegmentIndex = [self.subtitleSegmentedEntriesValues indexOfObject:preferedSubtitleLanguage];
+            
+            //Quality
+            NSString* preferedQuality = DEFAULT_QUALITY;
+            if([settings objectForKey:@"preferedQuality"]){
+                preferedQuality = [settings objectForKey:@"preferedQuality"];
+            }
+            self.qualitySegmentedControl.selectedSegmentIndex = [self.qualitySegmentedEntriesValues indexOfObject:preferedQuality];
+
+            
 
             self.accountName.text = @"Chargement ...";
             [self.connectionButton setTitle:@"se déconnecter" forState:UIControlStateNormal];
-            [[NLTAPI sharedInstance] callAPI:@"users/init" withResultBlock:^(id result, NSError *error) {
-                if([result isKindOfClass:[NSDictionary class]]&&[(NSDictionary*)result objectForKey:@"error"]){
-                    error = [NSError errorWithDomain:@"NLTAPIDomain" code:500 userInfo:(NSDictionary*)result];
-                }
+            [[NLTAPI sharedInstance] userAccountInfoWithResultBlock:^(id result, NSError *error) {
                 if(!error){
                     if(result&&[result isKindOfClass:[NSDictionary class]]&&[result objectForKey:@"user"]){
                         self.accountName.text = [[result objectForKey:@"user"] objectForKey:@"username"];
@@ -149,7 +218,7 @@
                 }else{
                     [self disconnect:nil];
                 }
-            } withKey:self withCacheDuration:60*10];
+            } withKey:self];
         }
     }];
 }

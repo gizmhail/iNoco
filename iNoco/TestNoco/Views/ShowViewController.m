@@ -70,6 +70,20 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     [self.watchListButton.layer setCornerRadius:2.0f];
     [self.watchListBackground.layer setCornerRadius:5.0f];
     [self.readBackground.layer setCornerRadius:5.0f];
+    
+    self.csaImageView.image = nil;
+    if([self.show.rating_fr intValue] == 10){
+        self.csaImageView.image = [UIImage imageNamed:@"csa_10_black.png"];
+    }
+    if([self.show.rating_fr intValue] == 12){
+        self.csaImageView.image = [UIImage imageNamed:@"csa_12_black.png"];
+    }
+    if([self.show.rating_fr intValue] == 16){
+        self.csaImageView.image = [UIImage imageNamed:@"csa_16_black.png"];
+    }
+    if([self.show.rating_fr intValue] == 18){
+        self.csaImageView.image = [UIImage imageNamed:@"csa_18_black.png"];
+    }
 
     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(familyTap)];
     self.famillyLabel.userInteractionEnabled = TRUE;
@@ -82,6 +96,20 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     self.timeLabel.text = @"";
     self.favoriteFamilly.selected = FALSE;
     self.imageView.image = [UIImage imageNamed:@"noco.png"];
+    
+    
+    self.partnerImageView.image = nil;
+    [[NLTAPI sharedInstance] partnersWithResultBlock:^(id result, NSError *error) {
+        if([[NLTAPI sharedInstance].partnersByKey objectForKey:self.show.partner_key]){
+            NSDictionary* partnerInfo = [[NLTAPI sharedInstance].partnersByKey objectForKey:self.show.partner_key];
+            if([partnerInfo objectForKey:@"icon_128x72"]){
+                [self.partnerImageView sd_setImageWithURL:[NSURL URLWithString:[partnerInfo objectForKey:@"icon_128x72"]] placeholderImage:nil];
+            }
+        }
+        [self.collectionView reloadData];
+    } withKey:self];
+
+    
     
     if(ALLOW_DOWNLOADS){
         self.downloadView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 230, 40)];
@@ -168,7 +196,7 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
         if(result&&[result isKindOfClass:[NSArray class]]){
             self.chapters = [NSMutableArray array];
             for (NSDictionary* chapter in result) {
-                if([chapter objectForKey:@"id_show_sub"]!=[NSNull null]){
+                if([chapter objectForKey:@"id_show_sub"]!=[NSNull null]&&[[chapter objectForKey:@"stand_alone"] intValue]==1){
                     [self.chapters addObject:chapter];
                 }
             }
@@ -345,54 +373,48 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
         return;
     }
 #warning TODO Add preference for prefered quality
-    NSString* urlStr = [NSString stringWithFormat:@"/shows/%i/video/LQ/fr", self.show.id_show];
     __weak ShowViewController* weakSelf = self;
     [self.videoActivity startAnimating];
-    [[NLTAPI sharedInstance] callAPI:urlStr withResultBlock:^(id result, NSError *error) {
-        if(result&&[result objectForKey:@"file"]&&[result objectForKey:@"file"]!=[NSNull null]){
-            if([(NSString*)[result objectForKey:@"file"] compare:@"not found"]!=NSOrderedSame){
-                userEndedPlay = FALSE;
-                NSString* file = [result objectForKey:@"file"];
-                NSURL* url = [NSURL URLWithString:file];
-                if([[NocoDownloadsManager sharedInstance] isDownloaded:self.show]){
-                    file = [[NocoDownloadsManager sharedInstance] downloadFilePathForShow:self.show];
-                    if(file){
-                        url = [NSURL fileURLWithPath:file];
-                    }
-
+    [[NLTAPI sharedInstance] videoUrlForShow:self.show withResultBlock:^(id result, NSError *error) {
+        if(result){
+            userEndedPlay = FALSE;
+            NSString* file = [result objectForKey:@"file"];
+            NSURL* url = [NSURL URLWithString:file];
+            if([[NocoDownloadsManager sharedInstance] isDownloaded:self.show]){
+                file = [[NocoDownloadsManager sharedInstance] downloadFilePathForShow:self.show];
+                if(file){
+                    url = [NSURL fileURLWithPath:file];
                 }
-                weakSelf.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:url];
-                weakSelf.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
-                weakSelf.moviePlayer.view.frame = weakSelf.imageView.frame;
-                [weakSelf.imageView.superview addSubview:weakSelf.moviePlayer.view];
-                [weakSelf.videoActivity.superview bringSubviewToFront:weakSelf.videoActivity];
-                [weakSelf.moviePlayer setInitialPlaybackTime:progress];
-                [weakSelf.moviePlayer prepareToPlay];
-                weakSelf.moviePlayer.shouldAutoplay = TRUE;
-                [self.moviePlayer setFullscreen:YES animated:YES];
-                MPNowPlayingInfoCenter *infoCenter = [MPNowPlayingInfoCenter defaultCenter];
-                NSMutableDictionary* info = [NSMutableDictionary dictionaryWithDictionary:infoCenter.nowPlayingInfo];
-                if(!info){
-                    info =  [NSMutableDictionary dictionary];
-                }
-                if(self.show.show_TT) [info setObject:self.show.show_TT forKey:MPMediaItemPropertyTitle];
-                if(self.show.family_TT) [info setObject:self.show.family_TT forKey:MPMediaItemPropertyArtist];
-                [info setObject:[NSNumber numberWithInt:self.show.episode_number] forKey:MPMediaItemPropertyAlbumTrackNumber];
-                [info setObject:[[MPMediaItemArtwork alloc] initWithImage:self.imageView.image] forKey:MPMediaItemPropertyArtwork];
-                infoCenter.nowPlayingInfo = info;
-
-            }else{
-                [self.videoActivity stopAnimating];
-                if([result objectForKey:@"popmessage"]&&[[result objectForKey:@"popmessage"] objectForKey:@"message"]){
-                    [[[UIAlertView alloc] initWithTitle:@"Erreur" message:[[result objectForKey:@"popmessage"] objectForKey:@"message"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
-                }
+                
             }
+            weakSelf.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:url];
+            weakSelf.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
+            weakSelf.moviePlayer.view.frame = weakSelf.imageView.frame;
+            [weakSelf.imageView.superview addSubview:weakSelf.moviePlayer.view];
+            [weakSelf.videoActivity.superview bringSubviewToFront:weakSelf.videoActivity];
+            [weakSelf.moviePlayer setInitialPlaybackTime:progress];
+            [weakSelf.moviePlayer prepareToPlay];
+            weakSelf.moviePlayer.shouldAutoplay = TRUE;
+            [self.moviePlayer setFullscreen:YES animated:YES];
+            MPNowPlayingInfoCenter *infoCenter = [MPNowPlayingInfoCenter defaultCenter];
+            NSMutableDictionary* info = [NSMutableDictionary dictionaryWithDictionary:infoCenter.nowPlayingInfo];
+            if(!info){
+                info =  [NSMutableDictionary dictionary];
+            }
+            if(self.show.show_TT) [info setObject:self.show.show_TT forKey:MPMediaItemPropertyTitle];
+            if(self.show.family_TT) [info setObject:self.show.family_TT forKey:MPMediaItemPropertyArtist];
+            [info setObject:[NSNumber numberWithInt:self.show.episode_number] forKey:MPMediaItemPropertyAlbumTrackNumber];
+            [info setObject:[[MPMediaItemArtwork alloc] initWithImage:self.imageView.image] forKey:MPMediaItemPropertyArtwork];
+            infoCenter.nowPlayingInfo = info;
         }else{
             [self.videoActivity stopAnimating];
+            if(error.code == NLTAPI_ERROR_VIDEO_UNAVAILABLE_WITH_POPMESSAGE && [error.userInfo objectForKey:@"popmessage"]&&[[error.userInfo objectForKey:@"popmessage"] objectForKey:@"message"]){
+                [[[UIAlertView alloc] initWithTitle:@"Erreur" message:[[error.userInfo objectForKey:@"popmessage"] objectForKey:@"message"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+            }else{
 #warning Handle error
+            }
         }
     } withKey:self];
-
 }
 
 - (void)updateInterctiveUI{
@@ -676,6 +698,9 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     [readButton.layer setCornerRadius:2.0f];
     
     
+    UIImageView* partnerImageView = (UIImageView*)[cell viewWithTag:600];
+    partnerImageView.image = nil;
+    
     title.text = @"Chargement ...";
     subtitle.text = @"";
     time.text = @"";
@@ -683,6 +708,13 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     imageView.backgroundColor = [UIColor whiteColor];
     
     if(show){
+        if([[NLTAPI sharedInstance].partnersByKey objectForKey:show.partner_key]){
+            NSDictionary* partnerInfo = [[NLTAPI sharedInstance].partnersByKey objectForKey:show.partner_key];
+            if([partnerInfo objectForKey:@"icon_128x72"]){
+                [partnerImageView sd_setImageWithURL:[NSURL URLWithString:[partnerInfo objectForKey:@"icon_128x72"]] placeholderImage:nil];
+            }
+        }
+        
         readView.hidden = FALSE;
         readButton.selected = show.mark_read;
         if(readButton.selected){
