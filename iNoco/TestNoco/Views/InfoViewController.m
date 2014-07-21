@@ -162,7 +162,7 @@
     self.accountName.text = nil;
     self.settingsZone.hidden = TRUE;
     [self.connectionButton setTitle:@"se connecter" forState:UIControlStateNormal];
-    [[NLTOAuth sharedInstance] isAuthenticatedAfterRefreshTokenUse:^(BOOL authenticated) {
+    [[NLTOAuth sharedInstance] isAuthenticatedAfterRefreshTokenUse:^(BOOL authenticated, NSError* error) {
         if(authenticated){
             self.settingsZone.hidden = FALSE;
             NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];

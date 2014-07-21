@@ -463,17 +463,14 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
 
 - (void)downloadClick{
     if([[NocoDownloadsManager sharedInstance] isDownloaded:self.show]){
-#warning TODO Propose to erase download
         self.downloadAlert = [[UIAlertView alloc] initWithTitle:@"Mode hors ligne" message:@"Effacer la vidéo téléchargée ?" delegate:self cancelButtonTitle:@"Non" otherButtonTitles:@"Oui", nil];
         [self.downloadAlert show];
     }else{
         if([[NocoDownloadsManager sharedInstance] isDownloadPending:self.show]){
-#warning TODO Propose to cancel download
             self.downloadAlert = [[UIAlertView alloc] initWithTitle:@"Mode hors ligne" message:@"Annuler le téléchargement en cours ?" delegate:self cancelButtonTitle:@"Non" otherButtonTitles:@"Oui", nil];
             [self.downloadAlert show];
 
         }else{
-#warning TODO Propose to launch download
             self.downloadAlert = [[UIAlertView alloc] initWithTitle:@"Mode hors ligne" message:@"Lancer le téléchargement de cette vidéo ?" delegate:self cancelButtonTitle:@"Non" otherButtonTitles:@"Oui", nil];
             [self.downloadAlert show];
         }

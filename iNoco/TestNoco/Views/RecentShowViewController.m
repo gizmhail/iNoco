@@ -117,7 +117,8 @@
     [self resetResult];
     [self.collectionView reloadData];
     __weak RecentShowViewController* weakSelf = self;
-    [[NLTOAuth sharedInstance] isAuthenticatedAfterRefreshTokenUse:^(BOOL authenticated) {
+    [[NLTOAuth sharedInstance] isAuthenticatedAfterRefreshTokenUse:^(BOOL authenticated, NSError* error) {
+#warning TODO Handle offline
         initialAuthentCheckDone = TRUE;
         if(!authenticated){
             [weakSelf.view hideToastActivity];
@@ -151,7 +152,7 @@
     int page = (int) indexPath.section;
     __weak RecentShowViewController* weakSelf = self;
     if(![self.resultByPage objectForKey:[NSNumber numberWithInt:page]]){
-        [[NLTOAuth sharedInstance]isAuthenticatedAfterRefreshTokenUse:^(BOOL authenticated) {
+        [[NLTOAuth sharedInstance]isAuthenticatedAfterRefreshTokenUse:^(BOOL authenticated, NSError* error) {
             if(authenticated){
                 if(weakSelf.filter && page > [weakSelf greatestFetchedPage]){
                     //If filtering, we don't download additionnal pages (unless some pages were missing, skipped due to high speed scrolling)
@@ -168,7 +169,7 @@
                         if(error){
                             maxShows = [self entriesBeforePage:page];
                             if(!self.errorAlert){
-                                self.errorAlert = [[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter" delegate:self   cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                                self.errorAlert = [[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:self   cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                                 [self.errorAlert show];
                             }
                             [weakSelf.collectionView reloadData];
@@ -178,6 +179,7 @@
                     }];
                 }
             }else{
+#warning TODO Handle offline
                 [weakSelf.view hideToastActivity];
                 [weakSelf.refreshControl endRefreshing];
             }

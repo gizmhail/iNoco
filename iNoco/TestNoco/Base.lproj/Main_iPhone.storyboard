@@ -1068,7 +1068,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Pour profiter des programmes de noco, vous devez vous connecter avec votre compte noco.tv" textAlignment="center" id="ipy-A0-yGg">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Pour profiter des programmes de noco, vous devez vous connecter avec votre compte noco.tv" textAlignment="center" selectable="NO" id="ipy-A0-yGg">
                                 <rect key="frame" x="0.0" y="213" width="320" height="100"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

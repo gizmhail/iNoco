@@ -60,12 +60,12 @@
 
         [weakSelf.view hideToastActivity];
         if(error){
-            [weakSelf.tabBarController.view makeToast:[NSString stringWithFormat:@"Impossible de charger le guide des programmes de Nolife"] duration:3 position:@"bottom"];
+            [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de charger le guide des programmes de Nolife. Veuillez vérifier votre connection." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
         }else{
             [self loadShowsByDay:[[NLTEPG sharedInstance] cachedEPG]];
         }
         [self.tableView reloadData];
-        if(!firstFocusOnNowDone){
+        if(!firstFocusOnNowDone&&!error){
             firstFocusOnNowDone = TRUE;
             [self scrollToNow];
         }
@@ -164,6 +164,8 @@
         [[NLTAPI sharedInstance] showWithId:nocoId withResultBlock:^(id result, NSError *error) {
             if(result){
                 [self performSegueWithIdentifier:@"DisplayRecentShow" sender:result];
+            }else if (error){
+                [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de charger l'émission. Veuillez vérifier votre connection." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             }
         } withKey:self];
     }else if([[show objectForKey:@"type"]isKindOfClass:[NSString class]]&&[(NSString*)[show objectForKey:@"type"] compare:@"Clip"]==NSOrderedSame){
