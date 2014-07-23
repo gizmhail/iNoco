@@ -18,6 +18,7 @@
 #import "FavoriteProgramManager.h"
 #import "RecentShowViewController.h"
 #import "NocoDownloadsManager.h"
+#import "ShowCollectionViewCell.h"
 
 @interface ShowViewController (){
     int unreadCalls;
@@ -122,6 +123,7 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
         [self.downloadTextButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
         [self.downloadView addSubview:self.downloadTextButton];
         self.downloadImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.downloadImageButton.isAccessibilityElement = false;
         self.downloadImageButton.frame = CGRectMake(self.downloadView.frame.size.width - 20, 5, 20, 20);
         self.downloadImageButton.contentMode = UIViewContentModeScaleAspectFit;
         [self.downloadImageButton setImage:[UIImage imageNamed:@"download.png"] forState:UIControlStateNormal];
@@ -664,93 +666,12 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
 
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ShowsCell" forIndexPath:indexPath];
-    cell.layer.borderColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.4].CGColor;
-    [cell.layer setCornerRadius:5.0f];
-    cell.layer.borderWidth= 1;
-    
     NLTShow* show = [self showAtIndex:indexPath.row];
-    UIImageView* imageView = (UIImageView*)[cell viewWithTag:100];
-    UILabel* title = (UILabel*)[cell viewWithTag:110];
-    UILabel* subtitle = (UILabel*)[cell viewWithTag:120];
-    UILabel* time = (UILabel*)[cell viewWithTag:130];
-    UIView* durationView = [cell viewWithTag:200];
-    UIView* durationBackground = [cell viewWithTag:205];
-    UILabel* durationLabel = (UILabel*)[cell viewWithTag:210];
-    [durationBackground.layer setCornerRadius:5.0f];
-    durationView.hidden = true;
-    
-    UIView* watchListView = [cell viewWithTag:300];
-    UIView* watchListBackground = [cell viewWithTag:305];
-    UIButton* watchListButton = (UIButton*)[cell viewWithTag:310];
-    UIView* readView = [cell viewWithTag:400];
-    UIView* readBackground = [cell viewWithTag:405];
-    UIButton* readButton = (UIButton*)[cell viewWithTag:410];
-    
-    watchListView.hidden = TRUE;
-    readView.hidden = TRUE;
-    [watchListBackground.layer setCornerRadius:5.0f];
-    [readBackground.layer setCornerRadius:5.0f];
-    [watchListButton.layer setCornerRadius:2.0f];
-    [readButton.layer setCornerRadius:2.0f];
-    
-    
-    UIImageView* partnerImageView = (UIImageView*)[cell viewWithTag:600];
-    partnerImageView.image = nil;
-    
-    title.text = @"Chargement ...";
-    subtitle.text = @"";
-    time.text = @"";
-    imageView.image = [UIImage imageNamed:@"noco.png"];
-    imageView.backgroundColor = [UIColor whiteColor];
-    
-    if(show){
-        if([[NLTAPI sharedInstance].partnersByKey objectForKey:show.partner_key]){
-            NSDictionary* partnerInfo = [[NLTAPI sharedInstance].partnersByKey objectForKey:show.partner_key];
-            if([partnerInfo objectForKey:@"icon_128x72"]){
-                [partnerImageView sd_setImageWithURL:[NSURL URLWithString:[partnerInfo objectForKey:@"icon_128x72"]] placeholderImage:nil];
-            }
-        }
-        
-        readView.hidden = FALSE;
-        readButton.selected = show.mark_read;
-        if(readButton.selected){
-            readButton.backgroundColor = SELECTED_VALID_COLOR;
-        }else{
-            readButton.backgroundColor = THEME_COLOR;
-        }
-        [[NLTAPI sharedInstance] isInQueueList:show withResultBlock:^(id result, NSError *error) {
-            if(!error){
-                watchListView.hidden = FALSE;
-                watchListButton.selected = [result boolValue];
-                if(watchListButton.selected){
-                    watchListButton.backgroundColor = SELECTED_VALID_COLOR;
-                }else{
-                    watchListButton.backgroundColor = THEME_COLOR;
-                }
-            }
-        } withKey:self];
-        
-        durationView.hidden = FALSE;
-        durationLabel.text = [show durationString];
-        if(show.family_TT){
-            title.text = show.family_TT;
-            if(show.episode_number && show.episode_number != 0){
-                title.text = [title.text stringByAppendingFormat:@" - %i", show.episode_number];
-            }
-        }
-        if(show.show_TT) {
-            subtitle.text = show.show_TT;
-        }
-        if(show.broadcastDate) {
-            NSDateFormatter *formater = [[NSDateFormatter alloc] init];
-            [formater setDateFormat:@"dd MMM YYY - HH:mm"];
-            time.text = [formater stringFromDate:show.broadcastDate];
-        }
-        if(show.screenshot_512x288){
-#warning Find alternative screenshot when not available
-            [imageView sd_setImageWithURL:[NSURL URLWithString:show.screenshot_512x288] placeholderImage:[UIImage imageNamed:@"noco.png"]];
-        }
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ShowsCell" forIndexPath:indexPath];
+    if([cell isKindOfClass:[ShowCollectionViewCell class]]){
+        [(ShowCollectionViewCell*)cell loadShow:show];
+    }else{
+        NSLog(@"PB with cell loading");
     }
     return cell;
 }

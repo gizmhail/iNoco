@@ -7,9 +7,9 @@
 //
 
 #import "RecentShowViewController.h"
+#import <QuartzCore/QuartzCore.h>
 #import "UIImageView+WebCache.h"
 #import <MediaPlayer/MediaPlayer.h>
-#import <QuartzCore/QuartzCore.h>
 #import "ShowViewController.h"
 #import "UIView+Toast.h"
 #import "FavoriteProgramManager.h"
@@ -59,6 +59,8 @@
         self.title = self.family.family_TT;
         if(!self.navigationItem.rightBarButtonItem){
             self.favoriteFamilly = [UIButton buttonWithType:UIButtonTypeCustom];
+            self.favoriteFamilly.accessibilityLabel = @"programme favoris";
+            self.favoriteFamilly.accessibilityHint = @"cliquer pour mettre ou enlever le programme de cette émission dans les programmes favoris";
             self.favoriteFamilly.frame = CGRectMake(0, 0, 30, 30);
             [self.favoriteFamilly setImage:[UIImage imageNamed:@"heart_off"] forState:UIControlStateNormal];
             [self.favoriteFamilly setImage:[UIImage imageNamed:@"heart_on"] forState:UIControlStateSelected];
@@ -116,6 +118,7 @@
 - (void)refreshResult{
     [self resetResult];
     [self.collectionView reloadData];
+    UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.collectionView);
     __weak RecentShowViewController* weakSelf = self;
     [[NLTOAuth sharedInstance] isAuthenticatedAfterRefreshTokenUse:^(BOOL authenticated, NSError* error) {
 #warning TODO Handle offline
@@ -131,6 +134,7 @@
                 [self.collectionView reloadData];
             } withKey:self];
         }
+        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.collectionView);
     }];
 }
 
@@ -220,6 +224,7 @@
         [self.resultByPage setObject:[NSMutableArray arrayWithArray:result] forKey:[NSNumber numberWithInt:page]];
         [self filterShowsAtPage:page];
         [self.collectionView reloadData];
+        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.collectionView);
     }else{
         //TODO Handle error
     }
@@ -370,6 +375,7 @@
     self.filter = nil;
     self.filteredResultByPage = nil;
     [self.collectionView reloadData];
+    UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, @"Filtrage");
 }
 
 
@@ -378,6 +384,7 @@
     [self filterShowsWithString];
     //[self.collectionView reloadItemsAtIndexPaths:[self.collectionView indexPathsForVisibleItems]];
     [self.collectionView reloadData];
+    UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, @"Annulation du filtre");
     [searchBar resignFirstResponder];
     [[UISegmentedControl appearanceWhenContainedIn:[UISearchBar class], nil] setTintColor:searchBar.tintColor];
 }
@@ -431,101 +438,17 @@
     }
 }
 
-- (void)loadShowCell:(UICollectionViewCell*)cell withShow:(NLTShow*)show{
-    cell.layer.borderColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.4].CGColor;
-    [cell.layer setCornerRadius:5.0f];
-    cell.layer.borderWidth= 1;
-    
-    UIImageView* imageView = (UIImageView*)[cell viewWithTag:100];
-    UILabel* title = (UILabel*)[cell viewWithTag:110];
-    UILabel* subtitle = (UILabel*)[cell viewWithTag:120];
-    UILabel* time = (UILabel*)[cell viewWithTag:130];
-    UIView* durationView = [cell viewWithTag:200];
-    UIView* durationBackground = [cell viewWithTag:205];
-    UILabel* durationLabel = (UILabel*)[cell viewWithTag:210];
-    [durationBackground.layer setCornerRadius:5.0f];
-    durationView.hidden = true;
-    
-    UIView* watchListView = [cell viewWithTag:300];
-    UIView* watchListBackground = [cell viewWithTag:305];
-    UIButton* watchListButton = (UIButton*)[cell viewWithTag:310];
-    UIView* readView = [cell viewWithTag:400];
-    UIView* readBackground = [cell viewWithTag:405];
-    UIButton* readButton = (UIButton*)[cell viewWithTag:410];
-    
-    watchListView.hidden = TRUE;
-    readView.hidden = TRUE;
-    [watchListBackground.layer setCornerRadius:5.0f];
-    [readBackground.layer setCornerRadius:5.0f];
-    [watchListButton.layer setCornerRadius:2.0f];
-    [readButton.layer setCornerRadius:2.0f];
-    
-    
-    title.text = @"Chargement ...";
-    subtitle.text = @"";
-    time.text = @"";
-    imageView.image = [UIImage imageNamed:@"noco.png"];
-    imageView.backgroundColor = [UIColor whiteColor];
-    
-    UIImageView* partnerImageView = (UIImageView*)[cell viewWithTag:600];
-    partnerImageView.image = nil;
-    
-    if(show){
-        if([[NLTAPI sharedInstance].partnersByKey objectForKey:show.partner_key]){
-            NSDictionary* partnerInfo = [[NLTAPI sharedInstance].partnersByKey objectForKey:show.partner_key];
-            if([partnerInfo objectForKey:@"icon_128x72"]){
-                [partnerImageView sd_setImageWithURL:[NSURL URLWithString:[partnerInfo objectForKey:@"icon_128x72"]] placeholderImage:nil];
-            }
-        }
-        readView.hidden = FALSE;
-        readButton.selected = show.mark_read;
-        if(readButton.selected){
-            readButton.backgroundColor = SELECTED_VALID_COLOR;
-        }else{
-            readButton.backgroundColor = THEME_COLOR;
-        }
-        [[NLTAPI sharedInstance] isInQueueList:show withResultBlock:^(id result, NSError *error) {
-            if(!error){
-                watchListView.hidden = FALSE;
-                watchListButton.selected = [result boolValue];
-                if(watchListButton.selected){
-                    watchListButton.backgroundColor = SELECTED_VALID_COLOR;
-                }else{
-                    watchListButton.backgroundColor = THEME_COLOR;
-                }
-            }
-        } withKey:self];
-        
-        durationView.hidden = FALSE;
-        durationLabel.text = [show durationString];
-        if(show.family_TT){
-            title.text = show.family_TT;
-            if(show.episode_number && show.episode_number != 0){
-                if(show.season_number > 1){
-                    title.text = [title.text stringByAppendingFormat:@" - S%02iE%02i", show.season_number,show.episode_number];
-                }else{
-                    title.text = [title.text stringByAppendingFormat:@" - %i", show.episode_number];
-                }
-            }
-        }
-        if(show.show_TT) {
-            subtitle.text = show.show_TT;
-        }
-        if(show.broadcastDate) {
-            NSDateFormatter *formater = [[NSDateFormatter alloc] init];
-            [formater setDateFormat:@"dd MMM YYY - HH:mm"];
-            time.text = [formater stringFromDate:show.broadcastDate];
-        }
-        if(show.screenshot_512x288){
-#warning Find alternative screenshot when not available
-            [imageView sd_setImageWithURL:[NSURL URLWithString:show.screenshot_512x288] placeholderImage:[UIImage imageNamed:@"noco.png"]];
-        }
-    }
+- (void)loadShowCell:(ShowCollectionViewCell*)cell withShow:(NLTShow*)show{
+    [cell loadShow:show];
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     NLTShow* show = [self showAtIndex:indexPath.row];
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ShowsCell" forIndexPath:indexPath];
-    [self loadShowCell:cell withShow:show];
+    if([cell isKindOfClass:[ShowCollectionViewCell class]]){
+        [self loadShowCell:(ShowCollectionViewCell*)cell withShow:show];
+    }else{
+        NSLog(@"PB with cell loading");
+    }
     return cell;
 }
 

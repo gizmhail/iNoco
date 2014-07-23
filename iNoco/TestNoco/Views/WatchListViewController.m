@@ -231,42 +231,20 @@
     }else if( indexPath.section == [self favoriteFamilySection] ){
         //Family object
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FamilllyCell" forIndexPath:indexPath];
-        cell.layer.borderColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.4].CGColor;
-        [cell.layer setCornerRadius:5.0f];
-        cell.layer.borderWidth= 1;
-        UIImageView* imageView = (UIImageView*)[cell viewWithTag:100];
-        UILabel* title = (UILabel*)[cell viewWithTag:110];
-        UILabel* subtitle = (UILabel*)[cell viewWithTag:120];
-        imageView.image = [UIImage imageNamed:@"noco.png"];
-        title.text = @"Chargement ...";
-        subtitle.text = @"";
         NLTFamily* family = [self familyAtIndex:indexPath.row];
-        
-        UIImageView* partnerImageView = (UIImageView*)[cell viewWithTag:600];
-        partnerImageView.image = nil;
-        
-        if(family){
-            if([[NLTAPI sharedInstance].partnersByKey objectForKey:family.partner_key]){
-                NSDictionary* partnerInfo = [[NLTAPI sharedInstance].partnersByKey objectForKey:family.partner_key];
-                if([partnerInfo objectForKey:@"icon_128x72"]){
-                    [partnerImageView sd_setImageWithURL:[NSURL URLWithString:[partnerInfo objectForKey:@"icon_128x72"]] placeholderImage:nil];
-                }
-            }
-            title.text = family.family_TT;
-            subtitle.text = family.theme_name;
-            if(family.icon_512x288){
-#warning Find alternative screenshot when not available
-                [imageView sd_setImageWithURL:[NSURL URLWithString:family.icon_512x288] placeholderImage:[UIImage imageNamed:@"noco.png"]];
-            }
+        if([cell isKindOfClass:[ShowCollectionViewCell class]]){
+            [(ShowCollectionViewCell*)cell loadFamily:family];
+        }else{
+            NSLog(@"PB with cell loading");
         }
     }else if( indexPath.section == [self downloadsSection] ){
         NLTShow* show = [self downloadedShowAtIndex:indexPath.row];
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ShowsCell" forIndexPath:indexPath];
-        [self loadShowCell:cell withShow:show];
+        [self loadShowCell:(ShowCollectionViewCell*)cell withShow:show];
     }else if( indexPath.section == [self resumePlaySection] ){
         NLTShow* show = [self resumePlayShowAtIndex:indexPath.row];
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ShowsCell" forIndexPath:indexPath];
-        [self loadShowCell:cell withShow:show];
+        [self loadShowCell:(ShowCollectionViewCell*)cell withShow:show];
     }
     return cell;
 }

@@ -10,6 +10,7 @@
 #import "RecentShowViewController.h"
 #import "ConnectionViewController.h"
 #import "NLTAPI.h"
+#import "ShowCollectionViewCell.h"
 
 @interface RecentShowViewController : UIViewController <UICollectionViewDataSource,UICollectionViewDelegate,ConnectionViewControllerDelegate,UISearchBarDelegate,UIAlertViewDelegate>{
     int maxShows;
@@ -29,5 +30,5 @@
 - (void)loadResultAtIndex:(int)resultIndex;
 - (void)resetResult;
 - (void)removeResultAtIndex:(long)index;
-- (void)loadShowCell:(UICollectionViewCell*)cell withShow:(NLTShow*)show;
+- (void)loadShowCell:(ShowCollectionViewCell*)cell withShow:(NLTShow*)show;
 @end

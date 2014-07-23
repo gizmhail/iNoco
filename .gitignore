@@ -1,2 +1,22 @@
 
 iNoco/TestNoco/credentials.h
+
+iNoco/Crashlytics.framework/Crashlytics
+
+iNoco/Crashlytics.framework/Headers
+
+iNoco/Crashlytics.framework/Resources
+
+iNoco/Crashlytics.framework/run
+
+iNoco/Crashlytics.framework/submit
+
+iNoco/Crashlytics.framework/Versions/A/Crashlytics
+
+iNoco/Crashlytics.framework/Versions/A/Headers/Crashlytics.h
+
+iNoco/Crashlytics.framework/Versions/A/Resources/Info.plist
+
+iNoco/Crashlytics.framework/Versions/Current
+
+iNoco/TestNoco/crashlytics.sh

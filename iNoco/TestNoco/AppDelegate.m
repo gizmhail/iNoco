@@ -11,6 +11,7 @@
 #import "NLTAPI.h"
 #import <AVFoundation/AVFoundation.h>
 #import "NocoDownloadsManager.h"
+#import <Crashlytics/Crashlytics.h>
 
 void uncaughtExceptionHandler(NSException *exception) {
     NSLog(@"CRASH: %@", exception);
@@ -20,12 +21,14 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-#warning TODO Add __weak weakSelf in blocks throughout app
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
+#ifdef DEBUG
+    //[[Crashlytics sharedInstance] setDebugMode:YES];
+#endif
+    [Crashlytics startWithAPIKey:CRASHLITICS_KEY afterDelay:5];
 
 #ifdef DEBUG
-    NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+    //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
 #endif
     NSError *setCategoryError = nil;
     BOOL success = [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error: &setCategoryError];
