@@ -105,7 +105,6 @@
 		4FEECD6A1949D683002514CE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEECD691949D683002514CE /* main.m */; };
 		4FEECD6E1949D683002514CE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEECD6D1949D683002514CE /* AppDelegate.m */; };
 		4FEECD711949D683002514CE /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FEECD6F1949D683002514CE /* Main_iPhone.storyboard */; };
-		4FEECD741949D683002514CE /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FEECD721949D683002514CE /* Main_iPad.storyboard */; };
 		4FEECD7C1949D683002514CE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FEECD7B1949D683002514CE /* Images.xcassets */; };
 		4FEECD831949D683002514CE /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FEECD821949D683002514CE /* XCTest.framework */; };
 		4FEECD841949D683002514CE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FEECD5D1949D683002514CE /* Foundation.framework */; };
@@ -265,7 +264,6 @@
 		4FEECD6C1949D683002514CE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4FEECD6D1949D683002514CE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		4FEECD701949D683002514CE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		4FEECD731949D683002514CE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		4FEECD7B1949D683002514CE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4FEECD811949D683002514CE /* iNocoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iNocoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FEECD821949D683002514CE /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -551,7 +549,6 @@
 				4FEECD6C1949D683002514CE /* AppDelegate.h */,
 				4FEECD6D1949D683002514CE /* AppDelegate.m */,
 				4FEECD6F1949D683002514CE /* Main_iPhone.storyboard */,
-				4FEECD721949D683002514CE /* Main_iPad.storyboard */,
 				4FEECD7B1949D683002514CE /* Images.xcassets */,
 				4FEECD641949D683002514CE /* Supporting Files */,
 				4F2175CB196D3D890005EB14 /* oss.html */,
@@ -715,7 +712,6 @@
 				4F636AA41958C60A004C0A18 /* Octicons-playback-play.png in Resources */,
 				4F2175C7196CACB10005EB14 /* avatar-round.png in Resources */,
 				4F459505196324BA0061381E /* iTunesArtwork@2x.png in Resources */,
-				4FEECD741949D683002514CE /* Main_iPad.storyboard in Resources */,
 				4FD084931978778800A99958 /* csa_10_black.png in Resources */,
 				4F4594FD196324BA0061381E /* Icon-76@2x.png in Resources */,
 				4FEECD7C1949D683002514CE /* Images.xcassets in Resources */,
@@ -840,14 +836,6 @@
 			name = Main_iPhone.storyboard;
 			sourceTree = "<group>";
 		};
-		4FEECD721949D683002514CE /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4FEECD731949D683002514CE /* Base */,
-			);
-			name = Main_iPad.storyboard;
-			sourceTree = "<group>";
-		};
 		4FEECD8B1949D683002514CE /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -941,6 +929,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TestNoco/iNoco-Prefix.pch";
 				INFOPLIST_FILE = "TestNoco/iNoco-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = iNoco;
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -957,6 +946,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TestNoco/iNoco-Prefix.pch";
 				INFOPLIST_FILE = "TestNoco/iNoco-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = iNoco;
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;

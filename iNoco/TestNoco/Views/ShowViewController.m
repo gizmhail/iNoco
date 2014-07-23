@@ -160,10 +160,8 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     }
     if(self.show.show_resume) {
         self.descriptionText.text = self.show.show_resume;
-        //self.descriptionText.text = [self.descriptionText.text stringByAppendingString:@"\n\n"];
-    }
-    if(self.show.family_resume) {
-        //self.descriptionText.text = [self.descriptionText.text stringByAppendingString:self.show.family_resume];
+    }else if(self.show.family_resume) {
+        self.descriptionText.text = self.show.family_resume;
     }
     self.readButton.selected = self.show.mark_read;
     self.readImageButton.selected = self.show.mark_read;
@@ -271,22 +269,51 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
 
 - (void)notificationMPMoviePlayerLoadStateDidChangeNotification:(NSNotification*)notif{
 #ifdef DEBUG
-    NSLog(@"Load state %i", self.moviePlayer.loadState);
+    NSLog(@"Load state %li", (long)self.moviePlayer.loadState);
 #endif
     if(self.moviePlayer.loadState & MPMovieLoadStatePlayable){
     }
 }
 
 - (void)notificaitonMPMoviePlayerDidExitFullscreenNotification:(NSNotification*)notif{
-    if(!self.readButton.selected){
-        if(self.chapters&&[self.chapters count]>0){
-            self.readSheet = [[UIActionSheet alloc] initWithTitle:@"Marquer comme lu" delegate:self cancelButtonTitle:@"Ne pas marquer comme lu" destructiveButtonTitle:nil otherButtonTitles:allReadMessage, @"l'émission seule", nil];
-            [self.readSheet showFromTabBar:self.navigationController.tabBarController.tabBar];
+    __weak ShowViewController* weakSelf = self;
+    [[NLTAPI sharedInstance] showWithId:self.show.id_show withResultBlock:^(NLTShow* result, NSError *error) {
+        BOOL markRead = result.mark_read;
+        if(markRead){
+            //It has been properly mark as read by the backend
+            weakSelf.readButton.selected = TRUE;
+            weakSelf.readImageButton.selected = TRUE;
+            [weakSelf updateInterctiveUI];
+            if(weakSelf.chapters&&[weakSelf.chapters count]>0){
+                weakSelf.readSheet = [[UIActionSheet alloc] initWithTitle:@"Marquer comme lu" delegate:weakSelf cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:allReadMessage,@"l'émission seule", nil];
+                [weakSelf.readSheet showFromTabBar:weakSelf.navigationController.tabBarController.tabBar];
+            }else{
+                [self proposeToRemoveFromWatchList];
+            }
         }else{
-            self.readSheet = [[UIActionSheet alloc] initWithTitle:@"Marquer comme lu" delegate:self cancelButtonTitle:@"Ne pas marquer comme lu" destructiveButtonTitle:nil otherButtonTitles:@"marquer l'émission comme lu", nil];
-            [self.readSheet showFromTabBar:self.navigationController.tabBarController.tabBar];
+            //Not mark as read by the backend (do not track, or problem): we'll handle it manually
+            if(!weakSelf.readButton.selected){
+                if(weakSelf.chapters&&[weakSelf.chapters count]>0){
+                    weakSelf.readSheet = [[UIActionSheet alloc] initWithTitle:@"Marquer comme lu" delegate:weakSelf cancelButtonTitle:@"Ne pas marquer comme lu" destructiveButtonTitle:nil otherButtonTitles:allReadMessage, @"l'émission seule", nil];
+                    [weakSelf.readSheet showFromTabBar:weakSelf.navigationController.tabBarController.tabBar];
+                }else{
+                    weakSelf.readSheet = [[UIActionSheet alloc] initWithTitle:@"Marquer comme lu" delegate:weakSelf cancelButtonTitle:@"Ne pas marquer comme lu" destructiveButtonTitle:nil otherButtonTitles:@"marquer l'émission comme lu", nil];
+                    [weakSelf.readSheet showFromTabBar:weakSelf.navigationController.tabBarController.tabBar];
+                }
+            }else{
+                [self proposeToRemoveFromWatchList];
+            }
         }
+    } withKey:self noCache:YES];
+}
+
+- (void)proposeToRemoveFromWatchList{
+    if(self.watchListButton.selected){
+        //Propose to remove from watchlist, as it is read
+        self.statusSheet = [[UIActionSheet alloc] initWithTitle:@"Liste de lecture" delegate:self cancelButtonTitle:@"Ne pas retirer" destructiveButtonTitle:nil otherButtonTitles:removeFromWatchlist, nil];
+        [self.statusSheet showFromTabBar:self.navigationController.tabBarController.tabBar];
     }
+
 }
 
 - (void)notificationMPMoviePlayerPlaybackDidFinishNotification:(NSNotification*)notif{
@@ -644,11 +671,7 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
             weakSelf.readAlert = nil;
             weakSelf.readError = nil;
             [weakSelf updateInterctiveUI];
-            if(weakSelf.watchListButton.selected){
-                //Propose to remove from watchlist, as it is read
-                self.statusSheet = [[UIActionSheet alloc] initWithTitle:@"Liste de lecture" delegate:self cancelButtonTitle:@"Ne pas retirer" destructiveButtonTitle:nil otherButtonTitles:removeFromWatchlist, nil];
-                [self.statusSheet showFromTabBar:self.navigationController.tabBarController.tabBar];
-            }
+            [weakSelf proposeToRemoveFromWatchList];
         }
 
     } withKey:self];

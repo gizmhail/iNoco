@@ -272,6 +272,16 @@
     if(pageResults){
         if([pageResults count]>indexInPage){
             result = [pageResults objectAtIndex:indexInPage];
+            /*
+             Remove if not needed
+            //We try to fetch the same instance as the cached instance (if controller local cache is outdated, this avoid having 2 different instances)
+            if([result isKindOfClass:[NLTShow class]]&&[[NLTAPI sharedInstance].showsById objectForKey:[NSNumber numberWithInt:[(NLTShow*)result id_show]]]){
+                result = [[NLTAPI sharedInstance].showsById objectForKey:[NSNumber numberWithInt:[(NLTShow*)result id_show]]];
+            }
+            if([result isKindOfClass:[NLTFamily class]]&&[[NLTAPI sharedInstance].familiesById objectForKey:[NSNumber numberWithInt:[(NLTFamily*)result id_family]]]){
+                result = [[NLTAPI sharedInstance].familiesById objectForKey:[NSNumber numberWithInt:[(NLTFamily*)result id_family]]];
+            }
+             */
         }else{
             NSLog(@"Index PB");
         }
