@@ -276,8 +276,12 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
 }
 
 - (void)notificaitonMPMoviePlayerDidExitFullscreenNotification:(NSNotification*)notif{
+    self.readAlert = [[UIAlertView alloc] initWithTitle:@"Connection en cours ..." message:@"Récupération de l'état lu/non lu..." delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+    [self.readAlert show];
     __weak ShowViewController* weakSelf = self;
     [[NLTAPI sharedInstance] showWithId:self.show.id_show withResultBlock:^(NLTShow* result, NSError *error) {
+        [weakSelf.readAlert dismissWithClickedButtonIndex:0 animated:YES];
+        weakSelf.readAlert = nil;
         BOOL markRead = result.mark_read;
         if(markRead){
             //It has been properly mark as read by the backend
