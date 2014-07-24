@@ -38,7 +38,31 @@
     self.subtitleSegmentedEntriesValues = @[@"none", @"en", @"fr", @"ja"];
     self.qualitySegmentedEntriesValues = @[@"LQ", @"HQ", @"TV", @"HD_720", @"HD_1080"];
 
+    self.settingsZone.layer.borderColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.4].CGColor;
+    [self.settingsZone.layer setCornerRadius:5.0f];
+    self.settingsZone.layer.borderWidth= 1;
+    [self.settingsZone.layer setShadowColor:[UIColor lightGrayColor].CGColor];
+    [self.settingsZone.layer setShadowOpacity:0.5];
+    [self.settingsZone.layer setShadowRadius:0.2];
+    [self.settingsZone.layer setShadowOffset:CGSizeMake(1, 1)];
+
+    self.iNocoZone.layer.borderColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.4].CGColor;
+    [self.iNocoZone.layer setCornerRadius:5.0f];
+    self.iNocoZone.layer.borderWidth= 1;
+    [self.iNocoZone.layer setShadowColor:[UIColor lightGrayColor].CGColor];
+    [self.iNocoZone.layer setShadowOpacity:0.5];
+    [self.iNocoZone.layer setShadowRadius:0.2];
+    [self.iNocoZone.layer setShadowOffset:CGSizeMake(1, 1)];
     
+    self.accountZone.layer.borderColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.4].CGColor;
+    [self.accountZone.layer setCornerRadius:5.0f];
+    self.accountZone.layer.borderWidth= 1;
+    [self.accountZone.layer setShadowColor:[UIColor lightGrayColor].CGColor];
+    [self.accountZone.layer setShadowOpacity:0.5];
+    [self.accountZone.layer setShadowRadius:0.2];
+    [self.accountZone.layer setShadowOffset:CGSizeMake(1, 1)];
+    
+ 
     // Do any additional setup after loading the view.
 }
 

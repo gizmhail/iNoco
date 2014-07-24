@@ -19,6 +19,8 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *languageSegementedControl;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *subtitleSegementedControl;
 @property (weak, nonatomic) IBOutlet UIView *settingsZone;
+@property (weak, nonatomic) IBOutlet UIView *iNocoZone;
+@property (weak, nonatomic) IBOutlet UIView *accountZone;
 
 - (IBAction)disconnect:(id)sender;
 - (IBAction)catalogueChanged:(id)sender;
