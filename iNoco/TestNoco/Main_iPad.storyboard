@@ -39,7 +39,7 @@
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="3" id="v1a-oH-A5n">
                                     <size key="itemSize" width="245" height="280"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="50" height="50"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
@@ -153,6 +153,20 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </collectionViewCell>
                                 </cells>
+                                <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="RecentShowFilterFooter" id="H5N-oa-kXT" customClass="FilterFooterCollectionReusableView">
+                                    <rect key="frame" x="0.0" y="280" width="764" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button opaque="NO" tag="1000" contentMode="scaleToFill" restorationIdentifier="RecentshowFooterReusableView" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="SEx-yF-1K7">
+                                            <rect key="frame" x="224" y="10" width="316" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <state key="normal" title="Rechercher parmi toutes les émissions">
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
+                                    </subviews>
+                                </collectionReusableView>
                                 <connections>
                                     <outlet property="dataSource" destination="nf5-WY-UdG" id="a9X-Bk-z4M"/>
                                     <outlet property="delegate" destination="nf5-WY-UdG" id="Qih-si-jiG"/>
@@ -1428,6 +1442,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                     <connections>
                         <outlet property="activity" destination="daK-Sc-ezo" id="4W4-3d-r47"/>
                         <outlet property="collectionView" destination="dcx-ww-K86" id="NcP-eT-fts"/>
+                        <outlet property="searchBar" destination="eJ8-EE-mYe" id="eKS-P8-Jqc"/>
                         <segue destination="JAW-94-Ybq" kind="push" identifier="DisplayRecentShow" id="4Qe-0V-q8F"/>
                         <segue destination="nf5-WY-UdG" kind="push" identifier="DisplayFamily" id="UgH-2G-9fT"/>
                     </connections>
@@ -1478,7 +1493,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Kug-yo-jdF"/>
-        <segue reference="Uld-fo-urg"/>
+        <segue reference="4Qe-0V-q8F"/>
+        <segue reference="UgH-2G-9fT"/>
     </inferredMetricsTieBreakers>
 </document>

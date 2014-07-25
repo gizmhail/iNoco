@@ -19,7 +19,6 @@
     BOOL initialAuthentCheckDone;
 }
 
-@property (retain,nonatomic)NSString* search;
 @end
 
 
@@ -28,6 +27,9 @@
 -(void)viewDidLoad{
     [super viewDidLoad];
     self.title = @"recherche";
+    if(self.search){
+        self.searchBar.text = self.search;
+    }
 }
 
 

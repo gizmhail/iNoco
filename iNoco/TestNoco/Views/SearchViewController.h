@@ -9,5 +9,6 @@
 #import "RecentShowViewController.h"
 
 @interface SearchViewController : RecentShowViewController
+@property (retain,nonatomic)NSString* search;
 
 @end

@@ -13,6 +13,8 @@
 #import "ShowViewController.h"
 #import "UIView+Toast.h"
 #import "FavoriteProgramManager.h"
+#import "FilterFooterCollectionReusableView.h"
+#import "SearchViewController.h"
 
 @interface RecentShowViewController ()
 @property (retain,nonatomic)UIButton* favoriteFamilly;
@@ -365,6 +367,19 @@
     }
 }
 
+- (void)launchFullsearchForFilter{
+    if (self.filter != nil && [self.filter compare:@""] != NSOrderedSame) {
+        [self.tabBarController setSelectedIndex:2];
+        UINavigationController* searchNav = (UINavigationController*)[self.tabBarController.viewControllers objectAtIndex:2];
+        [searchNav popToRootViewControllerAnimated:NO];
+        SearchViewController* searchController = [[searchNav viewControllers] firstObject];
+        searchController.search = self.filter;
+        searchController.searchBar.text = self.filter;
+        [searchController.collectionView reloadData];
+    }
+
+}
+
 #pragma mark UIAlertviewDelegate
 
 -(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
@@ -469,6 +484,24 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if([[segue destinationViewController] isKindOfClass:[ShowViewController class]]&&[sender isKindOfClass:[NLTShow class]]){
         [(ShowViewController*)[segue destinationViewController] setShow:sender];
+    }
+}
+
+
+-(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
+    if([kind compare:UICollectionElementKindSectionFooter]==NSOrderedSame){
+        FilterFooterCollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"RecentShowFilterFooter" forIndexPath:indexPath];
+        footerView.delegate = self;
+        return footerView;
+    }
+    return nil;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section{
+    if (self.filter == nil || [self.filter compare:@""] == NSOrderedSame) {
+        return CGSizeMake(0, 0);
+    }else {
+        return CGSizeMake(self.collectionView.bounds.size.width, 50);
     }
 }
 
