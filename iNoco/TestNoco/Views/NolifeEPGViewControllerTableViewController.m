@@ -14,6 +14,7 @@
 #import "ShowViewController.h"
 #import "WebViewDetailsViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "EPGTableViewCell.h"
 
 @interface NolifeEPGViewControllerTableViewController (){
     BOOL firstFocusOnNowDone;
@@ -100,9 +101,10 @@
     UILabel* timeLabel = (UILabel*)[cell viewWithTag:100];
     UILabel* titleLabel = (UILabel*)[cell viewWithTag:110];
     UILabel* subtitleLabel = (UILabel*)[cell viewWithTag:120];
-    UIView* backgroundView = [cell viewWithTag:300];
     UIImageView* imageView= (UIImageView*)[cell viewWithTag:130];
     
+    /*
+    UIView* backgroundView = [cell viewWithTag:300];
     backgroundView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     backgroundView.layer.borderWidth = 1;
     
@@ -110,7 +112,7 @@
     [backgroundView.layer setShadowOpacity:0.5];
     [backgroundView.layer setShadowRadius:0.2];
     [backgroundView.layer setShadowOffset:CGSizeMake(1, 1)];
-    
+    */
 
     NSString* imageUrl = nil;
     if([show objectForKey:@"screenshot"] && [show objectForKey:@"screenshot"] != [NSNull null] && [(NSString*)[show objectForKey:@"screenshot"] compare:@""] != NSOrderedSame){

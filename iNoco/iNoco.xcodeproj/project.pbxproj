@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F11173A19823A7A00242C22 /* EPGTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F11173919823A7A00242C22 /* EPGTableViewCell.m */; };
 		4F1254B61951D457003FEEA5 /* NLTOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1254B51951D457003FEEA5 /* NLTOAuth.m */; };
 		4F1254B91951E60C003FEEA5 /* NLTOAuthController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1254B81951E60C003FEEA5 /* NLTOAuthController.m */; };
 		4F1254BE1951F597003FEEA5 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4F1254BD1951F597003FEEA5 /* README.md */; };
@@ -129,6 +130,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4F11173819823A7A00242C22 /* EPGTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EPGTableViewCell.h; sourceTree = "<group>"; };
+		4F11173919823A7A00242C22 /* EPGTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EPGTableViewCell.m; sourceTree = "<group>"; };
 		4F1254B41951D457003FEEA5 /* NLTOAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLTOAuth.h; sourceTree = "<group>"; };
 		4F1254B51951D457003FEEA5 /* NLTOAuth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLTOAuth.m; sourceTree = "<group>"; };
 		4F1254B71951E60C003FEEA5 /* NLTOAuthController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLTOAuthController.h; sourceTree = "<group>"; };
@@ -419,6 +422,8 @@
 				4F636A511955CEE0004C0A18 /* ConnectionViewController.m */,
 				4F92784F197E56AD00DB138B /* ShowCollectionViewCell.h */,
 				4F927850197E56AD00DB138B /* ShowCollectionViewCell.m */,
+				4F11173819823A7A00242C22 /* EPGTableViewCell.h */,
+				4F11173919823A7A00242C22 /* EPGTableViewCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -817,6 +822,7 @@
 				4F37F3761969FEC000D0AACC /* NolifeEPGViewControllerTableViewController.m in Sources */,
 				4F636A4E1955C7D4004C0A18 /* RecentShowViewController.m in Sources */,
 				4F37F379196A15A000D0AACC /* WebViewDetailsViewController.m in Sources */,
+				4F11173A19823A7A00242C22 /* EPGTableViewCell.m in Sources */,
 				4F459508196325E60061381E /* SearchViewController.m in Sources */,
 				4F927851197E56AD00DB138B /* ShowCollectionViewCell.m in Sources */,
 				4F636A8419577726004C0A18 /* UIImageView+HighlightedWebCache.m in Sources */,
