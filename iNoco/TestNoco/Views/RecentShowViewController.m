@@ -15,8 +15,10 @@
 #import "FavoriteProgramManager.h"
 #import "FilterFooterCollectionReusableView.h"
 #import "SearchViewController.h"
+#import "ConnectionViewController.h"
 
-@interface RecentShowViewController ()
+@interface RecentShowViewController (){
+}
 @property (retain,nonatomic)UIButton* favoriteFamilly;
 @property (retain,nonatomic)UIRefreshControl* refreshControl;
 @property (retain,nonatomic)UIAlertView* errorAlert;
@@ -86,9 +88,14 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-    [self.view makeToastActivity];
     initialAuthentCheckDone = FALSE;
-    [self refreshResult];
+    if(!self.noNetworkForAuth){
+        [self.view makeToastActivity];
+        [self refreshResult];
+    }else{
+        //Back from auth try, with lacking network: we avoid, once, to try to reconnect
+        self.noNetworkForAuth = FALSE;
+    }
 
 }
 
@@ -126,9 +133,15 @@
 #warning TODO Handle offline
         initialAuthentCheckDone = TRUE;
         if(!authenticated){
-            [weakSelf.view hideToastActivity];
-            [weakSelf.navigationController.tabBarController performSegueWithIdentifier:@"NotConnectedSegue" sender:nil];
-            [weakSelf.refreshControl endRefreshing];
+            if([error.domain compare:NSURLErrorDomain]==NSOrderedSame && error.code == -1009){
+                [weakSelf.view hideToastActivity];
+                [weakSelf.refreshControl endRefreshing];
+                [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:self   cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+            }else{
+                [weakSelf.view hideToastActivity];
+                [weakSelf performSegueWithIdentifier:@"NotConnectedSegue" sender:self];
+                [weakSelf.refreshControl endRefreshing];
+            }
         }else{
             [weakSelf connectedToNoco];
             //Fetch partners logo
@@ -147,6 +160,10 @@
 }
 - (void)connectedToNoco{
     [self loadResultAtIndex:0];
+}
+
+- (void)noNetwordForAuth{
+    self.noNetworkForAuth = TRUE;
 }
 
 - (long)greatestFetchedPage{
@@ -484,6 +501,10 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if([[segue destinationViewController] isKindOfClass:[ShowViewController class]]&&[sender isKindOfClass:[NLTShow class]]){
         [(ShowViewController*)[segue destinationViewController] setShow:sender];
+    }
+    
+    if([[segue destinationViewController] isKindOfClass:[ConnectionViewController class]]){
+        [(ConnectionViewController*)[segue destinationViewController] setSender:sender];
     }
 }
 

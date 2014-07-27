@@ -328,6 +328,9 @@
     if([[segue destinationViewController] isKindOfClass:[RecentShowViewController class]]&&[sender isKindOfClass:[NLTFamily class]]){
         [(RecentShowViewController*)[segue destinationViewController] setFamily:(NLTFamily*)sender];
     }
+    if([[segue destinationViewController] isKindOfClass:[ConnectionViewController class]]){
+        [(ConnectionViewController*)[segue destinationViewController] setSender:sender];
+    }
 }
 
 @end

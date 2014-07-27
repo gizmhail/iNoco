@@ -409,10 +409,13 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     __weak ShowViewController* weakSelf = self;
     [self.videoActivity startAnimating];
     [[NLTAPI sharedInstance] videoUrlForShow:self.show withResultBlock:^(id result, NSError *error) {
-        if(result){
+        if(result || [[NocoDownloadsManager sharedInstance] isDownloaded:self.show]){
             userEndedPlay = FALSE;
             NSString* file = [result objectForKey:@"file"];
-            NSURL* url = [NSURL URLWithString:file];
+            NSURL* url = nil;
+            if(file){
+                [NSURL URLWithString:file];
+            }
             if([[NocoDownloadsManager sharedInstance] isDownloaded:self.show]){
                 file = [[NocoDownloadsManager sharedInstance] downloadFilePathForShow:self.show];
                 if(file){

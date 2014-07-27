@@ -11,8 +11,11 @@
 @protocol ConnectionViewControllerDelegate <NSObject>
 @optional
 - (void)connectedToNoco;
+- (void)noNetwordForAuth;
 @end
+
 @interface ConnectionViewController : UIViewController
+@property (assign, nonatomic) id<ConnectionViewControllerDelegate> sender;
 - (IBAction)connect:(id)sender;
 - (IBAction)accounCreation:(id)sender;
 

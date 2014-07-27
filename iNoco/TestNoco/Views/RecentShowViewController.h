@@ -23,6 +23,7 @@
 @property (retain, nonatomic) NLTFamily* family;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activity;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (assign,nonatomic) BOOL noNetworkForAuth;
 
 - (id)resultAtIndex:(long)index;
 - (NLTShow*)showAtIndex:(long)showIndex;

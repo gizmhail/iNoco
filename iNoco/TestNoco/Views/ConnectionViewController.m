@@ -10,7 +10,6 @@
 #import "NLTOAuth.h"
 
 @interface ConnectionViewController ()
-@property (assign, nonatomic) id<ConnectionViewControllerDelegate> sender;
 @end
 
 @implementation ConnectionViewController
@@ -36,6 +35,7 @@
     // Dispose of any resources that can be recreated.
 }
 
+//TODO Remove
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
@@ -57,6 +57,13 @@
                 }];
             });
         }else{
+            if([error.domain compare:NSURLErrorDomain]==NSOrderedSame && error.code == -1009){
+                if([weakSelf.sender respondsToSelector:@selector(noNetwordForAuth)]){
+                    [weakSelf.sender noNetwordForAuth];
+                }
+                [weakSelf dismissViewControllerAnimated:YES completion:^{
+                }];
+            }
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             });
