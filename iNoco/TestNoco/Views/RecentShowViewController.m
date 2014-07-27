@@ -320,7 +320,7 @@
                 [self loadResultAtIndex:showIndex];
             }else{
                 //Loading not needed anymore
-                NSLog(@"Loading not needed");
+                //NSLog(@"Loading not needed");
             }
         });
     }

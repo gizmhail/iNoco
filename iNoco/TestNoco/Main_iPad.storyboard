@@ -543,7 +543,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </view>
                                             <view tag="200" contentMode="scaleToFill" id="SFo-6K-Qmo">
-                                                <rect key="frame" x="349" y="199" width="128" height="21"/>
+                                                <rect key="frame" x="277" y="177" width="128" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <view alpha="0.64999997615814209" tag="205" contentMode="scaleToFill" id="kIE-8A-Lfz">
@@ -552,7 +552,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                     </view>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="version téléchargée" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UDK-pY-3Z5">
-                                                        <rect key="frame" x="4" y="0.0" width="119" height="21"/>
+                                                        <rect key="frame" x="-1" y="0.0" width="119" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1494,6 +1494,6 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="4Qe-0V-q8F"/>
-        <segue reference="UgH-2G-9fT"/>
+        <segue reference="Uld-fo-urg"/>
     </inferredMetricsTieBreakers>
 </document>

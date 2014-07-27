@@ -747,7 +747,7 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
                     } withKey:weakSelf];
                 }else{
                     //Loading not needed anymore
-                    NSLog(@"Loading not needed");
+                    //NSLog(@"Loading not needed");
                 }
             });
         }

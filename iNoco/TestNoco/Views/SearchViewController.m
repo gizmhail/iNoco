@@ -109,7 +109,7 @@
                         } withKey:weakSelf];
                     }else{
                         //Loading not needed anymore
-                        NSLog(@"Loading not needed");
+                        //NSLog(@"Loading not needed");
                     }
                 });
             }
@@ -172,7 +172,7 @@
                         } withKey:weakSelf];
                     }else{
                         //Loading not needed anymore
-                        NSLog(@"Loading not needed");
+                        //NSLog(@"Loading not needed");
                     }
                 });
             }

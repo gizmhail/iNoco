@@ -213,7 +213,15 @@
         NSMutableArray* infos = [NSMutableArray arrayWithArray:cache];
         self.downloadInfos = [NSMutableArray array];
         for (NSDictionary* info in infos) {
-            [self.downloadInfos addObject:[info mutableCopy] ];
+            if([info isKindOfClass:[NSDictionary class]]){
+                if([[info objectForKey:@"showInfo"] isKindOfClass:[NSDictionary class]]){
+                    [self.downloadInfos addObject:[info mutableCopy] ];
+                }else{
+                    NSLog(@"Pb with stored info");
+                }
+            }else{
+                NSLog(@"Pb with stored info");
+            }
         }
     }
 }
