@@ -150,7 +150,6 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     }
     if(self.show.broadcastDate) {
         NSDateFormatter *formater = [[NSDateFormatter alloc] init];
-        formater = [[NSDateFormatter alloc] init];
         [formater setDateFormat:@"dd MMM YYY - HH:mm"];
         self.timeLabel.text = [formater stringFromDate:self.show.broadcastDate];
     }
@@ -405,7 +404,7 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
         }
         return;
     }
-#warning TODO Add preference for prefered quality
+
     __weak ShowViewController* weakSelf = self;
     [self.videoActivity startAnimating];
     [[NLTAPI sharedInstance] videoUrlForShow:self.show withResultBlock:^(id result, NSError *error) {
@@ -414,7 +413,7 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
             NSString* file = [result objectForKey:@"file"];
             NSURL* url = nil;
             if(file){
-                [NSURL URLWithString:file];
+                url = [NSURL URLWithString:file];
             }
             if([[NocoDownloadsManager sharedInstance] isDownloaded:self.show]){
                 file = [[NocoDownloadsManager sharedInstance] downloadFilePathForShow:self.show];
@@ -423,6 +422,7 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
                 }
                 
             }
+            NSLog(@"Reading url %@",url);
             weakSelf.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:url];
             weakSelf.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
             weakSelf.moviePlayer.view.frame = weakSelf.imageView.frame;

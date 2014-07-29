@@ -33,7 +33,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="dqf-IB-oJ1">
-                                <rect key="frame" x="2" y="66" width="764" height="907"/>
+                                <rect key="frame" x="2" y="66" width="764" height="909"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="3" id="v1a-oH-A5n">
@@ -195,6 +195,7 @@
                         <outlet property="collectionView" destination="dqf-IB-oJ1" id="NGh-VR-xkI"/>
                         <outlet property="searchBar" destination="n1m-fb-oGN" id="UyD-C5-Mbp"/>
                         <segue destination="JAW-94-Ybq" kind="push" identifier="DisplayRecentShow" id="kle-D5-vYb"/>
+                        <segue destination="ChP-V5-6sA" kind="modal" identifier="NotConnectedSegue" id="73L-hL-LBD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nem-ra-afa" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -236,7 +237,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="1ZV-ep-2mw">
-                                <rect key="frame" x="2" y="20" width="764" height="946"/>
+                                <rect key="frame" x="2" y="20" width="764" height="955"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="3" id="ut3-iM-fZI">
@@ -432,6 +433,7 @@
                         <outlet property="emptyMessageLabel" destination="GDN-zC-lYX" id="9DX-Ft-Rao"/>
                         <segue destination="JAW-94-Ybq" kind="push" identifier="DisplayRecentShow" id="n1U-TL-WAH"/>
                         <segue destination="nf5-WY-UdG" kind="push" identifier="DisplayFamily" id="ymw-vL-d9H"/>
+                        <segue destination="ChP-V5-6sA" kind="modal" identifier="NotConnectedSegue" id="akU-Xt-KfF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qSA-0P-8qP" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1137,7 +1139,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nTF-jo-M6y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1317" y="5106"/>
+            <point key="canvasLocation" x="3515" y="1362"/>
         </scene>
         <!--NolifeEPG View Controller Table View Controller - Programmes Nolife-->
         <scene sceneID="Q9G-T6-f7P">
@@ -1445,6 +1447,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                         <outlet property="searchBar" destination="eJ8-EE-mYe" id="eKS-P8-Jqc"/>
                         <segue destination="JAW-94-Ybq" kind="push" identifier="DisplayRecentShow" id="4Qe-0V-q8F"/>
                         <segue destination="nf5-WY-UdG" kind="push" identifier="DisplayFamily" id="UgH-2G-9fT"/>
+                        <segue destination="ChP-V5-6sA" kind="modal" identifier="NotConnectedSegue" id="DwT-Xq-8De"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v0b-OD-ve8" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1493,7 +1496,8 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="UgH-2G-9fT"/>
+        <segue reference="DwT-Xq-8De"/>
         <segue reference="4Qe-0V-q8F"/>
-        <segue reference="Uld-fo-urg"/>
     </inferredMetricsTieBreakers>
 </document>

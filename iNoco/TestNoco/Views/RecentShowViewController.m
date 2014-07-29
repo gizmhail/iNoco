@@ -75,6 +75,10 @@
     }
 }
 
+-(void)viewWillDisappear:(BOOL)animated{
+    self.navigationItem.rightBarButtonItem = nil;
+}
+
 - (IBAction)favoriteFamillyClick:(id)sender {
     if(self.family){
         self.favoriteFamilly.selected = !self.favoriteFamilly.selected;

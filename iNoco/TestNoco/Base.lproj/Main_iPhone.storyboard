@@ -33,7 +33,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="JZE-0w-5XN">
-                                <rect key="frame" x="2" y="66" width="316" height="451"/>
+                                <rect key="frame" x="2" y="66" width="316" height="453"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="3" id="rx1-hx-uhB">
@@ -237,7 +237,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="a2m-D9-ptu">
-                                <rect key="frame" x="2" y="20" width="316" height="490"/>
+                                <rect key="frame" x="2" y="20" width="316" height="499"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="3" id="75g-LI-MNR">
@@ -1494,8 +1494,8 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="uN7-L9-3aO"/>
-        <segue reference="kd9-uj-CES"/>
-        <segue reference="a1v-Eq-xu4"/>
+        <segue reference="j4N-YV-D3C"/>
+        <segue reference="etX-5O-isD"/>
+        <segue reference="NRb-n4-HGn"/>
     </inferredMetricsTieBreakers>
 </document>

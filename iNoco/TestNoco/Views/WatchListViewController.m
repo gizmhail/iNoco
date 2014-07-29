@@ -114,7 +114,7 @@
             //We want a bit to be sure the call call is still needed
             __weak WatchListViewController* weakSelf = self;
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                UICollectionViewCell* cell = [weakSelf.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:showIndex inSection:[self watchListSection] ]];
+                UICollectionViewCell* cell = [weakSelf.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:showIndex inSection:[weakSelf watchListSection] ]];
                 if([[weakSelf.collectionView visibleCells] containsObject:cell]){
                     [[NLTAPI sharedInstance] showWithId:[idNumber integerValue] withResultBlock:^(id result, NSError *error) {
                         if(!error){
@@ -147,7 +147,7 @@
             //We wait a bit to be sure the call is still needed
             __weak WatchListViewController* weakSelf = self;
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                UICollectionViewCell* cell = [weakSelf.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:showIndex inSection:[self resumePlaySection] ]];
+                UICollectionViewCell* cell = [weakSelf.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:showIndex inSection:[weakSelf resumePlaySection] ]];
                 if([[weakSelf.collectionView visibleCells] containsObject:cell]){
                     [[NLTAPI sharedInstance] showWithId:[idNumber integerValue] withResultBlock:^(id result, NSError *error) {
                         if(!error){
@@ -182,8 +182,10 @@
         __weak WatchListViewController* weakSelf = self;
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            UICollectionViewCell* cell = [weakSelf.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:familyIndex inSection:1]];
+            UICollectionViewCell* cell = [weakSelf.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:familyIndex inSection:[weakSelf favoriteFamilySection]]];
             if([[weakSelf.collectionView visibleCells] containsObject:cell]){
+#warning TODO Understand why familyMergedKey is nilled sometimes (for index 1)
+                NSString* familyMergedKey = [[[FavoriteProgramManager sharedInstance] favoriteFamilies] objectAtIndex:familyIndex];
                 [[NLTAPI sharedInstance] familyWithFamilyMergedKey:familyMergedKey withResultBlock:^(NLTFamily* newFamily, NSError *error) {
                     BOOL valid = TRUE;
                     if(error&&error.domain == NSCocoaErrorDomain){

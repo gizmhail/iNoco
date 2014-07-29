@@ -253,6 +253,9 @@
         
         BOOL directoryOk = [self prepareStoreDirectory];
 #warning TOOD Handle problems with dir creation
+        if(!directoryOk){
+            NSLog(@"Problem with storage directory");
+        }
         NSString *appSupportDir = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject];
         NSString* fileName = [(NSString*)[downloadInfo objectForKey:@"urlStr"] lastPathComponent];
         fileName = [[fileName componentsSeparatedByString:@"?"] firstObject];
@@ -310,11 +313,6 @@
  * NSURLSessionDownloadTaskResumeData key, whose value is the resume
  * data.
  */-(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes{
-     float progress = 0;
-     if(expectedTotalBytes>0){
-         progress = fileOffset/expectedTotalBytes;
-     }
-    //NSLog(@"Session download task resumed (%i%%) at offset %lld bytes out of an expected %lld bytes.\n", (int)(progress*100), fileOffset, expectedTotalBytes);
      NSLog(@"Resuming task for show %@", downloadTask.taskDescription);
      if(![self.tasks objectForKey:downloadTask.taskDescription]){
          [self.tasks setObject:downloadTask forKey:downloadTask.taskDescription];

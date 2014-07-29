@@ -144,7 +144,7 @@
 - (NSArray*)callInfoWithSameUrlPart:(NLTAPICallInfo*)referenceInfo{
     NSMutableArray* callInfos = [NSMutableArray array];
     for (NLTAPICallInfo* info in self.calls) {
-        if(info.urlPart && [info.urlPart compare:referenceInfo.urlPart] == NSOrderedSame && info != referenceInfo){
+        if(referenceInfo.urlPart && info.urlPart && [info.urlPart compare:referenceInfo.urlPart] == NSOrderedSame && info != referenceInfo){
             [callInfos addObject:info];
         }
     }
@@ -154,7 +154,7 @@
 - (void)removeCallInfoWithSameUrlPart:(NLTAPICallInfo*)referenceInfo{
     NSMutableArray* callInfos = [NSMutableArray array];
     for (NLTAPICallInfo* info in self.calls) {
-        if(info.urlPart && [info.urlPart compare:referenceInfo.urlPart] == NSOrderedSame && info != referenceInfo){
+        if(referenceInfo.urlPart && info.urlPart && [info.urlPart compare:referenceInfo.urlPart] == NSOrderedSame && info != referenceInfo){
             [callInfos addObject:info];
         }
     }
@@ -926,13 +926,13 @@
                 if(subLangInfo &&  [[subLangInfo objectForKey:@"quality_list"] isKindOfClass:[NSDictionary class]]){
                     NSDictionary* qualityList = [subLangInfo objectForKey:@"quality_list"];
                     //Searching for available quality matching request
-                    NSDictionary* qualityInfo = nil;
+                    //NSDictionary* qualityInfo = nil;
                     for (NSString* aivalableQuality in qualityList) {
-                        NSDictionary* aivalableQualityInfo = [qualityList objectForKey:qualityList];
+                        //NSDictionary* aivalableQualityInfo = [qualityList objectForKey:qualityList];
                         if([aivalableQuality compare:preferedQuality options:NSCaseInsensitiveSearch]==NSOrderedSame){
                             //Perfect match
                             qualityKey = aivalableQuality;
-                            qualityInfo = aivalableQualityInfo;
+                            //qualityInfo = aivalableQualityInfo;
                             infoOk = TRUE;
                             perfectMatchQuality = true;
                             break;
@@ -940,7 +940,7 @@
                             //Alternative match
                             if(qualityKey == nil){
                                 qualityKey = aivalableQuality;
-                                qualityInfo = aivalableQualityInfo;
+                                //qualityInfo = aivalableQualityInfo;
                                 infoOk = TRUE;
                             }
                         }
