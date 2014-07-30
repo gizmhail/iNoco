@@ -154,7 +154,7 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
         self.timeLabel.text = [formater stringFromDate:self.show.broadcastDate];
     }
     if(self.show.screenshot_512x288){
-#warning Find alternative screenshot when not available
+        //TODO Find alternative screenshot when not available
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:self.show.screenshot_512x288] placeholderImage:[UIImage imageNamed:@"noco.png"]];
     }
     if(self.show.show_resume) {
@@ -173,8 +173,6 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
             weakSelf.watchListButton.selected = [result boolValue];
             weakSelf.watchListTextButton.selected = [result boolValue];
             [weakSelf updateInterctiveUI];
-        }else{
-#warning Handle error
         }
     } withKey:self];
     
@@ -447,7 +445,7 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
             if(error.code == NLTAPI_ERROR_VIDEO_UNAVAILABLE_WITH_POPMESSAGE && [error.userInfo objectForKey:@"popmessage"]&&[[error.userInfo objectForKey:@"popmessage"] objectForKey:@"message"]){
                 [[[UIAlertView alloc] initWithTitle:@"Erreur" message:[[error.userInfo objectForKey:@"popmessage"] objectForKey:@"message"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             }else{
-#warning Handle error
+                [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de lire la vidéo" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             }
         }
     } withKey:self];
@@ -593,7 +591,6 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
                     [[NocoDownloadsManager sharedInstance] cancelDownloadForShow:self.show];
                     [self updateInterctiveUI];
                 }else{
-#warning TODO Add preference for prefered quality
                     [[NocoDownloadsManager sharedInstance] planDownloadForShow:self.show withQuality:@"LQ"];
                     [self updateInterctiveUI];
                 }

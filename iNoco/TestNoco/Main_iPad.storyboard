@@ -1431,8 +1431,15 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                     <outlet property="delegate" destination="nEt-Jc-Mn4" id="yxA-Yi-Pko"/>
                                 </connections>
                             </collectionView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aucun résultat pour cette recherche" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="XVi-z5-ZQk">
+                                <rect key="frame" x="284" y="504" width="200" height="15"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" id="daK-Sc-ezo">
-                                <rect key="frame" x="364" y="494" width="37" height="37"/>
+                                <rect key="frame" x="0.0" y="0.0" width="37" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <color key="color" red="0.086274512110000007" green="0.53333336109999996" blue="0.80000007149999997" alpha="1" colorSpace="deviceRGB"/>
                             </activityIndicatorView>
@@ -1444,6 +1451,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                     <connections>
                         <outlet property="activity" destination="daK-Sc-ezo" id="4W4-3d-r47"/>
                         <outlet property="collectionView" destination="dcx-ww-K86" id="NcP-eT-fts"/>
+                        <outlet property="noResultLabel" destination="XVi-z5-ZQk" id="ifg-oZ-6XW"/>
                         <outlet property="searchBar" destination="eJ8-EE-mYe" id="eKS-P8-Jqc"/>
                         <segue destination="JAW-94-Ybq" kind="push" identifier="DisplayRecentShow" id="4Qe-0V-q8F"/>
                         <segue destination="nf5-WY-UdG" kind="push" identifier="DisplayFamily" id="UgH-2G-9fT"/>

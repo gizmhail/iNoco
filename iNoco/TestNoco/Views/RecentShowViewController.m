@@ -18,10 +18,14 @@
 #import "ConnectionViewController.h"
 
 @interface RecentShowViewController (){
+    BOOL emptyPageFound;
+    int pendingPageCalls;
+    int firstEmptyPageFound;
 }
 @property (retain,nonatomic)UIButton* favoriteFamilly;
 @property (retain,nonatomic)UIRefreshControl* refreshControl;
 @property (retain,nonatomic)UIAlertView* errorAlert;
+@property (retain,nonatomic)UIAlertView* quotaAlert;
 @end
 
 @implementation RecentShowViewController
@@ -120,6 +124,20 @@
 }
 */
 
+- (BOOL)checkErrorForQuotaLimit:(NSError*)error{
+    BOOL quotaError = false;
+    if(error && [error.domain compare:@"NLTAPIDomain"]==NSOrderedSame && error.code == NLTAPI_NOCO_ERROR){
+        if([error.userInfo objectForKey:@"code"] && [(NSString*)[error.userInfo objectForKey:@"code"] compare:@"TOO_MANY_REQUESTS"]==NSOrderedSame){
+            quotaError = TRUE;
+            if(![self.quotaAlert isVisible]){
+                self.quotaAlert = [[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Trop de connections simultanées faites à Noco : veuillez attendre quelques instants (une minute environ) avant de refaire un appel" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                [self.quotaAlert show];
+            }
+        }
+    }
+    return quotaError;
+}
+
 #pragma mark ConnectionViewControllerDelegate
 
 - (void) forceRefreshResult{
@@ -134,7 +152,7 @@
     UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.collectionView);
     __weak RecentShowViewController* weakSelf = self;
     [[NLTOAuth sharedInstance] isAuthenticatedAfterRefreshTokenUse:^(BOOL authenticated, NSError* error) {
-#warning TODO Handle offline
+#warning TODO Handle offline properly (add Reachability, ...)
         initialAuthentCheckDone = TRUE;
         if(!authenticated){
             if([error.domain compare:NSURLErrorDomain]==NSOrderedSame && error.code == -1009){
@@ -151,6 +169,7 @@
             //Fetch partners logo
             [[NLTAPI sharedInstance] partnersWithResultBlock:^(id result, NSError *error) {
                 [self.collectionView reloadData];
+                [self checkErrorForQuotaLimit:error];
             } withKey:self];
         }
         UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.collectionView);
@@ -161,7 +180,9 @@
     maxShows = -1;
     self.resultByPage = [NSMutableDictionary dictionary];
     self.filteredResultByPage = [NSMutableDictionary dictionary];
+    emptyPageFound = FALSE;
 }
+
 - (void)connectedToNoco{
     [self loadResultAtIndex:0];
 }
@@ -184,24 +205,53 @@
                 if(weakSelf.filter && page > [weakSelf greatestFetchedPage]){
                     //If filtering, we don't download additionnal pages (unless some pages were missing, skipped due to high speed scrolling)
                     [weakSelf.view hideToastActivity];
-                }else if([self.resultByPage objectForKey:[NSNumber numberWithInt:page-1]]&&[[self.resultByPage objectForKey:[NSNumber numberWithInt:page-1]] count]==0){
+                }else if(emptyPageFound && pendingPageCalls <= 0){
                     //We already known that the last page is empty : no need to go further
+#ifdef DEBUG_SHOWLIST_MAXSHOW
+                    [weakSelf.tabBarController.view makeToast:[NSString stringWithFormat:@"No call & setting maxShows due to empty page found at page %i (and no pending calls)", firstEmptyPageFound] duration:10 position:@"bottom"];
+#endif
                     maxShows = [self entriesBeforePage:page];
                     [weakSelf.collectionView reloadData];
                 }else{
                     [weakSelf.view makeToastActivity];
+                    pendingPageCalls++;
+#ifdef DEBUG_SHOWLIST_MAXSHOW
+                    NSLog(@"pendingPageCalls++: %i", pendingPageCalls);
+#endif
                     [weakSelf loadResultsAtPage:page withResultBlock:^(id result, NSError *error) {
+                        pendingPageCalls--;
+#ifdef DEBUG_SHOWLIST_MAXSHOW
+                        NSLog(@"pendingPageCalls--: %i", pendingPageCalls);
+#endif
                         [weakSelf.view hideToastActivity];
                         [weakSelf.refreshControl endRefreshing];
                         if(error){
+#ifdef DEBUG_SHOWLIST_MAXSHOW
+                            [weakSelf.tabBarController.view makeToast:[NSString stringWithFormat:@"Setting maxShows due to error %@", [error description]] duration:10 position:@"bottom"];
+                            NSLog(@"Error: %@", error);
+#endif
+                            BOOL quotaError = [self checkErrorForQuotaLimit:error];
                             maxShows = [self entriesBeforePage:page];
-                            if(!self.errorAlert){
+                            if(!self.errorAlert&&!quotaError){
                                 self.errorAlert = [[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:self   cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                                 [self.errorAlert show];
                             }
                             [weakSelf.collectionView reloadData];
                         }else{
                             [weakSelf insertPageResult:page withResult:result withError:error];
+                        }
+                        if(emptyPageFound){
+                            if(pendingPageCalls <= 0){
+                                maxShows = [self entriesBeforePage:page];
+                                [weakSelf.collectionView reloadData];
+#ifdef DEBUG_SHOWLIST_MAXSHOW
+                                [weakSelf.tabBarController.view makeToast:[NSString stringWithFormat:@"Setting maxShows %i due to empty page found at page %i (and no pending calls)", maxShows,firstEmptyPageFound] duration:10 position:@"bottom"];
+#endif
+                            }else{
+#ifdef DEBUG
+                                NSLog(@"Empty page found, but still %i calls pending", pendingPageCalls);
+#endif
+                            }
                         }
                     }];
                 }
@@ -242,7 +292,11 @@
     if(result&&[result isKindOfClass:[NSArray class]]){
         if([(NSArray*)result count]<[[NLTAPI sharedInstance] resultsByPage]){
             //End of available shows (not a full page of results)
-            maxShows = [(NSArray*)result count] + [self entriesBeforePage:page];
+            if(!emptyPageFound){
+                //For debug purposes
+                firstEmptyPageFound = page;
+            }
+            emptyPageFound = TRUE;
         }
         [self.resultByPage setObject:[NSMutableArray arrayWithArray:result] forKey:[NSNumber numberWithInt:page]];
         [self filterShowsAtPage:page];
@@ -250,6 +304,7 @@
         UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.collectionView);
     }else{
         //TODO Handle error
+        NSLog(@"Unexpected page result");
     }
 }
 

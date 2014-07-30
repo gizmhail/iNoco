@@ -1435,6 +1435,13 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <color key="color" red="0.086274512110000007" green="0.53333336109999996" blue="0.80000007149999997" alpha="1" colorSpace="deviceRGB"/>
                             </activityIndicatorView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aucun résultat pour cette recherche" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2oc-HB-G7y">
+                                <rect key="frame" x="49" y="273" width="221" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -1443,6 +1450,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                     <connections>
                         <outlet property="activity" destination="jPW-G0-abl" id="yPU-BN-wSh"/>
                         <outlet property="collectionView" destination="Dfp-vS-WRi" id="Vwa-G1-nBL"/>
+                        <outlet property="noResultLabel" destination="2oc-HB-G7y" id="7Bv-LB-X6x"/>
                         <segue destination="E8O-zX-w2W" kind="push" identifier="DisplayRecentShow" id="a1v-Eq-xu4"/>
                         <segue destination="Ekx-c5-60x" kind="push" identifier="DisplayFamily" id="uN7-L9-3aO"/>
                         <segue destination="Hur-rc-Twx" kind="modal" identifier="NotConnectedSegue" id="kd9-uj-CES"/>
@@ -1494,8 +1502,8 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="j4N-YV-D3C"/>
-        <segue reference="etX-5O-isD"/>
-        <segue reference="NRb-n4-HGn"/>
+        <segue reference="a1v-Eq-xu4"/>
+        <segue reference="kd9-uj-CES"/>
+        <segue reference="uN7-L9-3aO"/>
     </inferredMetricsTieBreakers>
 </document>

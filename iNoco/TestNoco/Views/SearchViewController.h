@@ -10,5 +10,6 @@
 
 @interface SearchViewController : RecentShowViewController
 @property (retain,nonatomic)NSString* search;
+@property (weak, nonatomic) IBOutlet UILabel *noResultLabel;
 
 @end

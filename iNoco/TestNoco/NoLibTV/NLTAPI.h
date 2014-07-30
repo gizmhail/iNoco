@@ -26,6 +26,7 @@
 
 #warning TODO Define all error codes
 #define NLTAPI_ERROR_VIDEO_UNAVAILABLE_WITH_POPMESSAGE 405
+#define NLTAPI_NOCO_ERROR 510
 
 @interface NLTAPI : NSObject<NSURLConnectionDataDelegate>
 @property (retain, nonatomic)NSString* partnerKey;//Limit shows and search calls

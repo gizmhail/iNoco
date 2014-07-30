@@ -261,7 +261,7 @@
     }
     if(!jsonError&&answer){
         if([answer isKindOfClass:[NSDictionary class]]&&[answer objectForKey:@"error"]){
-            NSError* nocoError = [NSError errorWithDomain:@"NLTAPIDomain" code:510 userInfo:answer];
+            NSError* nocoError = [NSError errorWithDomain:@"NLTAPIDomain" code:NLTAPI_NOCO_ERROR userInfo:answer];
             NSLog(@"Noco error: %@",nocoError);
             
             NSMutableArray* relatedCallInfoForCallback = [NSMutableArray array];
@@ -367,8 +367,6 @@
 }
 
 - (void)showWithId:(long)showId withResultBlock:(NLTCallResponseBlock)responseBlock withKey:(id)key noCache:(BOOL)noCache{
-#warning TODO ensure that showsById is updated with latest results (store in show the call date, and compare,...)
-
     long cache = NLT_SHOWS_CACHE_DURATION;
     if(noCache){
         cache = 0;

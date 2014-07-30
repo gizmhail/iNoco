@@ -33,4 +33,5 @@
 - (void)removeResultAtIndex:(long)index;
 - (void)loadShowCell:(ShowCollectionViewCell*)cell withShow:(NLTShow*)show;
 - (void)launchFullsearchForFilter;
+- (BOOL)checkErrorForQuotaLimit:(NSError*)error;
 @end

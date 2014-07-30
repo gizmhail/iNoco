@@ -35,9 +35,9 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    [self refreshResumePlay];
 }
-#pragma mark Resue play
+
+#pragma mark Resume play
 
 - (void)refreshResumePlay{
     NSString* urlStr = @"/users/resume_play";
@@ -67,6 +67,8 @@
             [weakSelf.collectionView reloadData];
         }
     } withKey:self];
+    [self refreshResumePlay];
+
 }
 
 - (void)indexDataUnavailable:(int)index{

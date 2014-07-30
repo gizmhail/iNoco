@@ -33,16 +33,23 @@
 }
 
 
+
 - (void)loadResultsAtPage:(int)page withResultBlock:(NLTCallResponseBlock)responseBlock{
     if(self.search && [self.search compare:@""]!=NSOrderedSame){
         __weak RecentShowViewController* weakSelf = self;
         [[NLTAPI sharedInstance] search:self.search atPage:page withResultBlock:^(id result, NSError *error) {
             [weakSelf.view hideToastActivity];
+            if(error){
+                [self checkErrorForQuotaLimit:error];
+            }
             if(responseBlock){
                 responseBlock(result, error);
             }
         } withKey:self];
     }else{
+        if(responseBlock){
+            responseBlock([NSArray array], nil);
+        }
         [self.view hideToastActivity];
     }
 }
@@ -72,6 +79,8 @@
                     if([[weakSelf.collectionView visibleCells] containsObject:cell]){
                         [[NLTAPI sharedInstance] showWithId:[idNumber integerValue] withResultBlock:^(NLTShow* newShow, NSError *error) {
                             BOOL valid = TRUE;
+                            [self checkErrorForQuotaLimit:error];
+
                             if(error&&error.domain == NSCocoaErrorDomain){
                                 //Parsing error
                                 valid = FALSE;
@@ -208,16 +217,35 @@
 #pragma mark UICollectioViewDatasource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    self.noResultLabel.hidden = TRUE;
     if(!self.search || [self.search compare:@""]==NSOrderedSame){
         return 0;
     }
-    return [super collectionView:collectionView numberOfItemsInSection:section];
+    int resultCount = [super collectionView:collectionView numberOfItemsInSection:section];
+    if(resultCount == 0){
+        self.noResultLabel.hidden = FALSE;
+    }else{
+        self.noResultLabel.hidden = TRUE;
+    
+    }
+    return resultCount;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     UICollectionViewCell* cell = nil;
     
     NSDictionary* result = [self resultAtIndex:indexPath.row];
+    if(!result){
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+            if([[self.collectionView visibleCells] containsObject:cell]){
+                [self loadResultAtIndex:indexPath.row];
+            }else{
+                //Loading not needed anymore
+                //NSLog(@"Loading not needed");
+            }
+        });
+    }
     if([result objectForKey:@"type"]&&[(NSString*)[result objectForKey:@"type"] compare:@"show"]==NSOrderedSame){
         //Show object
         return [super collectionView:collectionView cellForItemAtIndexPath:indexPath];

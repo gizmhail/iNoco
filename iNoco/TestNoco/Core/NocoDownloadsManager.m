@@ -54,12 +54,15 @@
         if (![[NSFileManager defaultManager] createDirectoryAtPath:appSupportDir withIntermediateDirectories:YES attributes:nil error:&error]) {
             NSLog(@"Unable to create NSApplicationSupportDirectory\n%@", error.localizedDescription);
             ok = false;
-#warning TODO Handle error
+#warning TODO Handle error: unable to create NSApplicationSupportDirectory
         }
         else {
             NSURL *url = [NSURL fileURLWithPath:appSupportDir];
             ok = [self addSkipBackupAttributeToItemAtURL:url];
-#warning TODO Handle error
+            if(!ok){
+                NSLog(@"Unable to exclude from backup");
+#warning TODO Handle error: unable to exlude from backup
+            }
         }
     }
     return ok;
@@ -150,11 +153,11 @@
             NSLog(@"Launching download of %@ (task: %@)", [result objectForKey:@"file"], [NSNumber numberWithUnsignedLong:downloadTask.taskIdentifier]);
             [downloadTask resume];
         }else{
+#warning TODO See if we should remove alert view messages (background cases, ...)
             if(error.code == NLTAPI_ERROR_VIDEO_UNAVAILABLE_WITH_POPMESSAGE && [error.userInfo objectForKey:@"popmessage"]&&[[error.userInfo objectForKey:@"popmessage"] objectForKey:@"message"]){
-#warning TODO See if we should remove message (background cases, ...)
                 [[[UIAlertView alloc] initWithTitle:@"Erreur" message:[[error.userInfo objectForKey:@"popmessage"] objectForKey:@"message"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             }else{
-#warning Handle other errors
+                [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de télécharger la vidéo" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             }
             [self.downloadInfos removeObject:downloadInfo];
 #warning TODO Add error notif instead of finished
@@ -252,7 +255,7 @@
         NSFileManager *fileManager = [NSFileManager defaultManager];
         
         BOOL directoryOk = [self prepareStoreDirectory];
-#warning TOOD Handle problems with dir creation
+#warning TOOD Handle problems with storage dir creation
         if(!directoryOk){
             NSLog(@"Problem with storage directory");
         }
