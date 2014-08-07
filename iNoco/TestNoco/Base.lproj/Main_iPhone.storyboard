@@ -33,7 +33,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="JZE-0w-5XN">
-                                <rect key="frame" x="2" y="66" width="316" height="453"/>
+                                <rect key="frame" x="2" y="64" width="316" height="453"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="3" id="rx1-hx-uhB">
@@ -185,6 +185,30 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <color key="color" red="0.086274512110000007" green="0.53333336109999996" blue="0.80000007149999997" alpha="1" colorSpace="deviceRGB"/>
                             </activityIndicatorView>
+                            <view hidden="YES" contentMode="scaleToFill" id="dGT-6d-gs9">
+                                <rect key="frame" x="0.0" y="64" width="320" height="40"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <view alpha="0.94999999999999996" contentMode="scaleToFill" id="7nU-d8-bg0">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                    </view>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="J7F-FQ-upV">
+                                        <rect key="frame" x="24" y="6" width="272" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <segments>
+                                            <segment title="Tous"/>
+                                            <segment title="Lus"/>
+                                            <segment title="Non lus"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="watchSegmentedControlChange:" destination="Ekx-c5-60x" eventType="valueChanged" id="sY6-7p-cfx"/>
+                                        </connections>
+                                    </segmentedControl>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     </view>
@@ -193,7 +217,10 @@
                     <connections>
                         <outlet property="activity" destination="ry5-sM-KHG" id="yQH-mA-JuQ"/>
                         <outlet property="collectionView" destination="JZE-0w-5XN" id="ZOx-sx-blu"/>
+                        <outlet property="filterBackground" destination="7nU-d8-bg0" id="3Fl-9B-wfm"/>
+                        <outlet property="filterView" destination="dGT-6d-gs9" id="tzA-7F-3EE"/>
                         <outlet property="searchBar" destination="6bX-GZ-lgn" id="Y8U-b4-OC5"/>
+                        <outlet property="watchSegmentedControl" destination="J7F-FQ-upV" id="qcu-kx-xYQ"/>
                         <segue destination="E8O-zX-w2W" kind="push" identifier="DisplayRecentShow" id="NRb-n4-HGn"/>
                         <segue destination="Hur-rc-Twx" kind="modal" identifier="NotConnectedSegue" id="etX-5O-isD"/>
                     </connections>
@@ -1502,8 +1529,8 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="a1v-Eq-xu4"/>
-        <segue reference="kd9-uj-CES"/>
+        <segue reference="NRb-n4-HGn"/>
         <segue reference="uN7-L9-3aO"/>
+        <segue reference="etX-5O-isD"/>
     </inferredMetricsTieBreakers>
 </document>

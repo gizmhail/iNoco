@@ -64,6 +64,16 @@
         self.searchBar.hidden = TRUE;
     }
     if(self.family){
+        //We force display of filter viewx in family mode
+        if(self.filterView.hidden){
+            self.filterView.hidden = FALSE;
+            /*
+            self.collectionView.frame = CGRectMake(self.collectionView.frame.origin.x,
+                                                   self.collectionView.frame.origin.y + self.filterView.frame.size.height,
+                                                   self.collectionView.frame.size.width,
+                                                   self.collectionView.frame.size.height - self.filterView.frame.size.height);
+             */
+        }
         self.title = self.family.family_TT;
         if(!self.navigationItem.rightBarButtonItem){
             self.favoriteFamilly = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -77,6 +87,7 @@
         }
         self.favoriteFamilly.selected = [[FavoriteProgramManager sharedInstance] isFavoriteForFamilyKey:self.family.family_key withPartnerKey:self.family.partner_key];
     }
+    [self fixNavigationBarRelativePosition];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -137,6 +148,17 @@
     }
     return quotaError;
 }
+
+- (IBAction)watchSegmentedControlChange:(id)sender {
+    [self refreshResult];
+    if(self.family){
+        //Filter is not displayed
+        [self.collectionView reloadData];
+    }else{
+        [self searchBarSearchButtonClicked:self.searchBar];
+    }
+}
+
 
 #pragma mark ConnectionViewControllerDelegate
 
@@ -268,7 +290,14 @@
 }
 
 - (void)loadResultsAtPage:(int)page withResultBlock:(NLTCallResponseBlock)responseBlock{
-    [[NLTAPI sharedInstance] showsAtPage:page withResultBlock:responseBlock withFamilyKey:self.family.family_key withKey:self];
+    NSString* watchFilter = nil;
+    if(self.watchSegmentedControl.selectedSegmentIndex == 1){
+        watchFilter = NLTAPI_WATCHFILTER_READONLY;
+    }
+    if(self.watchSegmentedControl.selectedSegmentIndex == 2){
+        watchFilter = NLTAPI_WATCHFILTER_UNREADONLY;
+    }
+    [[NLTAPI sharedInstance] showsAtPage:page withResultBlock:responseBlock withFamilyKey:self.family.family_key withWatchFilter:watchFilter withKey:self];
 
 }
 
@@ -477,29 +506,30 @@
     self.filteredResultByPage = nil;
     [self.collectionView reloadData];
     UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, @"Filtrage");
+    self.filterView.hidden = TRUE;
 }
 
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
     self.filter = searchBar.text;
+    if([self.filter compare:@""]==NSOrderedSame){
+        self.filter = nil;
+    }
     [self filterShowsWithString];
     //[self.collectionView reloadItemsAtIndexPaths:[self.collectionView indexPathsForVisibleItems]];
     [self.collectionView reloadData];
     UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, @"Annulation du filtre");
     [searchBar resignFirstResponder];
     [[UISegmentedControl appearanceWhenContainedIn:[UISearchBar class], nil] setTintColor:searchBar.tintColor];
+    self.filterView.hidden = TRUE;
 }
 
-/*
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
-    [searchBar setScopeButtonTitles:@[@"Tous", @"Non lu"]];
-    searchBar.showsScopeBar = YES;
-    [searchBar sizeToFit];
-    [searchBar setShowsCancelButton:YES animated:YES];
-    
+    self.filterView.hidden = FALSE;
     return YES;
 }
 
+/*
 - (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
     [searchBar setScopeButtonTitles:@[]];
     searchBar.showsScopeBar = NO;
@@ -594,6 +624,31 @@
     }
 }
 
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
+    UIEdgeInsets edgeInset = UIEdgeInsetsMake(0,0,0,0);
+    if(self.family){
+        edgeInset = UIEdgeInsetsMake(40,0,0,0);
+    }
+    return edgeInset;
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
+    [self fixNavigationBarRelativePosition];
+}
+
+- (void)fixNavigationBarRelativePosition{
+    if(self.navigationController.navigationBarHidden == FALSE){
+        float deltaY = 20 + self.navigationController.navigationBar.frame.size.height - self.collectionView.frame.origin.y ;
+        self.collectionView.frame = CGRectMake(self.collectionView.frame.origin.x,
+                                               self.collectionView.frame.origin.y + deltaY,
+                                               self.collectionView.frame.size.width,
+                                               self.collectionView.frame.size.height - deltaY);
+        self.filterView.frame = CGRectMake(self.filterView.frame.origin.x,
+                                           self.filterView.frame.origin.y + deltaY,
+                                           self.filterView.frame.size.width,
+                                           self.filterView.frame.size.height);
+    }
+}
 -(void)dealloc{
     [[NLTAPI sharedInstance] cancelCallsWithKey:self];
 }

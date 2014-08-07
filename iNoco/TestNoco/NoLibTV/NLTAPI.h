@@ -28,6 +28,10 @@
 #define NLTAPI_ERROR_VIDEO_UNAVAILABLE_WITH_POPMESSAGE 405
 #define NLTAPI_NOCO_ERROR 510
 
+#define NLTAPI_WATCHFILTER_READONLY @"1"
+#define NLTAPI_WATCHFILTER_UNREADONLY @"0"
+#define NLTAPI_WATCHFILTER_ALL nil
+
 @interface NLTAPI : NSObject<NSURLConnectionDataDelegate>
 @property (retain, nonatomic)NSString* partnerKey;//Limit shows and search calls
 @property (assign, nonatomic)BOOL subscribedOnly;//Limit shows calls
@@ -92,7 +96,7 @@
 //Response block  will contain an array of NLTShow objects
 - (void)showsAtPage:(int)page withResultBlock:(NLTCallResponseBlock)responseBlock withKey:(id)key;
 - (void)showsAtPage:(int)page withResultBlock:(NLTCallResponseBlock)responseBlock withFamilyKey:(NSString*)familyKey withKey:(id)key;
-
+- (void)showsAtPage:(int)page withResultBlock:(NLTCallResponseBlock)responseBlock withFamilyKey:(NSString*)familyKey withWatchFilter:(NSString*)watchFilter withKey:(id)key;
 //Tells how much shows/famillies we request by page in calls
 - (int)resultsByPage;
 

@@ -185,6 +185,30 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <color key="color" red="0.086274512110000007" green="0.53333336109999996" blue="0.80000007149999997" alpha="1" colorSpace="deviceRGB"/>
                             </activityIndicatorView>
+                            <view hidden="YES" contentMode="scaleToFill" id="tfh-nu-K3S">
+                                <rect key="frame" x="0.0" y="64" width="768" height="40"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <view alpha="0.94999998807907104" contentMode="scaleToFill" id="wCF-6Z-N1l">
+                                        <rect key="frame" x="0.0" y="0.0" width="768" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                    </view>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="Nqc-ik-WAJ">
+                                        <rect key="frame" x="24" y="6" width="720" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <segments>
+                                            <segment title="Tous"/>
+                                            <segment title="Lus"/>
+                                            <segment title="Non lus"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="watchSegmentedControlChange:" destination="nf5-WY-UdG" eventType="valueChanged" id="7bI-nn-w3v"/>
+                                        </connections>
+                                    </segmentedControl>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     </view>
@@ -193,7 +217,10 @@
                     <connections>
                         <outlet property="activity" destination="vHK-qI-EQa" id="Csa-bh-Myj"/>
                         <outlet property="collectionView" destination="dqf-IB-oJ1" id="NGh-VR-xkI"/>
+                        <outlet property="filterBackground" destination="wCF-6Z-N1l" id="PUg-9V-1Ew"/>
+                        <outlet property="filterView" destination="tfh-nu-K3S" id="LdO-K2-PVb"/>
                         <outlet property="searchBar" destination="n1m-fb-oGN" id="UyD-C5-Mbp"/>
+                        <outlet property="watchSegmentedControl" destination="Nqc-ik-WAJ" id="lgn-4d-klr"/>
                         <segue destination="JAW-94-Ybq" kind="push" identifier="DisplayRecentShow" id="kle-D5-vYb"/>
                         <segue destination="ChP-V5-6sA" kind="modal" identifier="NotConnectedSegue" id="73L-hL-LBD"/>
                     </connections>
@@ -1505,7 +1532,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="UgH-2G-9fT"/>
-        <segue reference="DwT-Xq-8De"/>
-        <segue reference="4Qe-0V-q8F"/>
+        <segue reference="kle-D5-vYb"/>
+        <segue reference="73L-hL-LBD"/>
     </inferredMetricsTieBreakers>
 </document>

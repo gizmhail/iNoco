@@ -503,6 +503,10 @@
 }
 
 - (void)showsAtPage:(int)page withResultBlock:(NLTCallResponseBlock)responseBlock withFamilyKey:(NSString*)familyKey withKey:(id)key{
+    [self showsAtPage:page withResultBlock:responseBlock withFamilyKey:familyKey withWatchFilter:nil withKey:key];
+}
+
+- (void)showsAtPage:(int)page withResultBlock:(NLTCallResponseBlock)responseBlock withFamilyKey:(NSString*)familyKey withWatchFilter:(NSString*)watchFilter withKey:(id)key{
     NSString* baseCall = @"shows";
     if(self.subscribedOnly){
         baseCall = @"shows/subscribed";
@@ -513,6 +517,9 @@
         urlStr = [urlStr stringByAppendingFormat:@"&family_key=%@", familyKey];
     }else if(self.partnerKey){
         urlStr = [urlStr stringByAppendingFormat:@"&partner_key=%@", self.partnerKey];
+    }
+    if(watchFilter){
+        urlStr = [urlStr stringByAppendingFormat:@"&mark_read=%@",watchFilter];
     }
     [[NLTAPI sharedInstance] callAPI:urlStr withResultBlock:^(NSArray* result, NSError *error) {
         NSDate* cachingDate = [[self.cachedResults objectForKey:urlStr] objectForKey:@"cachingDate"];

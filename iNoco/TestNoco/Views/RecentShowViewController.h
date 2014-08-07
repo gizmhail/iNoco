@@ -24,6 +24,9 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activity;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (assign,nonatomic) BOOL noNetworkForAuth;
+@property (weak, nonatomic) IBOutlet UIView *filterView;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *watchSegmentedControl;
+@property (weak, nonatomic) IBOutlet UIView *filterBackground;
 
 - (id)resultAtIndex:(long)index;
 - (NLTShow*)showAtIndex:(long)showIndex;
@@ -34,4 +37,5 @@
 - (void)loadShowCell:(ShowCollectionViewCell*)cell withShow:(NLTShow*)show;
 - (void)launchFullsearchForFilter;
 - (BOOL)checkErrorForQuotaLimit:(NSError*)error;
+- (IBAction)watchSegmentedControlChange:(id)sender;
 @end
