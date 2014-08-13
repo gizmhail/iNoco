@@ -47,6 +47,12 @@ void uncaughtExceptionHandler(NSException *exception) {
     if([settings objectForKey:@"SELECTED_CATALOG"]){
         catalog = [settings objectForKey:@"SELECTED_CATALOG"];
     }
+    
+#ifdef DEBUG
+    //NSLog(@"Disabling auto authent");
+    //[[NLTAPI sharedInstance] setAutoLaunchAuthentificationView:FALSE];
+#endif
+    
     [[NLTAPI sharedInstance] setSubscribedOnly:false];
     [[NLTAPI sharedInstance] setPartnerKey:nil];
     if([catalog compare:ALL_SUBSCRIPTED_CATALOG]==NSOrderedSame){

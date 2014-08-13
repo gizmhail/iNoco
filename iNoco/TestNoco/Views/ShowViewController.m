@@ -38,6 +38,7 @@
 @property (retain, nonatomic) UIButton* downloadImageButton;
 @property (retain, nonatomic) UIView* downloadView;
 @property (retain, nonatomic) NSError* readError;
+@property (retain, nonatomic) NSTimer* progressTimer;
 @end
 
 //TODO MOve this static strings in localisation file
@@ -318,6 +319,7 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
 }
 
 - (void)notificationMPMoviePlayerPlaybackDidFinishNotification:(NSNotification*)notif{
+    [self.progressTimer invalidate];
     int reason = MPMovieFinishReasonUserExited;
     if([notif.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey]){
         reason = [[notif.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] intValue];
@@ -365,6 +367,12 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     [self.videoActivity stopAnimating];
 }
 
+- (void)progressUpdate{
+    if(self.moviePlayer && self.moviePlayer.playbackState == MPMoviePlaybackStatePlaying){
+        [[NLTAPI sharedInstance] setResumePlay:1000*self.moviePlayer.currentPlaybackTime forShow:self.show withResultBlock:^(id result, NSError *error) {
+        } withKey:self];
+    }
+}
 - (void)tooglePlay{
     if(self.moviePlayer){
         if(self.moviePlayer.playbackState == MPMoviePlaybackStatePlaying){
@@ -405,50 +413,62 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
 
     __weak ShowViewController* weakSelf = self;
     [self.videoActivity startAnimating];
-    [[NLTAPI sharedInstance] videoUrlForShow:self.show withResultBlock:^(id result, NSError *error) {
-        if(result || [[NocoDownloadsManager sharedInstance] isDownloaded:self.show]){
-            userEndedPlay = FALSE;
-            NSString* file = [result objectForKey:@"file"];
-            NSURL* url = nil;
-            if(file){
-                url = [NSURL URLWithString:file];
-            }
-            if([[NocoDownloadsManager sharedInstance] isDownloaded:self.show]){
-                file = [[NocoDownloadsManager sharedInstance] downloadFilePathForShow:self.show];
-                if(file){
-                    url = [NSURL fileURLWithPath:file];
-                }
-                
-            }
-            NSLog(@"Reading url %@",url);
-            weakSelf.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:url];
-            weakSelf.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
-            weakSelf.moviePlayer.view.frame = weakSelf.imageView.frame;
-            [weakSelf.imageView.superview addSubview:weakSelf.moviePlayer.view];
-            [weakSelf.videoActivity.superview bringSubviewToFront:weakSelf.videoActivity];
-            [weakSelf.moviePlayer setInitialPlaybackTime:progress];
-            [weakSelf.moviePlayer prepareToPlay];
-            weakSelf.moviePlayer.shouldAutoplay = TRUE;
-            [self.moviePlayer setFullscreen:YES animated:YES];
-            MPNowPlayingInfoCenter *infoCenter = [MPNowPlayingInfoCenter defaultCenter];
-            NSMutableDictionary* info = [NSMutableDictionary dictionaryWithDictionary:infoCenter.nowPlayingInfo];
-            if(!info){
-                info =  [NSMutableDictionary dictionary];
-            }
-            if(self.show.show_TT) [info setObject:self.show.show_TT forKey:MPMediaItemPropertyTitle];
-            if(self.show.family_TT) [info setObject:self.show.family_TT forKey:MPMediaItemPropertyArtist];
-            [info setObject:[NSNumber numberWithInt:self.show.episode_number] forKey:MPMediaItemPropertyAlbumTrackNumber];
-            [info setObject:[[MPMediaItemArtwork alloc] initWithImage:self.imageView.image] forKey:MPMediaItemPropertyArtwork];
-            infoCenter.nowPlayingInfo = info;
-        }else{
-            [self.videoActivity stopAnimating];
-            if(error.code == NLTAPI_ERROR_VIDEO_UNAVAILABLE_WITH_POPMESSAGE && [error.userInfo objectForKey:@"popmessage"]&&[[error.userInfo objectForKey:@"popmessage"] objectForKey:@"message"]){
-                [[[UIAlertView alloc] initWithTitle:@"Erreur" message:[[error.userInfo objectForKey:@"popmessage"] objectForKey:@"message"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
-            }else{
-                [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de lire la vidéo" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
-            }
+    
+    NSURL* url = nil;
+    if([[NocoDownloadsManager sharedInstance] isDownloaded:self.show]){
+        NSString* file = [[NocoDownloadsManager sharedInstance] downloadFilePathForShow:self.show];
+        if(file){
+            url = [NSURL fileURLWithPath:file];
         }
-    } withKey:self];
+    }
+    if(url){
+        //Downloaded video
+        [self playURL:url];
+    }else{
+        //Remote video
+        [[NLTAPI sharedInstance] videoUrlForShow:self.show withResultBlock:^(id result, NSError *error) {
+            if(result){
+                userEndedPlay = FALSE;
+                NSString* file = [result objectForKey:@"file"];
+                NSURL* url = nil;
+                if(file){
+                    url = [NSURL URLWithString:file];
+                }
+                [weakSelf playURL:url];
+            }else{
+                [self.videoActivity stopAnimating];
+                if(error.code == NLTAPI_ERROR_VIDEO_UNAVAILABLE_WITH_POPMESSAGE && [error.userInfo objectForKey:@"popmessage"]&&[[error.userInfo objectForKey:@"popmessage"] objectForKey:@"message"]){
+                    [[[UIAlertView alloc] initWithTitle:@"Erreur" message:[[error.userInfo objectForKey:@"popmessage"] objectForKey:@"message"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+                }else{
+                    [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de lire la vidéo" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+                }
+            }
+        } withKey:self];
+    }
+}
+
+- (void)playURL:(NSURL*)url{
+    NSLog(@"Reading url %@",url);
+    self.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:url];
+    self.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
+    self.moviePlayer.view.frame = self.imageView.frame;
+    [self.imageView.superview addSubview:self.moviePlayer.view];
+    [self.videoActivity.superview bringSubviewToFront:self.videoActivity];
+    [self.moviePlayer setInitialPlaybackTime:progress];
+    [self.moviePlayer prepareToPlay];
+    self.moviePlayer.shouldAutoplay = TRUE;
+    [self.moviePlayer setFullscreen:YES animated:YES];
+    self.progressTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(progressUpdate) userInfo:nil repeats:YES];
+    MPNowPlayingInfoCenter *infoCenter = [MPNowPlayingInfoCenter defaultCenter];
+    NSMutableDictionary* info = [NSMutableDictionary dictionaryWithDictionary:infoCenter.nowPlayingInfo];
+    if(!info){
+        info =  [NSMutableDictionary dictionary];
+    }
+    if(self.show.show_TT) [info setObject:self.show.show_TT forKey:MPMediaItemPropertyTitle];
+    if(self.show.family_TT) [info setObject:self.show.family_TT forKey:MPMediaItemPropertyArtist];
+    [info setObject:[NSNumber numberWithInt:self.show.episode_number] forKey:MPMediaItemPropertyAlbumTrackNumber];
+    [info setObject:[[MPMediaItemArtwork alloc] initWithImage:self.imageView.image] forKey:MPMediaItemPropertyArtwork];
+    infoCenter.nowPlayingInfo = info;
 }
 
 - (void)updateInterctiveUI{
@@ -571,6 +591,7 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
 }
 
 -(void)dealloc{
+    [self.progressTimer invalidate];
     [[NLTAPI sharedInstance] cancelCallsWithKey:self];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setRemoteControlDelegate:nil];

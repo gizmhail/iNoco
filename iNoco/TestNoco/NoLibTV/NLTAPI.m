@@ -42,6 +42,7 @@
 
 - (instancetype)init{
     if(self = [super init]){
+        self.autoLaunchAuthentificationView = TRUE;
         self.calls = [NSMutableArray array];
         self.cachedResults = [NSMutableDictionary dictionary];
         self.showsById = [NSMutableDictionary dictionary];
@@ -51,6 +52,30 @@
         [self loadCache];
     }
     return self;
+}
+
+- (void)authentificationWrapper:(NLTAuthResponseBlock)responseBlock{
+    if(self.autoLaunchAuthentificationView){
+        [[NLTOAuth sharedInstance] authenticate:responseBlock];
+    }else{
+        [[NLTOAuth sharedInstance] isAuthenticatedAfterRefreshTokenUse:^(BOOL authenticated, NSError *error) {
+            if(authenticated){
+                if(responseBlock){
+                    responseBlock(nil);
+                }
+            }else if(error){
+                if(responseBlock){
+                    responseBlock(error);
+                }
+            }else{
+                NSError* error = [NSError errorWithDomain:@"NLTAPIDomain" code:401 userInfo:@{@"message":@"Not authenticated"}];
+                if(responseBlock){
+                    responseBlock(error);
+                }
+
+            }
+        }];
+    }
 }
 
 - (void)callAPI:(NSString*)urlPart withResultBlock:(NLTCallResponseBlock)block{
@@ -78,7 +103,7 @@
             return;
         }
     }
-    [[NLTOAuth sharedInstance] authenticate:^(NSError *error) {
+    [self authentificationWrapper:^(NSError *error) {
         if(error){
             if(block){
                 block(nil,error);
@@ -393,6 +418,7 @@
                         NLTShow* show = [[NLTShow alloc] initWithDictionnary:showInfo];
                         show.cachingDate = cachingDate;
                         if(show.id_show){
+#warning TODO Determine if this previousShow check is still needed now that propagateReadStatusInCachedResults ensure an up to date mark_read in caches
                             NLTShow* previousShow = [self.showsById objectForKey:[NSNumber numberWithInt:show.id_show]];
                             if(!previousShow || [[previousShow cachingDate] compare:cachingDate]!=NSOrderedDescending){
                                 [self.showsById setObject:show forKey:[NSNumber numberWithInt:show.id_show]];
@@ -451,7 +477,7 @@
                     responseBlock(requestedFamily, nil);
                 }
             }
-        } withKey:key withCacheDuration:NLT_SHOWS_CACHE_DURATION];
+        } withKey:key withCacheDuration:NLT_FAMILY_CACHE_DURATION];
     }
 }
 
@@ -545,6 +571,7 @@
                     NLTShow* show = [[NLTShow alloc] initWithDictionnary:showInfo];
                     show.cachingDate = cachingDate;
                     if(show.id_show){
+#warning TODO Determine if this previousShow check is still needed now that propagateReadStatusInCachedResults ensure an up to date mark_read in caches
                         NLTShow* previousShow = [self.showsById objectForKey:[NSNumber numberWithInt:show.id_show]];
                         if(!previousShow || [[previousShow cachingDate] compare:cachingDate]!=NSOrderedDescending){
                             [self.showsById setObject:show forKey:[NSNumber numberWithInt:show.id_show]];
@@ -734,7 +761,6 @@
 - (void)setReadStatus:(BOOL)isRead forShow:(NLTShow*)show withResultBlock:(NLTCallResponseBlock)responseBlock withKey:(id)key{
     NSString* urlStr = [NSString stringWithFormat:@"shows/%i/mark_read",show.id_show];
     //We're changing info for a show : calls cached for shows are reliable anymore
-    [self invalidateCacheWithPrefix:@"shows"];
     NSString* method = @"POST";
     if(!isRead){
         method = @"DELETE";
@@ -748,9 +774,11 @@
             if([result isKindOfClass:[NSArray class]]){
                 for (NSDictionary* readInfo in result) {
                     if([readInfo objectForKey:@"id_show"]&&[readInfo objectForKey:@"id_show"]!=[NSNull null]&&[[readInfo objectForKey:@"id_show"] integerValue]==show.id_show){
+                        show.cachingDate = [NSDate date];
                         if([readInfo objectForKey:@"mark_read"]&&[readInfo objectForKey:@"mark_read"]!=[NSNull null]){
                             show.mark_read = [[readInfo objectForKey:@"mark_read"] boolValue];
                         }
+                        [self propagateReadStatusInCachedResults:show];
                     }
                 }
             }
@@ -762,6 +790,39 @@
             }
         }
     } withKey:key withCacheDuration:0 withMethod:method withBody:nil withContentType:nil];
+}
+
+- (void)propagateReadStatusInCachedResults:(NLTShow*)show{
+    for (NSString* urlPart in [self.cachedResults allKeys]) {
+        if([urlPart hasPrefix:@"shows"]){
+            NSMutableDictionary* cachedResult = [NSMutableDictionary dictionaryWithDictionary:[self.cachedResults objectForKey:urlPart]];
+            NSArray* originalAnswer = [cachedResult objectForKey:@"answer"];
+            BOOL changeMade = false;
+            if([originalAnswer isKindOfClass:[NSArray class]]){
+                NSMutableArray* answer = [NSMutableArray arrayWithArray:originalAnswer];
+                for (long i = 0; i < [answer count]; i++) {
+                    NSDictionary* answerShow = [answer objectAtIndex:i];
+                    if([answerShow isKindOfClass:[NSDictionary class]]&&[answerShow objectForKey:@"id_show"]&&[[answerShow objectForKey:@"id_show"] integerValue]==show.id_show){
+                        //show is currently modified
+                        answerShow = [NSMutableDictionary dictionaryWithDictionary:answerShow];
+                        [(NSMutableDictionary*)answerShow setObject:[NSNumber numberWithBool:show.mark_read] forKey:@"mark_read"];
+                        [answer replaceObjectAtIndex:i withObject:answerShow];
+                        changeMade = true;
+                    }
+                }
+                if(changeMade){
+                    [cachedResult setObject:answer forKey:@"answer"];
+                }
+            }
+            if(changeMade){
+#ifdef DEBUG
+                NSLog(@"Changed cached results for %@",urlPart);
+#endif
+                [self.cachedResults setObject:cachedResult forKey:urlPart];
+            }
+        }
+    }
+    [self saveCache];
 }
 
 #pragma mark Progress

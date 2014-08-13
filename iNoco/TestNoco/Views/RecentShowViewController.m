@@ -67,12 +67,6 @@
         //We force display of filter viewx in family mode
         if(self.filterView.hidden){
             self.filterView.hidden = FALSE;
-            /*
-            self.collectionView.frame = CGRectMake(self.collectionView.frame.origin.x,
-                                                   self.collectionView.frame.origin.y + self.filterView.frame.size.height,
-                                                   self.collectionView.frame.size.width,
-                                                   self.collectionView.frame.size.height - self.filterView.frame.size.height);
-             */
         }
         self.title = self.family.family_TT;
         if(!self.navigationItem.rightBarButtonItem){
@@ -183,7 +177,10 @@
                 [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:self   cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             }else{
                 [weakSelf.view hideToastActivity];
-                [weakSelf performSegueWithIdentifier:@"NotConnectedSegue" sender:self];
+                //Segueue should not occur during viewWilll/DidAppear
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [weakSelf performSegueWithIdentifier:@"NotConnectedSegue" sender:self];
+                });
                 [weakSelf.refreshControl endRefreshing];
             }
         }else{
