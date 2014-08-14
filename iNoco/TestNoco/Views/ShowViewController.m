@@ -458,7 +458,7 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     [self.moviePlayer prepareToPlay];
     self.moviePlayer.shouldAutoplay = TRUE;
     [self.moviePlayer setFullscreen:YES animated:YES];
-    self.progressTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(progressUpdate) userInfo:nil repeats:YES];
+    self.progressTimer = [NSTimer scheduledTimerWithTimeInterval:PROGRESS_UPDATE_UPLOAD_STEP_TIME target:self selector:@selector(progressUpdate) userInfo:nil repeats:YES];
     MPNowPlayingInfoCenter *infoCenter = [MPNowPlayingInfoCenter defaultCenter];
     NSMutableDictionary* info = [NSMutableDictionary dictionaryWithDictionary:infoCenter.nowPlayingInfo];
     if(!info){
