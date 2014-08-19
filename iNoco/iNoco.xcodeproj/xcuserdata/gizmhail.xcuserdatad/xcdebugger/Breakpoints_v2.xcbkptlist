@@ -585,22 +585,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "TestNoco/NoLibTV/NLTOAuth.m"
-            timestampString = "429661654.064547"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "231"
-            endingLineNumber = "231"
-            landmarkName = "-fetchAccessTokenFromRefreshToken"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "TestNoco/NoLibTV/NLTAPI.m"
             timestampString = "429692436.847966"
             startingColumnNumber = "9223372036854775807"
@@ -614,47 +598,17 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TestNoco/NoLibTV/NLTAPI.m"
-            timestampString = "429707341.754997"
+            timestampString = "430096879.781636"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "555"
-            endingLineNumber = "555"
+            startingLineNumber = "536"
+            endingLineNumber = "536"
             landmarkName = "-showsAtPage:withResultBlock:withFamilyKey:withWatchFilter:withKey:"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[NLTAPI showsAtPage:withResultBlock:withFamilyKey:withWatchFilter:withKey:]"
-                  moduleName = "iNoco"
-                  urlString = "file:///Users/gizmhail/Documents/Perso/iOS/Noco/git/iNoco/iNoco/TestNoco/NoLibTV/NLTAPI.m"
-                  timestampString = "429707341.761114"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "555"
-                  endingLineNumber = "555"
-                  offsetFromSymbolStart = "776">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__76-[NLTAPI showsAtPage:withResultBlock:withFamilyKey:withWatchFilter:withKey:]_block_invoke"
-                  moduleName = "iNoco"
-                  urlString = "file:///Users/gizmhail/Documents/Perso/iOS/Noco/git/iNoco/iNoco/TestNoco/NoLibTV/NLTAPI.m"
-                  timestampString = "429707341.761346"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "555"
-                  endingLineNumber = "555"
-                  offsetFromSymbolStart = "98">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -664,11 +618,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TestNoco/NoLibTV/NLTAPI.m"
-            timestampString = "429707342.535877"
+            timestampString = "430096893.5025"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "556"
-            endingLineNumber = "556"
+            startingLineNumber = "537"
+            endingLineNumber = "537"
             landmarkName = "-showsAtPage:withResultBlock:withFamilyKey:withWatchFilter:withKey:"
             landmarkType = "5">
          </BreakpointContent>

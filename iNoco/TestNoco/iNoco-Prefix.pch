@@ -39,5 +39,5 @@
 
 #ifdef DEBUG
 #define DEBUG_NLT_CALL 1
-#define DEBUG_SHOWLIST_MAXSHOW 1
+//#define DEBUG_SHOWLIST_MAXSHOW 1
 #endif

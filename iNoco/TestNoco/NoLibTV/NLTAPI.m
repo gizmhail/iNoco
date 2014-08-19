@@ -534,7 +534,7 @@
 
 - (void)showsAtPage:(int)page withResultBlock:(NLTCallResponseBlock)responseBlock withFamilyKey:(NSString*)familyKey withWatchFilter:(NSString*)watchFilter withKey:(id)key{
     NSString* baseCall = @"shows";
-    if(self.subscribedOnly){
+    if(self.subscribedOnly && !familyKey){
         baseCall = @"shows/subscribed";
     }
     NSString* urlStr = [NSString stringWithFormat:@"%@?page=%i&elements_per_page=%i", baseCall, page, [self resultsByPage]];
