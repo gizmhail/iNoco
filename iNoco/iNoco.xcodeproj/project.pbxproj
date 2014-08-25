@@ -118,6 +118,7 @@
 		4FEECD851949D683002514CE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FEECD611949D683002514CE /* UIKit.framework */; };
 		4FEECD8D1949D683002514CE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FEECD8B1949D683002514CE /* InfoPlist.strings */; };
 		4FEECD8F1949D683002514CE /* TestNocoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEECD8E1949D683002514CE /* TestNocoTests.m */; };
+		4FEF289419ABC20E005D4C33 /* FamilyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEF289319ABC20E005D4C33 /* FamilyTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -286,6 +287,8 @@
 		4FEECD8A1949D683002514CE /* iNocoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iNocoTests-Info.plist"; sourceTree = "<group>"; };
 		4FEECD8C1949D683002514CE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4FEECD8E1949D683002514CE /* TestNocoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestNocoTests.m; sourceTree = "<group>"; };
+		4FEF289219ABC20E005D4C33 /* FamilyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FamilyTableViewCell.h; sourceTree = "<group>"; };
+		4FEF289319ABC20E005D4C33 /* FamilyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FamilyTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -429,6 +432,8 @@
 				4F11173919823A7A00242C22 /* EPGTableViewCell.m */,
 				4F11173B1982405C00242C22 /* FilterFooterCollectionReusableView.h */,
 				4F11173C1982405C00242C22 /* FilterFooterCollectionReusableView.m */,
+				4FEF289219ABC20E005D4C33 /* FamilyTableViewCell.h */,
+				4FEF289319ABC20E005D4C33 /* FamilyTableViewCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -812,6 +817,7 @@
 				4F636A471952F0DA004C0A18 /* NLTAPI.m in Sources */,
 				4F1254B91951E60C003FEEA5 /* NLTOAuthController.m in Sources */,
 				4F636A8519577726004C0A18 /* UIImageView+WebCache.m in Sources */,
+				4FEF289419ABC20E005D4C33 /* FamilyTableViewCell.m in Sources */,
 				4F636A7A19577726004C0A18 /* SDWebImageCompat.m in Sources */,
 				4F636A7B19577726004C0A18 /* SDWebImageDecoder.m in Sources */,
 				4F636AAB1958CD6E004C0A18 /* ShowViewController.m in Sources */,

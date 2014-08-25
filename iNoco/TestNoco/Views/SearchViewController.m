@@ -13,12 +13,16 @@
 #import <QuartzCore/QuartzCore.h>
 #import "ShowViewController.h"
 #import "UIView+Toast.h"
+#import "FamilyTableViewCell.h"
 
 @interface SearchViewController (){
     int maxShows;
-    BOOL initialAuthentCheckDone;
+    BOOL emptyFamilyPageFound;
+    int pendingFamilyPageCalls;
+    int maxFamily;
 }
 
+@property (retain, nonatomic) NSMutableDictionary* familiesByPage;
 @end
 
 
@@ -26,13 +30,25 @@
 
 -(void)viewDidLoad{
     [super viewDidLoad];
+    maxFamily = -1;
+    self.familiesByPage = [NSMutableDictionary dictionary];
     self.title = @"recherche";
     if(self.search){
         self.searchBar.text = self.search;
     }
 }
 
+- (void)resetResult{
+    [super resetResult];
+    maxFamily = -1;
+    self.familiesByPage = [NSMutableDictionary dictionary];
+    emptyFamilyPageFound = FALSE;
+}
 
+- (void)connectedToNoco{
+    [super connectedToNoco];
+    [self loadTableFamilyAtIndex:[NSIndexPath indexPathForItem:0 inSection:0]];
+}
 
 - (void)loadResultsAtPage:(int)page withResultBlock:(NLTCallResponseBlock)responseBlock{
     if(self.search && [self.search compare:@""]!=NSOrderedSame){
@@ -190,10 +206,17 @@
     return family;
 }
 
+- (void)updateDisplayedContainer{
+    if(!self.search || [self.search compare:@""]==NSOrderedSame){
+        self.collectionView.hidden = true;
+        self.familyTableview.hidden = false;
+    }else{
+        self.collectionView.hidden = false;
+        self.familyTableview.hidden = true;
+    }
+}
 
 #pragma mark UISearchbarDelegate
-
-
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
 }
@@ -202,16 +225,221 @@
     searchBar.text = @"";
     [searchBar resignFirstResponder];
     self.search = nil;
+    [self updateDisplayedContainer];
     [self.collectionView reloadData];
+    [self.familyTableview reloadData];
 }
 
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
     [self resetResult];
     self.search = searchBar.text;
+    [self updateDisplayedContainer];
     [self.collectionView reloadData];
+    [self.familyTableview reloadData];
     [self loadResultAtIndex:0];
     [searchBar resignFirstResponder];
+}
+
+#pragma mark - Families list
+
+- (NSIndexPath*)positionInResultsForTableFamilyAtIndexPath:(NSIndexPath*)indexPath{
+    long page = 0;
+    long indexInPage = 0;
+    long remainingIndex = indexPath.row;
+    int currentPage = 0;
+    while(remainingIndex >= 0){
+        //Default page count if page not fetched
+        long pageCount = (long)[[NLTAPI sharedInstance] resultsByPage];
+        NSArray* resultsInPage = [self.familiesByPage objectForKey:[NSNumber numberWithInt:currentPage]];
+        if(resultsInPage){
+            pageCount = [resultsInPage count];
+        }
+        if(pageCount > remainingIndex){
+            indexInPage = remainingIndex;
+            page = currentPage;
+            break;
+        }else{
+            remainingIndex -= pageCount;
+            currentPage++;
+        }
+    }
+    return [NSIndexPath indexPathForRow:indexInPage inSection:page];
+}
+
+- (id)loadedTableFamilyAtIndexPath:(NSIndexPath*)indexPath{
+    NSIndexPath* positionInResults = [self positionInResultsForTableFamilyAtIndexPath:indexPath];
+    long page = positionInResults.section;
+    long indexInPage = positionInResults.row;
+
+    id result = nil;
+    NSArray* pageResults = [self.familiesByPage objectForKey:[NSNumber numberWithInt:(int)page]];
+    if(pageResults){
+        if([pageResults count]>indexInPage){
+            result = [pageResults objectAtIndex:indexInPage];
+        }else{
+            NSLog(@"Index PB");
+        }
+    }
+    return result;
+}
+
+- (NLTFamily*)familyInTableAtIndex:(NSIndexPath*)indexPath{
+    NLTFamily* family = [self loadedTableFamilyAtIndexPath:indexPath];
+    if(!family){
+        //We want a bit to be sure the call call is still needed
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            UITableViewCell* cell = [self.familyTableview cellForRowAtIndexPath:indexPath];
+            if([[self.familyTableview visibleCells] containsObject:cell]){
+                [self loadTableFamilyAtIndex:indexPath];
+            }else{
+                //NSLog(@"Loading not needed");
+            }
+        });
+    }
+    return family;
+}
+
+- (long)tableEntriesBeforePage:(int)page{
+    long entries = 0;
+    for (NSNumber* pageResultsIndex in [self.familiesByPage allKeys]) {
+        if([pageResultsIndex integerValue]>page){
+            continue;
+        }
+        NSArray* pageResults = [self.familiesByPage objectForKey:pageResultsIndex];
+        entries += [pageResults count];
+    }
+    return entries;
+}
+
+- (void)loadTableFamilyAtIndex:(NSIndexPath*)indexPath{
+    NSIndexPath* positionInResults = [self positionInResultsForTableFamilyAtIndexPath:indexPath];
+    long page = positionInResults.section;
+    __weak SearchViewController* weakSelf = self;
+    if(![self.familiesByPage objectForKey:[NSNumber numberWithInt:page]]){
+        [[NLTOAuth sharedInstance]isAuthenticatedAfterRefreshTokenUse:^(BOOL authenticated, NSError* error) {
+            if(authenticated){
+                if(emptyFamilyPageFound && pendingFamilyPageCalls <= 0){
+                    //We already known that the last page is empty : no need to go further
+                    maxFamily = [self tableEntriesBeforePage:page];
+                    [weakSelf.familyTableview reloadData];
+                }else{
+                    [weakSelf.view makeToastActivity];
+                    pendingFamilyPageCalls++;
+                    [[NLTAPI sharedInstance] familiesAtPage:page withResultBlock:^(id result, NSError *error) {
+                        pendingFamilyPageCalls--;
+                        [weakSelf.view hideToastActivity];
+                        if(error){
+                            BOOL quotaError = [self checkErrorForQuotaLimit:error];
+                            maxFamily = [self tableEntriesBeforePage:page];
+                            if(!self.errorAlert&&!quotaError){
+                                self.errorAlert = [[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:self   cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                                [self.errorAlert show];
+                            }
+                            [weakSelf.collectionView reloadData];
+                        }else{
+                            if(result&&[result isKindOfClass:[NSArray class]]){
+                                if([(NSArray*)result count]<[[NLTAPI sharedInstance] resultsByPage]){
+                                    //End of available shows (not a full page of results)
+                                    emptyFamilyPageFound = TRUE;
+                                }
+                                [self.familiesByPage setObject:[NSMutableArray arrayWithArray:result] forKey:[NSNumber numberWithInt:page]];
+                                [self.familyTableview reloadData];
+                                UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.familyTableview);
+                            }else{
+                                //TODO Handle error
+                                NSLog(@"Unexpected page result");
+                            }
+                        }
+                        if(emptyFamilyPageFound){
+                            if(pendingFamilyPageCalls <= 0){
+                                maxFamily = [self tableEntriesBeforePage:page];
+                                [weakSelf.familyTableview reloadData];
+                            }else{
+#ifdef DEBUG
+                                NSLog(@"Empty page found, but still %i calls pending", pendingFamilyPageCalls);
+#endif
+                            }
+                        }
+                    } withKey:self];
+                }
+            }else{
+#warning TODO Handle offline
+                [weakSelf.view hideToastActivity];
+            }
+        }];
+    }else{
+        [self.view hideToastActivity];
+    }
+}
+
+
+
+
+#pragma mark UITableViewDelegate
+
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if(!self.initialAuthentCheckDone){
+        return 0;
+    }
+    if(maxFamily == -1){
+        //While we don't know the end
+        return 2000;
+    }
+    return maxFamily;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    NLTFamily* family = [self familyInTableAtIndex:indexPath];
+    FamilyTableViewCell *cell = (FamilyTableViewCell*)[tableView dequeueReusableCellWithIdentifier:@"FamilyCell" forIndexPath:indexPath];
+    UILabel* familyNameLabel = (UILabel*)[cell viewWithTag:200];
+    UILabel* episodeCountLabel = (UILabel*)[cell viewWithTag:230];
+    UILabel* resumeLabel = (UILabel*)[cell viewWithTag:240];
+    UILabel* themeLabel = (UILabel*)[cell viewWithTag:250];
+    UIImageView* familyImageView = (UIImageView*)[cell viewWithTag:220];
+    UIImageView* partnerImageView = (UIImageView*)[cell viewWithTag:600];
+    partnerImageView.image = nil;
+    familyImageView.image = [UIImage imageNamed:@"noco.png"];
+    if(family){
+        familyNameLabel.text = family.family_TT;
+        if(family.icon_512x288){
+#warning Find alternative screenshot when not available
+            [familyImageView sd_setImageWithURL:[NSURL URLWithString:family.icon_512x288] placeholderImage:[UIImage imageNamed:@"noco.png"]];
+        }
+        if(family.nb_shows == 1){
+            episodeCountLabel.text = @"1 épisode";
+        }else{
+            episodeCountLabel.text = [NSString stringWithFormat:@"%i épisodes", family.nb_shows];
+        }
+        resumeLabel.text = family.family_resume;
+        themeLabel.text = family.theme_name;
+        if([[NLTAPI sharedInstance].partnersByKey objectForKey:family.partner_key]){
+            NSDictionary* partnerInfo = [[NLTAPI sharedInstance].partnersByKey objectForKey:family.partner_key];
+            if([partnerInfo objectForKey:@"icon_128x72"]){
+                [partnerImageView sd_setImageWithURL:[NSURL URLWithString:[partnerInfo objectForKey:@"icon_128x72"]] placeholderImage:nil];
+            }
+        }
+    }else{
+        episodeCountLabel.text = @"";
+        resumeLabel.text = @"";
+        themeLabel.text = @"";
+        familyNameLabel.text = @"Chargement ...";
+        familyImageView.image = [UIImage imageNamed:@"noco.png"];
+    }
+    return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NLTFamily* family = [self familyInTableAtIndex:indexPath];
+    if(family && family.family_key){
+        [self performSegueWithIdentifier:@"DisplayFamily" sender:family];
+    }
 }
 
 #pragma mark UICollectioViewDatasource

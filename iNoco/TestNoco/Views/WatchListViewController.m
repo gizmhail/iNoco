@@ -19,7 +19,6 @@
 #import "NocoDownloadsManager.h"
 
 @interface WatchListViewController (){
-    BOOL initialAuthentCheckDone;
 }
 @property (retain,nonatomic)NSMutableArray* watchlistIds;
 @property (retain,nonatomic)NSArray* resumePlayInfo;

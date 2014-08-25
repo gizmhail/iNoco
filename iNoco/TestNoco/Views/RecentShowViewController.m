@@ -24,8 +24,6 @@
 }
 @property (retain,nonatomic)UIButton* favoriteFamilly;
 @property (retain,nonatomic)UIRefreshControl* refreshControl;
-@property (retain,nonatomic)UIAlertView* errorAlert;
-@property (retain,nonatomic)UIAlertView* quotaAlert;
 @end
 
 @implementation RecentShowViewController
@@ -48,10 +46,20 @@
 
 - (void)refreshControlSetup{
     self.refreshControl = [[UIRefreshControl alloc] init];
+    //self.refreshControl.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.6];
+    //self.refreshControl.frame = CGRectMake(0, 0, self.collectionView.frame.size.width, 2);
     
-    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Tirer pour rafraichir"];
+    NSMutableAttributedString* attr = [[NSMutableAttributedString alloc] initWithString:@"Tirer pour rafraichir"];
+    /*
+    [attr addAttribute:NSBackgroundColorAttributeName value:[THEME_COLOR colorWithAlphaComponent:0.9] range:[attr.string rangeOfString:attr.string ] ];
+    [attr addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:[attr.string rangeOfString:attr.string ] ];
+    */
+    
+    self.refreshControl.attributedTitle = attr;
+
     [self.refreshControl addTarget:self action:@selector(forceRefreshResult) forControlEvents:UIControlEventValueChanged];
     [self.collectionView addSubview:self.refreshControl];
+    
     self.collectionView.alwaysBounceVertical = YES;
 }
 
@@ -101,7 +109,7 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-    initialAuthentCheckDone = FALSE;
+    self.initialAuthentCheckDone = FALSE;
     if(!self.noNetworkForAuth){
         [self.view makeToastActivity];
         [self refreshResult];
@@ -156,10 +164,28 @@
 
 #pragma mark ConnectionViewControllerDelegate
 
+- (void) stopRefreshControl{
+    [self.refreshControl endRefreshing];
+    /*
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSMutableAttributedString* attr = [[NSMutableAttributedString alloc] initWithString:@"Tirer pour rafraichir"];
+        [attr addAttribute:NSBackgroundColorAttributeName value:[THEME_COLOR colorWithAlphaComponent:0.9] range:[attr.string rangeOfString:attr.string ] ];
+        [attr addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:[attr.string rangeOfString:attr.string ] ];
+        self.refreshControl.attributedTitle = attr;
+    });
+     */
+}
+
 - (void) forceRefreshResult{
+    /*
+    NSMutableAttributedString* attr = [[NSMutableAttributedString alloc] initWithString:@"Tirer pour rafraichir"];
+    self.refreshControl.attributedTitle = attr;
+    */
+    
     maxShows = -1;
     [[NLTAPI sharedInstance] invalidateCacheWithPrefix:@"shows"];
     [self refreshResult];
+
 }
 
 - (void)refreshResult{
@@ -169,11 +195,11 @@
     __weak RecentShowViewController* weakSelf = self;
     [[NLTOAuth sharedInstance] isAuthenticatedAfterRefreshTokenUse:^(BOOL authenticated, NSError* error) {
 #warning TODO Handle offline properly (add Reachability, ...)
-        initialAuthentCheckDone = TRUE;
+        self.initialAuthentCheckDone = TRUE;
         if(!authenticated){
             if([error.domain compare:NSURLErrorDomain]==NSOrderedSame && error.code == -1009){
                 [weakSelf.view hideToastActivity];
-                [weakSelf.refreshControl endRefreshing];
+                [weakSelf stopRefreshControl];
                 [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:self   cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             }else{
                 [weakSelf.view hideToastActivity];
@@ -181,7 +207,7 @@
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [weakSelf performSegueWithIdentifier:@"NotConnectedSegue" sender:self];
                 });
-                [weakSelf.refreshControl endRefreshing];
+                [weakSelf stopRefreshControl];
             }
         }else{
             [weakSelf connectedToNoco];
@@ -243,7 +269,7 @@
                         NSLog(@"pendingPageCalls--: %i", pendingPageCalls);
 #endif
                         [weakSelf.view hideToastActivity];
-                        [weakSelf.refreshControl endRefreshing];
+                        [weakSelf stopRefreshControl];
                         if(error){
 #ifdef DEBUG_SHOWLIST_MAXSHOW
                             [weakSelf.tabBarController.view makeToast:[NSString stringWithFormat:@"Setting maxShows due to error %@", [error description]] duration:10 position:@"bottom"];
@@ -277,12 +303,12 @@
             }else{
 #warning TODO Handle offline
                 [weakSelf.view hideToastActivity];
-                [weakSelf.refreshControl endRefreshing];
+                [weakSelf stopRefreshControl];
             }
         }];
     }else{
         [self.view hideToastActivity];
-        [self.refreshControl endRefreshing];
+        [self stopRefreshControl];
     }
 }
 
@@ -540,7 +566,7 @@
 #pragma mark UICollectioViewDatasource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    if(!initialAuthentCheckDone){
+    if(!self.initialAuthentCheckDone){
         return 0;
     }
     if(self.filter){

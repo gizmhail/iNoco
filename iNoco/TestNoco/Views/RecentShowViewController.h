@@ -14,8 +14,8 @@
 
 @interface RecentShowViewController : UIViewController <UICollectionViewDataSource,UICollectionViewDelegate,ConnectionViewControllerDelegate,UISearchBarDelegate,UIAlertViewDelegate>{
     int maxShows;
-    BOOL initialAuthentCheckDone;
 }
+@property (assign,nonatomic) BOOL initialAuthentCheckDone;
 @property (retain, nonatomic) NSMutableDictionary* resultByPage;
 @property (retain, nonatomic) NSMutableDictionary* filteredResultByPage;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -27,6 +27,8 @@
 @property (weak, nonatomic) IBOutlet UIView *filterView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *watchSegmentedControl;
 @property (weak, nonatomic) IBOutlet UIView *filterBackground;
+@property (retain,nonatomic)UIAlertView* errorAlert;
+@property (retain,nonatomic)UIAlertView* quotaAlert;
 
 - (id)resultAtIndex:(long)index;
 - (NLTShow*)showAtIndex:(long)showIndex;
