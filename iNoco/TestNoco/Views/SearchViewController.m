@@ -302,10 +302,14 @@
 
 - (long)tableEntriesCount{
     long entries = 0;
-    for (NSNumber* pageResultsIndex in [self.familiesByPage allKeys]) {
-        NSArray* pageResults = [self.familiesByPage objectForKey:pageResultsIndex];
-        long previousPagesCount = [[NLTAPI sharedInstance] resultsByPage]*[pageResultsIndex integerValue];
-        entries = MAX(entries,previousPagesCount+[pageResults count]);
+    NSDictionary* pageDictionary = self.familiesByPage;
+    NSNumber * maxPage = [[pageDictionary allKeys] valueForKeyPath:@"@max.intValue"];
+    for (int i = 0; i<= [maxPage integerValue]; i++) {
+        if([pageDictionary objectForKey:[NSNumber numberWithInt:i]]){
+            entries += [[pageDictionary objectForKey:[NSNumber numberWithInt:i]] count];
+        }else{
+            entries += [[NLTAPI sharedInstance] resultsByPage];
+        }
     }
     return entries;
 }
@@ -317,64 +321,55 @@
     if(![self.familiesByPage objectForKey:[NSNumber numberWithInt:page]]){
         [[NLTOAuth sharedInstance]isAuthenticatedAfterRefreshTokenUse:^(BOOL authenticated, NSError* error) {
             if(authenticated){
-                if(emptyFamilyPageFound && pendingFamilyPageCalls <= 0){
-                    //We already known that the last page is empty : no need to go further
-                    maxFamily = [self tableEntriesCount];
+                [weakSelf.view makeToastActivity];
+                pendingFamilyPageCalls++;
+                [[NLTAPI sharedInstance] familiesAtPage:page withResultBlock:^(id result, NSError *error) {
+                    pendingFamilyPageCalls--;
+                    [weakSelf.view hideToastActivity];
+                    if(error){
+                        
+                        BOOL quotaError = [self checkErrorForQuotaLimit:error];
+                        maxFamily = [self tableEntriesCount];
 #ifdef DEBUG
-                    NSLog(@"maxFamily (%i) set due to emptyFamilyPageFound and pendingFamilyPageCalls == 0", maxFamily);
+                        NSLog(@"maxFamily (%i) set due to error in page fetching", maxFamily);
 #endif
-                    [weakSelf.familyTableview reloadData];
-                }else{
-                    [weakSelf.view makeToastActivity];
-                    pendingFamilyPageCalls++;
-                    [[NLTAPI sharedInstance] familiesAtPage:page withResultBlock:^(id result, NSError *error) {
-                        pendingFamilyPageCalls--;
-                        [weakSelf.view hideToastActivity];
-                        if(error){
-
-                            BOOL quotaError = [self checkErrorForQuotaLimit:error];
+                        if(!self.errorAlert&&!quotaError){
+                            self.errorAlert = [[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:self   cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                            [self.errorAlert show];
+                        }
+                        [weakSelf.collectionView reloadData];
+                    }else{
+                        if(result&&[result isKindOfClass:[NSArray class]]){
+                            if([(NSArray*)result count]<[[NLTAPI sharedInstance] resultsByPage]){
+                                //End of available shows (not a full page of results)
+#ifdef DEBUG
+                                NSLog(@"Empty family page found (%i)",page);
+#endif
+                                emptyFamilyPageFound = TRUE;
+                            }
+                            [self.familiesByPage setObject:[NSMutableArray arrayWithArray:result] forKey:[NSNumber numberWithInt:page]];
+                            [self.familyTableview reloadData];
+                            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.familyTableview);
+                        }else{
+                            //TODO Handle error
+                            NSLog(@"Unexpected page result");
+                        }
+                    }
+                    if(emptyFamilyPageFound){
+                        if(pendingFamilyPageCalls <= 0){
                             maxFamily = [self tableEntriesCount];
 #ifdef DEBUG
-                            NSLog(@"maxFamily (%i) set due to error in page fetching", maxFamily);
+                            NSLog(@"maxFamily (%i) set due to current emptyFamilyPageFound and pendingFamilyPageCalls == 0", maxFamily);
 #endif
-                            if(!self.errorAlert&&!quotaError){
-                                self.errorAlert = [[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:self   cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                                [self.errorAlert show];
-                            }
-                            [weakSelf.collectionView reloadData];
+                            
+                            [weakSelf.familyTableview reloadData];
                         }else{
-                            if(result&&[result isKindOfClass:[NSArray class]]){
-                                if([(NSArray*)result count]<[[NLTAPI sharedInstance] resultsByPage]){
-                                    //End of available shows (not a full page of results)
 #ifdef DEBUG
-                                    NSLog(@"Empty family page found (%i)",page);
+                            NSLog(@"Empty page found, but still %i calls pending", pendingFamilyPageCalls);
 #endif
-                                    emptyFamilyPageFound = TRUE;
-                                }
-                                [self.familiesByPage setObject:[NSMutableArray arrayWithArray:result] forKey:[NSNumber numberWithInt:page]];
-                                [self.familyTableview reloadData];
-                                UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.familyTableview);
-                            }else{
-                                //TODO Handle error
-                                NSLog(@"Unexpected page result");
-                            }
                         }
-                        if(emptyFamilyPageFound){
-                            if(pendingFamilyPageCalls <= 0){
-                                maxFamily = [self tableEntriesCount];
-#ifdef DEBUG
-                                NSLog(@"maxFamily (%i) set due to current emptyFamilyPageFound and pendingFamilyPageCalls == 0", maxFamily);
-#endif
-
-                                [weakSelf.familyTableview reloadData];
-                            }else{
-#ifdef DEBUG
-                                NSLog(@"Empty page found, but still %i calls pending", pendingFamilyPageCalls);
-#endif
-                            }
-                        }
-                    } withKey:self];
-                }
+                    }
+                } withKey:self];
             }else{
 #warning TODO Handle offline
                 [weakSelf.view hideToastActivity];

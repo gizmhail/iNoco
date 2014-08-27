@@ -250,13 +250,6 @@
                 if(weakSelf.filter && page > [weakSelf greatestFetchedPage]){
                     //If filtering, we don't download additionnal pages (unless some pages were missing, skipped due to high speed scrolling)
                     [weakSelf.view hideToastActivity];
-                }else if(emptyPageFound && pendingPageCalls <= 0){
-                    //We already known that the last page is empty : no need to go further
-#ifdef DEBUG_SHOWLIST_MAXSHOW
-                    [weakSelf.tabBarController.view makeToast:[NSString stringWithFormat:@"No call & setting maxShows due to empty page found at page %i (and no pending calls)", firstEmptyPageFound] duration:10 position:@"bottom"];
-#endif
-                    maxShows = [self entriesCount];
-                    [weakSelf.collectionView reloadData];
                 }else{
                     [weakSelf.view makeToastActivity];
                     pendingPageCalls++;
@@ -330,10 +323,14 @@
     if(self.filter){
         pageDictionary = self.filteredResultByPage;
     }
-    for (NSNumber* pageResultsIndex in [pageDictionary allKeys]) {
-        NSArray* pageResults = [pageDictionary objectForKey:pageResultsIndex];
-        long previousPagesCount = [[NLTAPI sharedInstance] resultsByPage]*[pageResultsIndex integerValue];
-        entries = MAX(entries,previousPagesCount+[pageResults count]);
+    
+    NSNumber * maxPage = [[pageDictionary allKeys] valueForKeyPath:@"@max.intValue"];
+    for (int i = 0; i<= [maxPage integerValue]; i++) {
+        if([pageDictionary objectForKey:[NSNumber numberWithInt:i]]){
+            entries += [[pageDictionary objectForKey:[NSNumber numberWithInt:i]] count];
+        }else{
+            entries += [[NLTAPI sharedInstance] resultsByPage];
+        }
     }
     return entries;
 }
