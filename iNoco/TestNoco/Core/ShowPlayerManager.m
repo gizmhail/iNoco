@@ -147,6 +147,10 @@
         //error
         NSLog(@"Stoped due to error");
         [self.moviePlayer stop];
+#warning Add emssage, fix fullscreen exit problems
+        if([self displayAlerts]){
+            [[[UIAlertView alloc] initWithTitle:@"Lecture impossible" message:@"Impossible de lire cette émission" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
+        }
     }
     [self.moviePlayer setFullscreen:NO animated:YES];
     [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = [NSMutableDictionary dictionary];

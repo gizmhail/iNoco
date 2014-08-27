@@ -96,7 +96,7 @@
 - (NSMutableDictionary*)downloadInfoForTask:(NSURLSessionTask*)task{
     NSMutableDictionary* info = nil;
     for (NSMutableDictionary* downloadInfo in self.downloadInfos) {
-        if([downloadInfo objectForKey:@"taskIdentifier"]&&[(NSNumber*)[downloadInfo objectForKey:@"taskIdentifier"] unsignedLongValue] == task.taskIdentifier){
+        if([downloadInfo objectForKey:@"taskDescription"]&&[(NSString*)[downloadInfo objectForKey:@"taskDescription"] compare:task.taskDescription]==NSOrderedSame){
             info = downloadInfo;
             break;
         }
@@ -150,9 +150,10 @@
             [downloadInfo setObject:[NSNumber numberWithUnsignedLong:downloadTask.taskIdentifier] forKey:@"taskIdentifier"];
             [downloadInfo setObject:downloadTask.taskDescription forKey:@"taskDescription"];
             [self saveCache];
-            NSLog(@"Launching download of %@ (task: %@)", [result objectForKey:@"file"], [NSNumber numberWithUnsignedLong:downloadTask.taskIdentifier]);
+            NSLog(@"Launching download of %@ (task: %@ -- show: %@ / %i)", [result objectForKey:@"file"], [NSNumber numberWithUnsignedLong:downloadTask.taskIdentifier], [[downloadInfo objectForKey:@"showInfo"] objectForKey:@"id_show"], show.id_show);
             [downloadTask resume];
         }else{
+            NSLog(@"planDownloadForShow error %@", error);
 #warning TODO See if we should remove alert view messages (background cases, ...)
             if(error.code == NLTAPI_ERROR_VIDEO_UNAVAILABLE_WITH_POPMESSAGE && [error.userInfo objectForKey:@"popmessage"]&&[[error.userInfo objectForKey:@"popmessage"] objectForKey:@"message"]){
                 [[[UIAlertView alloc] initWithTitle:@"Erreur" message:[[error.userInfo objectForKey:@"popmessage"] objectForKey:@"message"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
@@ -302,6 +303,11 @@
         progress = (float)totalBytesWritten / (float)totalBytesExpectedToWrite;
     }
     NSMutableDictionary* downloadInfo = [self downloadInfoForTask:downloadTask];
+    if(![downloadInfo objectForKey:@"showInfo"]){
+#ifdef DEBUG
+        NSLog(@"Missing showinfo in downloadInfo %@ (probably canceling)", downloadInfo);
+#endif
+    }
     NLTShow* downloadShow = [[NLTShow alloc] initWithDictionnary:[downloadInfo objectForKey:@"showInfo"]];
     //NSLog(@"[Show %i] Session download task wrote (%i%%) an additional %lld bytes (total %lld bytes) out of an expected %lld bytes.\n", downloadShow.id_show,(int)(progress*100), bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
     [downloadInfo setObject:[NSNumber numberWithFloat:progress] forKey:@"progress"];
