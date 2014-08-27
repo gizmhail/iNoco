@@ -255,7 +255,7 @@
 #ifdef DEBUG_SHOWLIST_MAXSHOW
                     [weakSelf.tabBarController.view makeToast:[NSString stringWithFormat:@"No call & setting maxShows due to empty page found at page %i (and no pending calls)", firstEmptyPageFound] duration:10 position:@"bottom"];
 #endif
-                    maxShows = [self entriesBeforePage:page];
+                    maxShows = [self entriesCount];
                     [weakSelf.collectionView reloadData];
                 }else{
                     [weakSelf.view makeToastActivity];
@@ -276,7 +276,7 @@
                             NSLog(@"Error: %@", error);
 #endif
                             BOOL quotaError = [self checkErrorForQuotaLimit:error];
-                            maxShows = [self entriesBeforePage:page];
+                            maxShows = [self entriesCount];
                             if(!self.errorAlert&&!quotaError){
                                 self.errorAlert = [[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:self   cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                                 [self.errorAlert show];
@@ -287,7 +287,7 @@
                         }
                         if(emptyPageFound){
                             if(pendingPageCalls <= 0){
-                                maxShows = [self entriesBeforePage:page];
+                                maxShows = [self entriesCount];
                                 [weakSelf.collectionView reloadData];
 #ifdef DEBUG_SHOWLIST_MAXSHOW
                                 [weakSelf.tabBarController.view makeToast:[NSString stringWithFormat:@"Setting maxShows %i due to empty page found at page %i (and no pending calls)", maxShows,firstEmptyPageFound] duration:10 position:@"bottom"];
@@ -324,18 +324,16 @@
 
 }
 
-- (long)entriesBeforePage:(int)page{
+- (long)entriesCount{
     long entries = 0;
     NSDictionary* pageDictionary = self.resultByPage;
     if(self.filter){
         pageDictionary = self.filteredResultByPage;
     }
     for (NSNumber* pageResultsIndex in [pageDictionary allKeys]) {
-        if([pageResultsIndex integerValue]>page){
-            continue;
-        }
         NSArray* pageResults = [pageDictionary objectForKey:pageResultsIndex];
-        entries += [pageResults count];
+        long previousPagesCount = [[NLTAPI sharedInstance] resultsByPage]*[pageResultsIndex integerValue];
+        entries = MAX(entries,previousPagesCount+[pageResults count]);
     }
     return entries;
 }

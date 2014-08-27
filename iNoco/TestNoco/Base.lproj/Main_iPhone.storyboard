@@ -1474,8 +1474,8 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="200" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yo2-Qf-qZm">
-                                                            <rect key="frame" x="104" y="6" width="206" height="38"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <rect key="frame" x="104" y="1" width="206" height="38"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                             <string key="text">Family
 Family</string>
                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -1487,21 +1487,21 @@ Family</string>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         </imageView>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="230" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10123 épisodes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6d6-1z-JTT">
-                                                            <rect key="frame" x="104" y="42" width="91" height="21"/>
+                                                            <rect key="frame" x="104" y="37" width="91" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="250" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Informatique" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="W6g-lW-3Y5">
-                                                            <rect key="frame" x="214" y="42" width="91" height="21"/>
+                                                            <rect key="frame" x="214" y="37" width="91" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="240" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="GTk-0c-ZgZ">
-                                                            <rect key="frame" x="8" y="59" width="297" height="57"/>
+                                                            <rect key="frame" x="8" y="57" width="297" height="57"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <string key="text">Série
 
@@ -1603,8 +1603,8 @@ Les geeks ont une vie. Même s'ils ne bougent pas beaucoup.</string>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="WbY-uH-vXB"/>
-        <segue reference="j4N-YV-D3C"/>
         <segue reference="Zd2-bH-dfy"/>
+        <segue reference="WbY-uH-vXB"/>
+        <segue reference="SK6-5m-Pcy"/>
     </inferredMetricsTieBreakers>
 </document>

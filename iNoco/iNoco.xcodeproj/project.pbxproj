@@ -28,6 +28,7 @@
 		4F3DE0A0196C9A6600D2A0B7 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3DE09D196C9A6600D2A0B7 /* Default.png */; };
 		4F3DE0A1196C9A6600D2A0B7 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3DE09E196C9A6600D2A0B7 /* Default@2x.png */; };
 		4F3DE0A3196CA47C00D2A0B7 /* nolife.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3DE0A2196CA47C00D2A0B7 /* nolife.png */; };
+		4F44FC3B19AD0A3C00367C6C /* ShowPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F44FC3A19AD0A3C00367C6C /* ShowPlayerManager.m */; };
 		4F4594F6196324BA0061381E /* Icon-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4594E6196324BA0061381E /* Icon-40.png */; };
 		4F4594F7196324BA0061381E /* Icon-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4594E7196324BA0061381E /* Icon-40@2x.png */; };
 		4F4594F8196324BA0061381E /* Icon-60.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4594E8196324BA0061381E /* Icon-60.png */; };
@@ -164,6 +165,8 @@
 		4F3DE09D196C9A6600D2A0B7 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		4F3DE09E196C9A6600D2A0B7 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		4F3DE0A2196CA47C00D2A0B7 /* nolife.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nolife.png; sourceTree = "<group>"; };
+		4F44FC3919AD0A3C00367C6C /* ShowPlayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowPlayerManager.h; sourceTree = "<group>"; };
+		4F44FC3A19AD0A3C00367C6C /* ShowPlayerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowPlayerManager.m; sourceTree = "<group>"; };
 		4F4594E6196324BA0061381E /* Icon-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-40.png"; sourceTree = "<group>"; };
 		4F4594E7196324BA0061381E /* Icon-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-40@2x.png"; sourceTree = "<group>"; };
 		4F4594E8196324BA0061381E /* Icon-60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60.png"; sourceTree = "<group>"; };
@@ -354,6 +357,8 @@
 				4F37F367196612FE00D0AACC /* FavoriteProgramManager.m */,
 				4FEB0C6719703AE400A84A39 /* NocoDownloadsManager.h */,
 				4FEB0C6819703AE400A84A39 /* NocoDownloadsManager.m */,
+				4F44FC3919AD0A3C00367C6C /* ShowPlayerManager.h */,
+				4F44FC3A19AD0A3C00367C6C /* ShowPlayerManager.m */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -833,6 +838,7 @@
 				4FEECD6A1949D683002514CE /* main.m in Sources */,
 				4F37F3761969FEC000D0AACC /* NolifeEPGViewControllerTableViewController.m in Sources */,
 				4F636A4E1955C7D4004C0A18 /* RecentShowViewController.m in Sources */,
+				4F44FC3B19AD0A3C00367C6C /* ShowPlayerManager.m in Sources */,
 				4F37F379196A15A000D0AACC /* WebViewDetailsViewController.m in Sources */,
 				4F11173A19823A7A00242C22 /* EPGTableViewCell.m in Sources */,
 				4F459508196325E60061381E /* SearchViewController.m in Sources */,

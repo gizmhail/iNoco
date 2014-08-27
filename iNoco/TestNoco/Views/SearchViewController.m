@@ -300,14 +300,12 @@
     return family;
 }
 
-- (long)tableEntriesBeforePage:(int)page{
+- (long)tableEntriesCount{
     long entries = 0;
     for (NSNumber* pageResultsIndex in [self.familiesByPage allKeys]) {
-        if([pageResultsIndex integerValue]>page){
-            continue;
-        }
         NSArray* pageResults = [self.familiesByPage objectForKey:pageResultsIndex];
-        entries += [pageResults count];
+        long previousPagesCount = [[NLTAPI sharedInstance] resultsByPage]*[pageResultsIndex integerValue];
+        entries = MAX(entries,previousPagesCount+[pageResults count]);
     }
     return entries;
 }
@@ -321,7 +319,10 @@
             if(authenticated){
                 if(emptyFamilyPageFound && pendingFamilyPageCalls <= 0){
                     //We already known that the last page is empty : no need to go further
-                    maxFamily = [self tableEntriesBeforePage:page];
+                    maxFamily = [self tableEntriesCount];
+#ifdef DEBUG
+                    NSLog(@"maxFamily (%i) set due to emptyFamilyPageFound and pendingFamilyPageCalls == 0", maxFamily);
+#endif
                     [weakSelf.familyTableview reloadData];
                 }else{
                     [weakSelf.view makeToastActivity];
@@ -330,8 +331,12 @@
                         pendingFamilyPageCalls--;
                         [weakSelf.view hideToastActivity];
                         if(error){
+
                             BOOL quotaError = [self checkErrorForQuotaLimit:error];
-                            maxFamily = [self tableEntriesBeforePage:page];
+                            maxFamily = [self tableEntriesCount];
+#ifdef DEBUG
+                            NSLog(@"maxFamily (%i) set due to error in page fetching", maxFamily);
+#endif
                             if(!self.errorAlert&&!quotaError){
                                 self.errorAlert = [[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:self   cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                                 [self.errorAlert show];
@@ -341,6 +346,9 @@
                             if(result&&[result isKindOfClass:[NSArray class]]){
                                 if([(NSArray*)result count]<[[NLTAPI sharedInstance] resultsByPage]){
                                     //End of available shows (not a full page of results)
+#ifdef DEBUG
+                                    NSLog(@"Empty family page found (%i)",page);
+#endif
                                     emptyFamilyPageFound = TRUE;
                                 }
                                 [self.familiesByPage setObject:[NSMutableArray arrayWithArray:result] forKey:[NSNumber numberWithInt:page]];
@@ -353,7 +361,11 @@
                         }
                         if(emptyFamilyPageFound){
                             if(pendingFamilyPageCalls <= 0){
-                                maxFamily = [self tableEntriesBeforePage:page];
+                                maxFamily = [self tableEntriesCount];
+#ifdef DEBUG
+                                NSLog(@"maxFamily (%i) set due to current emptyFamilyPageFound and pendingFamilyPageCalls == 0", maxFamily);
+#endif
+
                                 [weakSelf.familyTableview reloadData];
                             }else{
 #ifdef DEBUG
@@ -440,6 +452,18 @@
     if(family && family.family_key){
         [self performSegueWithIdentifier:@"DisplayFamily" sender:family];
     }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
+        NLTFamily* family = [self familyInTableAtIndex:indexPath];
+        if(family){
+            if(!family.family_resume || [[family.family_resume stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] compare:@""]==NSOrderedSame){
+                return 60;
+            }
+        }
+    }
+    return 120;
 }
 
 #pragma mark UICollectioViewDatasource

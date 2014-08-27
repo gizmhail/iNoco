@@ -20,17 +20,20 @@
 #import "NocoDownloadsManager.h"
 #import "ShowCollectionViewCell.h"
 
+#warning REMOVE 
+//#define LEGACY_MOVIE_PLAYER
+
 @interface ShowViewController (){
     int unreadCalls;
     float progress;
+#ifdef LEGACY_MOVIE_PLAYER
     bool userEndedPlay;
+#endif
 }
-@property (retain, nonatomic) MPMoviePlayerController* moviePlayer;
 @property (retain, nonatomic) NSMutableArray* chapters;
 @property (retain, nonatomic) UIAlertView* downloadAlert;
 @property (retain, nonatomic) UIAlertView* readAlert;
 @property (retain, nonatomic) UIAlertView* statusAlert;
-@property (retain, nonatomic) UIAlertView* progressAlert;
 @property (retain, nonatomic) UIActionSheet* readSheet;
 @property (retain, nonatomic) UIActionSheet* statusSheet;
 @property (retain, nonatomic) UIProgressView* downloadProgress;
@@ -38,7 +41,11 @@
 @property (retain, nonatomic) UIButton* downloadImageButton;
 @property (retain, nonatomic) UIView* downloadView;
 @property (retain, nonatomic) NSError* readError;
+#ifdef LEGACY_MOVIE_PLAYER
+@property (retain, nonatomic) MPMoviePlayerController* moviePlayer;
 @property (retain, nonatomic) NSTimer* progressTimer;
+@property (retain, nonatomic) UIAlertView* progressAlert;
+#endif
 @end
 
 //TODO MOve this static strings in localisation file
@@ -61,7 +68,11 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+#ifdef LEGACY_MOVIE_PLAYER
     [self playerNotificationSubscription];
+#else ifdef DEBUG
+    NSLog(@"\n\n!!!!\n\nPlease remove LEGACY_MOVIE_PLAYER code before release\n\n!!!!\n\n");
+#endif
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     //UI customization
@@ -251,29 +262,14 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     // Dispose of any resources that can be recreated.
 }
 
-- (void)playerNotificationSubscription{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationMPMoviePlayerNowPlayingMovieDidChangeNotification:) name:MPMoviePlayerNowPlayingMovieDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationMPMoviePlayerPlaybackDidFinishNotification:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificaitonMPMoviePlayerDidExitFullscreenNotification:) name:MPMoviePlayerDidExitFullscreenNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(notificationMPMoviePlayerPlaybackDidFinishNotification:)
-                                                 name:MPMoviePlayerWillExitFullscreenNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(notificationMPMoviePlayerLoadStateDidChangeNotification:)
-                                                 name:MPMoviePlayerLoadStateDidChangeNotification
-                                               object:nil];
+#pragma mark - Player
+
+#pragma mark ShowPlayerManagerDelegate
+- (void)progressChanged:(float)p{
+    progress = p;
 }
 
-- (void)notificationMPMoviePlayerLoadStateDidChangeNotification:(NSNotification*)notif{
-#ifdef DEBUG
-    NSLog(@"Load state %li", (long)self.moviePlayer.loadState);
-#endif
-    if(self.moviePlayer.loadState & MPMovieLoadStatePlayable){
-    }
-}
-
-- (void)notificaitonMPMoviePlayerDidExitFullscreenNotification:(NSNotification*)notif{
+- (void)moviePlayerDidExitFullscreen{
     self.readAlert = [[UIAlertView alloc] initWithTitle:@"Connection en cours ..." message:@"Récupération de l'état lu/non lu..." delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
     [self.readAlert show];
     __weak ShowViewController* weakSelf = self;
@@ -309,14 +305,79 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     } withKey:self noCache:YES];
 }
 
-- (void)proposeToRemoveFromWatchList{
-    if(self.watchListButton.selected){
-        //Propose to remove from watchlist, as it is read
-        self.statusSheet = [[UIActionSheet alloc] initWithTitle:@"Liste de lecture" delegate:self cancelButtonTitle:@"Ne pas retirer" destructiveButtonTitle:nil otherButtonTitles:removeFromWatchlist, nil];
-        [self.statusSheet showFromTabBar:self.navigationController.tabBarController.tabBar];
-    }
-
+- (void)startedLookingForMovieUrl{
+    [self.videoActivity startAnimating];
+    
 }
+- (void)endedLookingForMovieUrl{
+    [self.videoActivity stopAnimating];
+}
+
+- (CGRect)moviePlayerFrame{
+    return self.imageView.frame;
+}
+
+- (UIView*)moviePlayerSuperview{
+    return self.imageView.superview;
+}
+
+- (void)moviePlayerPlacedInView{
+    [self.videoActivity.superview bringSubviewToFront:self.videoActivity];
+}
+
+- (void)tooglePlay{
+#ifdef LEGACY_MOVIE_PLAYER
+    if(self.moviePlayer){
+        if(self.moviePlayer.playbackState == MPMoviePlaybackStatePlaying){
+            //Playing
+            [self.moviePlayer pause];
+        }else{
+            //Not playing
+            [self.moviePlayer play];
+        }
+    }
+#endif
+    [[ShowPlayerManager sharedInstance] tooglePlay];
+}
+
+- (IBAction)play:(id)sender {
+#ifdef LEGACY_MOVIE_PLAYER
+    [self play];
+#else
+    [[ShowPlayerManager sharedInstance] setDelegate:self];
+    [[ShowPlayerManager sharedInstance] play:self.show withProgress:progress withImage:self.imageView.image];
+#endif
+}
+
+#pragma mark Player core
+#ifdef LEGACY_MOVIE_PLAYER
+
+- (void)playerNotificationSubscription{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationMPMoviePlayerNowPlayingMovieDidChangeNotification:) name:MPMoviePlayerNowPlayingMovieDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationMPMoviePlayerPlaybackDidFinishNotification:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificaitonMPMoviePlayerDidExitFullscreenNotification:) name:MPMoviePlayerDidExitFullscreenNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(notificationMPMoviePlayerPlaybackDidFinishNotification:)
+                                                 name:MPMoviePlayerWillExitFullscreenNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(notificationMPMoviePlayerLoadStateDidChangeNotification:)
+                                                 name:MPMoviePlayerLoadStateDidChangeNotification
+                                               object:nil];
+}
+
+- (void)notificationMPMoviePlayerLoadStateDidChangeNotification:(NSNotification*)notif{
+#ifdef DEBUG
+    NSLog(@"Load state %li", (long)self.moviePlayer.loadState);
+#endif
+    if(self.moviePlayer.loadState & MPMovieLoadStatePlayable){
+    }
+}
+
+- (void)notificaitonMPMoviePlayerDidExitFullscreenNotification:(NSNotification*)notif{
+    [self moviePlayerDidExitFullscreen];
+}
+
 
 - (void)notificationMPMoviePlayerPlaybackDidFinishNotification:(NSNotification*)notif{
     [self.progressTimer invalidate];
@@ -373,19 +434,8 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
         } withKey:self];
     }
 }
-- (void)tooglePlay{
-    if(self.moviePlayer){
-        if(self.moviePlayer.playbackState == MPMoviePlaybackStatePlaying){
-            //Playing
-            [self.moviePlayer pause];
-        }else{
-            //Not playing
-            [self.moviePlayer play];
-        }
-    }
-}
 
-- (IBAction)play:(id)sender {
+- (void)play {
     if(self.show.access_show == 0){
         if([self.show.access_error compare:@"subscription_required" options:NSCaseInsensitiveSearch]==NSOrderedSame){
             NSString* urlStr = [NSString stringWithFormat:@"partners/by_key/%@",self.show.partner_key];
@@ -470,6 +520,9 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     [info setObject:[[MPMediaItemArtwork alloc] initWithImage:self.imageView.image] forKey:MPMediaItemPropertyArtwork];
     infoCenter.nowPlayingInfo = info;
 }
+#endif
+
+#pragma mark Update UI
 
 - (void)updateInterctiveUI{
     if(self.readImageButton.selected){
@@ -591,7 +644,11 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
 }
 
 -(void)dealloc{
+#ifdef LEGACY_MOVIE_PLAYER
     [self.progressTimer invalidate];
+#else
+    [[ShowPlayerManager sharedInstance] setDelegate:nil];
+#endif
     [[NLTAPI sharedInstance] cancelCallsWithKey:self];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setRemoteControlDelegate:nil];
@@ -640,6 +697,17 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
         if(actionSheet.cancelButtonIndex != buttonIndex){
             [self watchListClick:nil];
         }
+    }
+}
+
+#pragma mark Watchlist
+
+
+- (void)proposeToRemoveFromWatchList{
+    if(self.watchListButton.selected){
+        //Propose to remove from watchlist, as it is read
+        self.statusSheet = [[UIActionSheet alloc] initWithTitle:@"Liste de lecture" delegate:self cancelButtonTitle:@"Ne pas retirer" destructiveButtonTitle:nil otherButtonTitles:removeFromWatchlist, nil];
+        [self.statusSheet showFromTabBar:self.navigationController.tabBarController.tabBar];
     }
     
 }
