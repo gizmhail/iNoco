@@ -149,4 +149,40 @@ void uncaughtExceptionHandler(NSException *exception) {
     [[NocoDownloadsManager sharedInstance] addCompletionHandler: completionHandler forSession: identifier];
 }
 
+#pragma mark URL Scheme
+
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+    NSString* query = [url query];
+    NSArray* params = [query componentsSeparatedByString:@"&"];
+    if(params){
+        for (NSString* param in params) {
+            NSArray* parts = [param componentsSeparatedByString:@"="];
+            NSString* key = @"";
+            NSString* value = @"";
+            if([parts count]>0){
+                key = [parts objectAtIndex:0];
+            }
+            if([parts count]>1){
+                value = [parts objectAtIndex:1];
+            }
+            //Using params
+            if([key compare:@"betaTest" options:NSCaseInsensitiveSearch]==NSOrderedSame){
+                if([value compare:@"activateFamilyList" options:NSCaseInsensitiveSearch]==NSOrderedSame){
+                    NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
+                    [settings setObject:[NSNumber numberWithBool:true] forKey:@"FamilyList"];
+                    [settings synchronize];
+                }
+                if([value compare:@"desactivateFamilyList" options:NSCaseInsensitiveSearch]==NSOrderedSame){
+                    NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
+                    [settings setObject:[NSNumber numberWithBool:false] forKey:@"FamilyList"];
+                    [settings synchronize];
+                }
+            }
+        }
+    }
+    return YES;
+}
+
+
+
 @end

@@ -20,6 +20,7 @@
     BOOL emptyFamilyPageFound;
     int pendingFamilyPageCalls;
     int maxFamily;
+    BOOL useFamilyList;
 }
 
 @property (retain, nonatomic) NSMutableDictionary* familiesByPage;
@@ -28,7 +29,12 @@
 
 @implementation SearchViewController
 
+- (BOOL)enableFamilyList{
+    return useFamilyList;
+}
+
 -(void)viewDidLoad{
+    [self loadFamilyListPreference];
     [super viewDidLoad];
     maxFamily = -1;
     self.familiesByPage = [NSMutableDictionary dictionary];
@@ -36,6 +42,15 @@
     if(self.search){
         self.searchBar.text = self.search;
     }
+}
+
+-(void)loadFamilyListPreference{
+    NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
+    useFamilyList = FALSE;
+    if([settings objectForKey:@"FamilyList"]){
+        useFamilyList = [[settings objectForKey:@"FamilyList"] boolValue];
+    }
+
 }
 
 - (void)resetResult{
@@ -66,7 +81,7 @@
         if(responseBlock){
             responseBlock([NSArray array], nil);
         }
-        [self.view hideToastActivity];
+        //[self.view hideToastActivity];
     }
 }
 
@@ -315,6 +330,10 @@
 }
 
 - (void)loadTableFamilyAtIndex:(NSIndexPath*)indexPath{
+    if(![self enableFamilyList]){
+        return ;
+    }
+
     NSIndexPath* positionInResults = [self positionInResultsForTableFamilyAtIndexPath:indexPath];
     long page = positionInResults.section;
     __weak SearchViewController* weakSelf = self;
@@ -387,10 +406,16 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    if(![self enableFamilyList]){
+        return 0;
+    }
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if(![self enableFamilyList]){
+        return 0;
+    }
     if(!self.initialAuthentCheckDone){
         return 0;
     }

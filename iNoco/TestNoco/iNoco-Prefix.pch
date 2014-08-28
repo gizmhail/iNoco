@@ -21,6 +21,8 @@
 // #define nolibtv_redirect_uri @"http://xxxxxxxxxx"
 #include "credentials.h"
 
+#define HACK_AUTH_WEBPAGE_REMOVE_ACCOUNT_CREATION 1
+
 #define ALL_SUBSCRIPTED_CATALOG @"ALLSUBSCRIPTED_CATALOG"
 #define ALL_NOCO_CATALOG @"ALL_NOCO_CATALOG"
 #define DEFAULT_CATALOG ALL_NOCO_CATALOG
