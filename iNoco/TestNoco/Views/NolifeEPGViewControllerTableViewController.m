@@ -18,6 +18,7 @@
 
 @interface NolifeEPGViewControllerTableViewController (){
     BOOL firstFocusOnNowDone;
+    BOOL cellSelected;
 }
 @property (retain,nonatomic)NSArray* epgDays;
 @property (retain,nonatomic)NSDictionary* dayContents;
@@ -159,11 +160,17 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+    if(cellSelected){
+        //Call already pending
+        return;
+    }
     NSDictionary* show = [self showAtIndexPath:indexPath];
     if(show && [[show objectForKey:@"NolifeOnlineURL"] isKindOfClass:[NSString class]]&&[(NSString*)[show objectForKey:@"NolifeOnlineURL"] compare:@""]!=NSOrderedSame){
         NSString* nocoUrl = (NSString*)[show objectForKey:@"NolifeOnlineURL"];
         int nocoId = [[nocoUrl lastPathComponent] integerValue];
+        cellSelected = true;
         [[NLTAPI sharedInstance] showWithId:nocoId withResultBlock:^(id result, NSError *error) {
+            cellSelected = false;
             if(result){
                 [self performSegueWithIdentifier:@"DisplayRecentShow" sender:result];
             }else if (error){

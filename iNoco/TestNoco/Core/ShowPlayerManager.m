@@ -43,7 +43,7 @@
 #pragma mark UI
 
 - (BOOL)displayAlerts{
-    return self.showList && [self.showList count]>1;
+    return !self.showList || [self.showList count] ==1;
 }
 
 #pragma mark Playlist logic

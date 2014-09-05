@@ -127,6 +127,30 @@
 }
 
 - (void)planDownloadForShow:(NLTShow*)show withQuality:(NSString*)quality{
+    if(show.access_show == 0){
+        if([show.access_error compare:@"subscription_required" options:NSCaseInsensitiveSearch]==NSOrderedSame){
+            NSString* urlStr = [NSString stringWithFormat:@"partners/by_key/%@",show.partner_key];
+            [[NLTAPI sharedInstance] callAPI:urlStr withResultBlock:^(id result, NSError *error) {
+                BOOL partnerFound = FALSE;
+                if([result isKindOfClass:[NSArray class]]){
+                    for (NSDictionary*partner in result) {
+                        if([(NSString*)[partner objectForKey:@"partner_key"] compare:show.partner_key]==NSOrderedSame){
+                            [[[UIAlertView alloc] initWithTitle:@"Lecture impossible" message:[NSString stringWithFormat:@"Vous n'êtes pas abonné(e) à %@", [partner objectForKey:@"partner_name"]] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
+                            partnerFound = TRUE;
+                            break;
+                        }
+                    }
+                }
+                if(!partnerFound){
+                    [[[UIAlertView alloc] initWithTitle:@"Lecture impossible" message:@"Impossible de lire cette émission" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
+                }
+            } withKey:self withCacheDuration:60*10];
+        }else{
+            [[[UIAlertView alloc] initWithTitle:@"Lecture impossible" message:@"Impossible de lire cette émission" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
+        }
+        return;
+    }
+    
     NSMutableDictionary* downloadInfo = [NSMutableDictionary dictionaryWithDictionary:@{
                                @"showInfo":show.rawShow,
                                @"quality":quality
