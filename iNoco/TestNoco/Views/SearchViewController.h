@@ -9,7 +9,7 @@
 #import "RecentShowViewController.h"
 
 @interface SearchViewController : RecentShowViewController<UITableViewDelegate>
-@property (retain,nonatomic)NSString* search;
+@property (retain,nonatomic) NSString* search;
 @property (weak, nonatomic) IBOutlet UILabel *noResultLabel;
 @property (weak, nonatomic) IBOutlet UITableView *familyTableview;
 

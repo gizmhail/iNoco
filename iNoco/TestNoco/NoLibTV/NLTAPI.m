@@ -274,6 +274,9 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection{
+#ifdef DEBUG_NLT_CALL
+    NSLog(@" > finished call to %@",connection.originalRequest.URL.absoluteString);
+#endif
     self.networkActivityCount--;
     if(self.handleNetworkActivityIndicator&&[[UIApplication sharedApplication] isNetworkActivityIndicatorVisible]){
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
@@ -366,6 +369,9 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
+#ifdef DEBUG_NLT_CALL
+    NSLog(@" > error on call to %@",connection.originalRequest.URL.absoluteString);
+#endif
     self.networkActivityCount--;
     if(self.handleNetworkActivityIndicator&&[[UIApplication sharedApplication] isNetworkActivityIndicatorVisible]){
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];

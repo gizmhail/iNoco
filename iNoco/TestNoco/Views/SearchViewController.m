@@ -50,6 +50,9 @@
     if([settings objectForKey:@"FamilyList"]){
         useFamilyList = [[settings objectForKey:@"FamilyList"] boolValue];
     }
+#ifdef DEBUG
+    //useFamilyList = TRUE;
+#endif
 
 }
 
