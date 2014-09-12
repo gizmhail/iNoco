@@ -159,11 +159,12 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+   [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     if(cellSelected){
         //Call already pending
         return;
     }
+    self.playlistContext = nil;
     NSDictionary* show = [self showAtIndexPath:indexPath];
     if(show && [[show objectForKey:@"NolifeOnlineURL"] isKindOfClass:[NSString class]]&&[(NSString*)[show objectForKey:@"NolifeOnlineURL"] compare:@""]!=NSOrderedSame){
         NSString* nocoUrl = (NSString*)[show objectForKey:@"NolifeOnlineURL"];
@@ -206,6 +207,10 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if([[segue destinationViewController] isKindOfClass:[ShowViewController class]]&&[sender isKindOfClass:[NLTShow class]]){
         [(ShowViewController*)[segue destinationViewController] setShow:sender];
+        if(self.playlistContext){
+            [(ShowViewController*)[segue destinationViewController] setContextPlaylist:self.playlistContext];
+        }
+
     }else if([[segue destinationViewController] isKindOfClass:[WebViewDetailsViewController class]]){
         NSDictionary* show = (NSDictionary*)sender;
         NSString* urlStr = nil;

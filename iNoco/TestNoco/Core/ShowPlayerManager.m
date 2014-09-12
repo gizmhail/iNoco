@@ -111,6 +111,7 @@
     if([notif.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey]){
         reason = [[notif.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] intValue];
     }
+    bool playbackCameToCompletion = self.moviePlayer.currentPlaybackTime == self.moviePlayer.duration;
     //MPMovieFinishReasonPlaybackEnded will be callend after MPMovieFinishReasonUserExited so we prevent reset the progress when an MPMovieFinishReasonUserExited occured
     if (reason == MPMovieFinishReasonPlaybackEnded && ! userEndedPlay) {
         //movie finished playin
@@ -155,7 +156,12 @@
     [self.moviePlayer setFullscreen:NO animated:YES];
     [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = [NSMutableDictionary dictionary];
     
-    [self switchToNextShow];
+    
+    if(playbackCameToCompletion){
+        [self switchToNextShow];
+    }else{
+        [self.moviePlayer.view removeFromSuperview];
+    }
 }
 
 - (void)notificationMPMoviePlayerNowPlayingMovieDidChangeNotification:(NSNotification*)notif{
@@ -268,7 +274,7 @@
 }
 
 - (void)playURL:(NSURL*)url withProgress:(float)progress withImage:(UIImage*)image{
-    NSLog(@"Reading url %@",url);
+    NSLog(@"Reading url %@ (%@)",url, self.currentShow.show_TT);
     self.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:url];
     self.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
     self.moviePlayer.view.frame = [self.delegate moviePlayerFrame];
@@ -289,7 +295,9 @@
     if(self.currentShow.show_TT) [info setObject:self.currentShow.show_TT forKey:MPMediaItemPropertyTitle];
     if(self.currentShow.family_TT) [info setObject:self.currentShow.family_TT forKey:MPMediaItemPropertyArtist];
     [info setObject:[NSNumber numberWithInt:self.currentShow.episode_number] forKey:MPMediaItemPropertyAlbumTrackNumber];
-    [info setObject:[[MPMediaItemArtwork alloc] initWithImage:image] forKey:MPMediaItemPropertyArtwork];
+    if(image){
+        [info setObject:[[MPMediaItemArtwork alloc] initWithImage:image] forKey:MPMediaItemPropertyArtwork];
+    }
     infoCenter.nowPlayingInfo = info;
 }
 
@@ -306,6 +314,7 @@
 -(void)dealloc{
     [self.progressTimer invalidate];
     [[NLTAPI sharedInstance] cancelCallsWithKey:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

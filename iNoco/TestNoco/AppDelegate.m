@@ -84,7 +84,6 @@ void uncaughtExceptionHandler(NSException *exception) {
     //Lock screen audio events
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
 
-
     return YES;
 }
 							

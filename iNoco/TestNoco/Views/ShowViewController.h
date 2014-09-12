@@ -38,7 +38,7 @@
 @property (weak, nonatomic) IBOutlet UIView *downloadedVersionBackground;
 @property (weak, nonatomic) IBOutlet UIImageView *csaImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *partnerImageView;
-
+@property (retain, nonatomic) NSMutableArray* contextPlaylist;
 - (IBAction)play:(id)sender;
 - (IBAction)favoriteFamillyClick:(id)sender;
 - (IBAction)toggleRead:(id)sender;

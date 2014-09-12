@@ -383,6 +383,18 @@
     return [NSIndexPath indexPathForRow:indexInPage inSection:page];
 }
 
+- (NSMutableArray*)allContextShows{
+    NSMutableArray* shows = [NSMutableArray array];
+    NSDictionary* pageDictionary = self.resultByPage;
+    if(self.filter){
+        pageDictionary = self.filteredResultByPage;
+    }
+    for (NSArray* items in [pageDictionary allValues]) {
+        [shows addObjectsFromArray:items];
+    }
+    return shows;
+}
+
 - (id)resultAtIndex:(long)index{
     NSIndexPath* indexPath = [self pageAndIndexInPageFor:index];
     long page = indexPath.section;
@@ -590,6 +602,7 @@
 - (void)loadShowCell:(ShowCollectionViewCell*)cell withShow:(NLTShow*)show{
     [cell loadShow:show];
 }
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     NLTShow* show = [self showAtIndex:indexPath.row];
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ShowsCell" forIndexPath:indexPath];
@@ -608,6 +621,9 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if([[segue destinationViewController] isKindOfClass:[ShowViewController class]]&&[sender isKindOfClass:[NLTShow class]]){
         [(ShowViewController*)[segue destinationViewController] setShow:sender];
+        if(self.playlistContext){
+            [(ShowViewController*)[segue destinationViewController] setContextPlaylist:self.playlistContext];
+        }
     }
     
     if([[segue destinationViewController] isKindOfClass:[ConnectionViewController class]]){
@@ -636,8 +652,10 @@
 #pragma mark UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    self.playlistContext = nil;
     NLTShow* show = [self showAtIndex:indexPath.row];
     if(show && show.id_show){
+        self.playlistContext = [self allContextShows];
         [self performSegueWithIdentifier:@"DisplayRecentShow" sender:show];
     }
 }

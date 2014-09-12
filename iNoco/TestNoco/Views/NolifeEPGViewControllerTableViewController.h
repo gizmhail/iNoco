@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface NolifeEPGViewControllerTableViewController : UITableViewController
+@property (retain,nonatomic)NSMutableArray* playlistContext;
 
 @end

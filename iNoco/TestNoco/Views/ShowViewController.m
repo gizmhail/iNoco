@@ -123,11 +123,24 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     } withKey:self];
 
     
+#ifdef DEBUG
+    if(self.contextPlaylist){
+        UIView* titleView = [[UIView alloc] initWithFrame:CGRectMake(10, 5, 100, 30)];
+        UIButton* playlistButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        playlistButton.frame = CGRectMake(0, 0, 100, 30);
+        [playlistButton.titleLabel setFont:[UIFont systemFontOfSize:10] ];
+        [playlistButton setTitle:@"Lancer la playlist" forState:UIControlStateNormal];
+        [playlistButton addTarget:self action:@selector(launchPlaylist) forControlEvents:UIControlEventTouchUpInside];
+        [playlistButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        [titleView addSubview:playlistButton];
+        self.navigationItem.titleView = titleView;
+    }
+#endif
     
     if(ALLOW_DOWNLOADS){
-        self.downloadView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 230, 40)];
+        self.downloadView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 180, 40)];
         self.downloadTextButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        self.downloadTextButton.frame = CGRectMake(0, 0, 200, 30);
+        self.downloadTextButton.frame = CGRectMake(0, 0, 150, 30);
         self.downloadTextButton.titleLabel.font = [UIFont systemFontOfSize:10];
         [self.downloadTextButton setTitle:@"télécharger" forState:UIControlStateNormal];
         [self.downloadTextButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
@@ -173,6 +186,13 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
         self.descriptionText.text = self.show.show_resume;
     }else if(self.show.family_resume) {
         self.descriptionText.text = self.show.family_resume;
+    }else{
+        [[NLTAPI sharedInstance] familyWithFamilyKey:self.show.family_key withPartnerKey:self.show.partner_key withResultBlock:^(NLTFamily* family, NSError *error) {
+            if(family && family.theme_name){
+                self.descriptionText.text = family.theme_name;
+            }
+        } withKey:self];
+
     }
     self.readButton.selected = self.show.mark_read;
     self.readImageButton.selected = self.show.mark_read;
@@ -221,6 +241,7 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     self.favoriteFamilly.selected = [[FavoriteProgramManager sharedInstance] isFavoriteForFamilyKey:self.show.family_key withPartnerKey:self.show.partner_key];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationNocoDownloadsNotificationFinishDownloading:) name:@"NocoDownloadsNotificationFinishDownloading" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationNocoDownloadsNotificationProgress:) name:@"NocoDownloadsNotificationProgress" object:nil];
+    
 }
 
 - (void)notificationNocoDownloadsNotificationFinishDownloading:(NSNotification*)notification{
@@ -261,6 +282,25 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark Playlist
+
+- (void)launchPlaylist{
+    if(self.contextPlaylist){
+        [[ShowPlayerManager sharedInstance] setDelegate:self];
+        NSMutableArray* playlist = self.contextPlaylist;
+        bool fromShow = true;
+        if(fromShow){
+            playlist = [NSMutableArray arrayWithCapacity:[self.contextPlaylist count]];
+            NSEnumerator*   reverseEnumerator = [self.contextPlaylist reverseObjectEnumerator];
+            for (id playlistItem in reverseEnumerator){
+                [playlist addObject:playlistItem];
+            }
+        }
+        [[ShowPlayerManager sharedInstance] play:self.show withProgress:progress withImage:self.imageView.image withPlaylist:playlist];
+    }
+}
+
 
 #pragma mark - Player
 
@@ -629,7 +669,8 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
         } withKey:self];
     }else{
         self.statusAlert = [[UIAlertView alloc] initWithTitle:@"Connection en cours ..." message:@"L'émision est en train d'être retirée de la liste de lecture..." delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
-        [self.statusAlert show];        [[NLTAPI sharedInstance] removeFromQueueList:self.show withResultBlock:^(id result, NSError *error) {
+        [self.statusAlert show];
+        [[NLTAPI sharedInstance] removeFromQueueList:self.show withResultBlock:^(id result, NSError *error) {
             [self.statusAlert dismissWithClickedButtonIndex:0 animated:YES];
             self.statusAlert = nil;
             if(error){

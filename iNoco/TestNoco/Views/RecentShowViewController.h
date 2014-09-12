@@ -29,6 +29,7 @@
 @property (weak, nonatomic) IBOutlet UIView *filterBackground;
 @property (retain,nonatomic)UIAlertView* errorAlert;
 @property (retain,nonatomic)UIAlertView* quotaAlert;
+@property (retain,nonatomic)NSMutableArray* playlistContext;
 
 - (id)resultAtIndex:(long)index;
 - (NLTShow*)showAtIndex:(long)showIndex;

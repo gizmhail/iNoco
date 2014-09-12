@@ -1064,6 +1064,12 @@
                     }
                 }
                 if(subLangInfo &&  [[subLangInfo objectForKey:@"quality_list"] isKindOfClass:[NSDictionary class]]){
+                    /*
+                    //Searching for quality key in media is not really needed
+                    qualityKey = preferedQuality;
+                    infoOk = TRUE;
+                     */
+                    
                     NSDictionary* qualityList = [subLangInfo objectForKey:@"quality_list"];
                     //Searching for available quality matching request
                     //NSDictionary* qualityInfo = nil;

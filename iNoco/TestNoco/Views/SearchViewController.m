@@ -544,6 +544,9 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if([[segue destinationViewController] isKindOfClass:[ShowViewController class]]&&[sender isKindOfClass:[NLTShow class]]){
         [(ShowViewController*)[segue destinationViewController] setShow:sender];
+        if(self.playlistContext){
+            [(ShowViewController*)[segue destinationViewController] setContextPlaylist:self.playlistContext];
+        }
     }
     if([[segue destinationViewController] isKindOfClass:[RecentShowViewController class]]&&[sender isKindOfClass:[NLTFamily class]]){
         [(RecentShowViewController*)[segue destinationViewController] setFamily:(NLTFamily*)sender];
@@ -556,6 +559,7 @@
 #pragma mark UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    self.playlistContext = nil;
     NSDictionary* result = [self resultAtIndex:indexPath.row];
     if([result objectForKey:@"type"]&&[(NSString*)[result objectForKey:@"type"] compare:@"show"]==NSOrderedSame){
         NLTShow* show = [self showAtIndex:indexPath.row];

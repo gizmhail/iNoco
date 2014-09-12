@@ -168,12 +168,12 @@
             
             NSURLSessionDownloadTask *downloadTask = [self.backgroundSession downloadTaskWithURL: url];
             downloadTask.taskDescription = [self taskDescriptionForShow:show];
-            [self.tasks setObject:downloadTask forKey:downloadTask.taskDescription];
+            [weakSelf.tasks setObject:downloadTask forKey:downloadTask.taskDescription];
             
             [downloadInfo setObject:[result objectForKey:@"file"] forKey:@"urlStr"];
             [downloadInfo setObject:[NSNumber numberWithUnsignedLong:downloadTask.taskIdentifier] forKey:@"taskIdentifier"];
             [downloadInfo setObject:downloadTask.taskDescription forKey:@"taskDescription"];
-            [self saveCache];
+            [weakSelf saveCache];
             NSLog(@"Launching download of %@ (task: %@ -- show: %@ / %i)", [result objectForKey:@"file"], [NSNumber numberWithUnsignedLong:downloadTask.taskIdentifier], [[downloadInfo objectForKey:@"showInfo"] objectForKey:@"id_show"], show.id_show);
             [downloadTask resume];
         }else{
@@ -184,7 +184,7 @@
             }else{
                 [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de télécharger la vidéo" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             }
-            [self.downloadInfos removeObject:downloadInfo];
+            [weakSelf.downloadInfos removeObject:downloadInfo];
 #warning TODO Add error notif instead of finished
             [[NSNotificationCenter defaultCenter] postNotificationName:@"NocoDownloadsNotificationFinishDownloading" object:[NSNumber numberWithLong:show.id_show] userInfo:downloadInfo];
         }

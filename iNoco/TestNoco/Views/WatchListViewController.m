@@ -224,6 +224,19 @@
     return show;
 }
 
+- (NSMutableArray*)allDownloadedContextShows{
+    NSMutableArray* shows = [NSMutableArray array];
+    NSArray* infos = [[NocoDownloadsManager sharedInstance] downloadInfos];
+    for (NSDictionary* info in infos) {
+        if([info objectForKey:@"showInfo"]){
+            NLTShow* show = [[NLTShow alloc] initWithDictionnary:[info objectForKey:@"showInfo"]];
+            [shows addObject:show];
+        }
+    }
+    return shows;
+}
+
+
 #pragma mark UICollectioViewDatasource
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -276,6 +289,7 @@
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    self.playlistContext = nil;
     if(indexPath.section == [self watchListSection] ){
         [super collectionView:collectionView didSelectItemAtIndexPath:indexPath];
     }else if(indexPath.section == [self favoriteFamilySection]){
@@ -287,6 +301,7 @@
         NLTShow* show = [self downloadedShowAtIndex:indexPath.row];
         if(show && show.id_show){
             [self performSegueWithIdentifier:@"DisplayRecentShow" sender:show];
+            self.playlistContext = [self allDownloadedContextShows];
         }
     }else if(indexPath.section == [self resumePlaySection]){
         NLTShow* show = [self resumePlayShowAtIndex:indexPath.row];
@@ -327,6 +342,9 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if([[segue destinationViewController] isKindOfClass:[ShowViewController class]]&&[sender isKindOfClass:[NLTShow class]]){
         [(ShowViewController*)[segue destinationViewController] setShow:sender];
+        if(self.playlistContext){
+            [(ShowViewController*)[segue destinationViewController] setContextPlaylist:self.playlistContext];
+        }
     }
     if([[segue destinationViewController] isKindOfClass:[RecentShowViewController class]]&&[sender isKindOfClass:[NLTFamily class]]){
         [(RecentShowViewController*)[segue destinationViewController] setFamily:(NLTFamily*)sender];
