@@ -29,6 +29,6 @@
 @property (assign,nonatomic) id<ShowPlayerManagerDelegate> delegate;
 + (instancetype)sharedInstance;
 - (void)tooglePlay;
-- (IBAction)play:(NLTShow*)show withProgress:(float)progress withImage:(UIImage*)image withPlaylist:(NSArray*)playlist;
+- (IBAction)play:(NLTShow*)show withProgress:(float)progress withImage:(UIImage*)image withPlaylist:(NSMutableArray*)playlist withCurrentPlaylistItem:(id)currentItem;
 - (IBAction)play:(NLTShow*)show withProgress:(float)progress withImage:(UIImage*)image;
 @end

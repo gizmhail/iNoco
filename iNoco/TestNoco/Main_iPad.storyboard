@@ -549,7 +549,10 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                                 <accessibility key="accessibilityConfiguration" label="lire la vidéo"/>
                                                 <state key="normal" image="Octicons-playback-play.png"/>
                                                 <connections>
+                                                    <action selector="cancelPlayStart:" destination="JAW-94-Ybq" eventType="touchCancel" id="GgK-bq-PnC"/>
+                                                    <action selector="cancelPlayStart:" destination="JAW-94-Ybq" eventType="touchUpOutside" id="GlO-Bg-jwD"/>
                                                     <action selector="play:" destination="JAW-94-Ybq" eventType="touchUpInside" id="ZyW-I8-FxL"/>
+                                                    <action selector="playStart:" destination="JAW-94-Ybq" eventType="touchDown" id="b9H-QF-PVO"/>
                                                 </connections>
                                             </button>
                                             <view tag="200" contentMode="scaleToFill" id="aiE-zw-Zgy">
@@ -1595,7 +1598,7 @@ Les geeks ont une vie. Même s'ils ne bougent pas beaucoup.</string>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="4Qe-0V-q8F"/>
-        <segue reference="UgH-2G-9fT"/>
         <segue reference="DwT-Xq-8De"/>
+        <segue reference="Uld-fo-urg"/>
     </inferredMetricsTieBreakers>
 </document>

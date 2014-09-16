@@ -10,5 +10,7 @@
 
 @interface NolifeEPGViewControllerTableViewController : UITableViewController
 @property (retain,nonatomic)NSMutableArray* playlistContext;
+@property (retain,nonatomic)NSString* playlistType;
+@property (retain,nonatomic)id playlistCurrentItem;
 
 @end

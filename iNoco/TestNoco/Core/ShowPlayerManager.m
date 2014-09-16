@@ -15,7 +15,8 @@
 @property (retain, nonatomic) NSTimer* progressTimer;
 @property (retain, nonatomic) UIAlertView* progressAlert;
 @property (retain, nonatomic) NLTShow* currentShow;
-@property (retain, nonatomic) NSArray* showList;
+@property (retain, nonatomic) id currentPlaylistItem;
+@property (retain, nonatomic) NSMutableArray* showList;
 
 @end
 
@@ -48,10 +49,10 @@
 
 #pragma mark Playlist logic
 
-- (NLTShow*)nextShow{
+- (id)nextShow{
     NLTShow* nextShow = nil;
-    if(self.currentShow && self.showList){
-        NSUInteger index = [self.showList indexOfObject:self.currentShow];
+    if(self.currentPlaylistItem && self.showList){
+        NSUInteger index = [self.showList indexOfObject:self.currentPlaylistItem];
         index++;
         if(index < [self.showList count]){
             nextShow = [self.showList objectAtIndex:index];
@@ -63,14 +64,38 @@
 - (void)switchToNextShow{
 #warning See if we should keep it in the superview
     [self.moviePlayer.view removeFromSuperview];
-    NLTShow* nextShow = [self nextShow];
+    id nextShow = [self nextShow];
     if(nextShow == nil){
         //Playlist is finished
         self.showList = nil;
+        self.currentShow = nil;
+        self.currentPlaylistItem = nil;
     }else{
-        self.currentShow = nextShow;
+        self.currentPlaylistItem = nextShow;
+        if([nextShow isKindOfClass:[NLTShow class]]){
 #warning TODO Add image =>> add UIIMage attribute to NLTShow
-        [self play:self.currentShow withProgress:0 withImage:[UIImage imageNamed:@"noco.png"]];
+            [self play:(NLTShow*)nextShow withProgress:0 withImage:[UIImage imageNamed:@"noco.png"]];
+        }else if([nextShow isKindOfClass:[NSDictionary class]]){
+            NSDictionary* showInfo = (NSDictionary*)nextShow;
+            if([[showInfo objectForKey:@"NolifeOnlineURL"] isKindOfClass:[NSString class]]&&[(NSString*)[showInfo objectForKey:@"NolifeOnlineURL"] compare:@""]!=NSOrderedSame){
+                NSString* nocoUrl = (NSString*)[showInfo objectForKey:@"NolifeOnlineURL"];
+                int nocoId = [[nocoUrl lastPathComponent] integerValue];
+                [[NLTAPI sharedInstance] showWithId:nocoId withResultBlock:^(id result, NSError *error) {
+                    if(result){
+                        [self play:result withProgress:0 withImage:[UIImage imageNamed:@"noco.png"]];
+                    }else if (error){
+                        //Skipping unusable show
+                        [self switchToNextShow];
+                    }
+                } withKey:self];
+            }else{
+                //Skipping unusable show
+                [self switchToNextShow];
+            }
+        }else{
+            //Skipping unusable show
+            [self switchToNextShow];
+        }
     }
 }
 
@@ -158,6 +183,7 @@
     
     
     if(playbackCameToCompletion){
+        self.currentShow = nil;
         [self switchToNextShow];
     }else{
         [self.moviePlayer.view removeFromSuperview];
@@ -191,8 +217,14 @@
     }
 }
 
-- (IBAction)play:(NLTShow*)show withProgress:(float)progress withImage:(UIImage*)image withPlaylist:(NSArray*)playlist{
-    self.showList = [NSArray arrayWithArray:playlist];
+- (IBAction)play:(NLTShow*)show withProgress:(float)progress withImage:(UIImage*)image withPlaylist:(NSMutableArray*)playlist withCurrentPlaylistItem:(id)currentItem{
+    self.showList = [NSMutableArray arrayWithArray:playlist];
+    if(!self.currentPlaylistItem){
+        self.currentPlaylistItem = currentItem;
+    }
+    if(!self.currentPlaylistItem){
+        self.currentPlaylistItem = show;
+    }
     [self play:show withProgress:progress withImage:image];
 }
 

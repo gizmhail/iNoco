@@ -71,11 +71,15 @@
         self.navigationController.navigationBarHidden = FALSE;
         self.searchBar.hidden = TRUE;
     }
-    if(self.family){
+    
+    if(self.family || (ALWAYS_DISPLAY_READFILTER_IN_RECENT_SHOWS && [self isMemberOfClass:[RecentShowViewController class]]) ){
         //We force display of filter viewx in family mode
         if(self.filterView.hidden){
             self.filterView.hidden = FALSE;
         }
+    }
+    
+    if(self.family){
         self.title = self.family.family_TT;
         if(!self.navigationItem.rightBarButtonItem){
             self.favoriteFamilly = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -551,7 +555,9 @@
     UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, @"Annulation du filtre");
     [searchBar resignFirstResponder];
     [[UISegmentedControl appearanceWhenContainedIn:[UISearchBar class], nil] setTintColor:searchBar.tintColor];
-    self.filterView.hidden = TRUE;
+    if( ! ALWAYS_DISPLAY_READFILTER_IN_RECENT_SHOWS || ! [self isMemberOfClass:[RecentShowViewController class]] ){
+        self.filterView.hidden = TRUE;
+    }
 }
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
@@ -623,6 +629,9 @@
         [(ShowViewController*)[segue destinationViewController] setShow:sender];
         if(self.playlistContext){
             [(ShowViewController*)[segue destinationViewController] setContextPlaylist:self.playlistContext];
+            [(ShowViewController*)[segue destinationViewController] setPlaylistType:self.playlistType];
+            self.playlistContext = nil;
+            self.playlistType = nil;
         }
     }
     
@@ -653,6 +662,15 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     self.playlistContext = nil;
+    
+    if(self.playlistType == nil){
+        self.playlistType = @"émissions récentes";
+        if(self.family){
+            self.playlistType = [NSString stringWithFormat:@"émissions de \"%@\"",self.family.family_TT];
+        }
+    }
+    
+    
     NLTShow* show = [self showAtIndex:indexPath.row];
     if(show && show.id_show){
         self.playlistContext = [self allContextShows];
@@ -662,7 +680,7 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
     UIEdgeInsets edgeInset = UIEdgeInsetsMake(0,0,0,0);
-    if(self.family){
+    if(self.family|| (ALWAYS_DISPLAY_READFILTER_IN_RECENT_SHOWS && [self isMemberOfClass:[RecentShowViewController class]]) ){
         edgeInset = UIEdgeInsetsMake(40,0,0,0);
     }
     return edgeInset;

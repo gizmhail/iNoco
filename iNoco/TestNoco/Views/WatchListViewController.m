@@ -236,6 +236,19 @@
     return shows;
 }
 
+- (NSMutableArray*)allResumeShows{
+    NSMutableArray* shows = [NSMutableArray array];
+    for (NSDictionary* resumePlay in self.resumePlayInfo) {
+        NSNumber* idNumber =  [resumePlay objectForKey:@"id_show"];
+        if([[NLTAPI sharedInstance].showsById objectForKey:idNumber]){
+            NLTShow* show = [[NLTAPI sharedInstance].showsById objectForKey:idNumber];
+            [shows addObject:show];
+        }
+    }
+    return shows;
+}
+
+
 
 #pragma mark UICollectioViewDatasource
 
@@ -291,6 +304,7 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     self.playlistContext = nil;
     if(indexPath.section == [self watchListSection] ){
+        self.playlistType = @"émissions de la liste de lecture";
         [super collectionView:collectionView didSelectItemAtIndexPath:indexPath];
     }else if(indexPath.section == [self favoriteFamilySection]){
         NLTFamily* family = [self familyAtIndex:indexPath.row];
@@ -300,12 +314,20 @@
     }else if(indexPath.section == [self downloadsSection]){
         NLTShow* show = [self downloadedShowAtIndex:indexPath.row];
         if(show && show.id_show){
-            [self performSegueWithIdentifier:@"DisplayRecentShow" sender:show];
+            if(self.playlistType == nil){
+                self.playlistType = @"émissions téléchargées";
+            }
+
             self.playlistContext = [self allDownloadedContextShows];
+            [self performSegueWithIdentifier:@"DisplayRecentShow" sender:show];
         }
     }else if(indexPath.section == [self resumePlaySection]){
         NLTShow* show = [self resumePlayShowAtIndex:indexPath.row];
         if(show && show.id_show){
+            if(self.playlistType == nil){
+                self.playlistType = @"émissions commencées";
+            }
+            self.playlistContext = [self allResumeShows];
             [self performSegueWithIdentifier:@"DisplayRecentShow" sender:show];
         }
     }
@@ -344,6 +366,9 @@
         [(ShowViewController*)[segue destinationViewController] setShow:sender];
         if(self.playlistContext){
             [(ShowViewController*)[segue destinationViewController] setContextPlaylist:self.playlistContext];
+            [(ShowViewController*)[segue destinationViewController] setPlaylistType:self.playlistType];
+            self.playlistContext = nil;
+            self.playlistType = nil;
         }
     }
     if([[segue destinationViewController] isKindOfClass:[RecentShowViewController class]]&&[sender isKindOfClass:[NLTFamily class]]){

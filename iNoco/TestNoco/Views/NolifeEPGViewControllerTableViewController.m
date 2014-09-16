@@ -164,8 +164,13 @@
         //Call already pending
         return;
     }
-    self.playlistContext = nil;
+    self.playlistContext = [self allEPGShowInfos];
+    if(self.playlistType == nil){
+        self.playlistType = @"émissions diffusées sur Nolife";
+    }
+
     NSDictionary* show = [self showAtIndexPath:indexPath];
+    self.playlistCurrentItem = show;
     if(show && [[show objectForKey:@"NolifeOnlineURL"] isKindOfClass:[NSString class]]&&[(NSString*)[show objectForKey:@"NolifeOnlineURL"] compare:@""]!=NSOrderedSame){
         NSString* nocoUrl = (NSString*)[show objectForKey:@"NolifeOnlineURL"];
         int nocoId = [[nocoUrl lastPathComponent] integerValue];
@@ -192,6 +197,24 @@
     return @"";
 }
 
+
+- (NSMutableArray*)allEPGShowInfos{
+    NSMutableArray* shows = [NSMutableArray array];
+    for (NSString* header in self.epgDays) {
+        NSArray* dayContents = [self.dayContents objectForKey:header];
+        [shows addObjectsFromArray:dayContents];
+    }
+    //We reverse the array to have the most recent element first (like in other views : defualt playlist format espected)
+    NSMutableArray* reversedShows = [NSMutableArray arrayWithCapacity:[shows count]];
+    NSEnumerator*   reverseEnumerator = [shows reverseObjectEnumerator];
+    for (id playlistItem in reverseEnumerator){
+        [reversedShows addObject:playlistItem];
+    }
+
+    return reversedShows;
+}
+
+
 - (NSDictionary*)showAtIndexPath:(NSIndexPath *)indexPath{
     NSDictionary* show = nil;
     if([self.epgDays count]>indexPath.section){
@@ -209,6 +232,10 @@
         [(ShowViewController*)[segue destinationViewController] setShow:sender];
         if(self.playlistContext){
             [(ShowViewController*)[segue destinationViewController] setContextPlaylist:self.playlistContext];
+            [(ShowViewController*)[segue destinationViewController] setPlaylistType:self.playlistType];
+            [(ShowViewController*)[segue destinationViewController] setContextPlaylistCurrentItem:self.playlistCurrentItem];
+            self.playlistContext = nil;
+            self.playlistType = nil;
         }
 
     }else if([[segue destinationViewController] isKindOfClass:[WebViewDetailsViewController class]]){

@@ -549,7 +549,10 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                                 <accessibility key="accessibilityConfiguration" label="lire la vidéo"/>
                                                 <state key="normal" image="Octicons-playback-play.png"/>
                                                 <connections>
+                                                    <action selector="cancelPlayStart:" destination="E8O-zX-w2W" eventType="touchUpOutside" id="0ts-Jd-cX8"/>
+                                                    <action selector="cancelPlayStart:" destination="E8O-zX-w2W" eventType="touchCancel" id="Xk2-Zk-8BZ"/>
                                                     <action selector="play:" destination="E8O-zX-w2W" eventType="touchUpInside" id="GHl-kk-NSY"/>
+                                                    <action selector="playStart:" destination="E8O-zX-w2W" eventType="touchDown" id="5An-Hv-sdw"/>
                                                 </connections>
                                             </button>
                                             <view tag="200" contentMode="scaleToFill" id="D9l-iN-Mdu">

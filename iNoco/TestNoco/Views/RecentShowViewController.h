@@ -30,6 +30,7 @@
 @property (retain,nonatomic)UIAlertView* errorAlert;
 @property (retain,nonatomic)UIAlertView* quotaAlert;
 @property (retain,nonatomic)NSMutableArray* playlistContext;
+@property (retain,nonatomic)NSString* playlistType;
 
 - (id)resultAtIndex:(long)index;
 - (NLTShow*)showAtIndex:(long)showIndex;

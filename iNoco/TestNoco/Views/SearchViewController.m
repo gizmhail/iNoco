@@ -45,15 +45,14 @@
 }
 
 -(void)loadFamilyListPreference{
+    useFamilyList = TRUE;
+    /*
     NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
     useFamilyList = FALSE;
     if([settings objectForKey:@"FamilyList"]){
         useFamilyList = [[settings objectForKey:@"FamilyList"] boolValue];
     }
-#ifdef DEBUG
-    //useFamilyList = TRUE;
-#endif
-
+    */ 
 }
 
 - (void)resetResult{
@@ -546,6 +545,9 @@
         [(ShowViewController*)[segue destinationViewController] setShow:sender];
         if(self.playlistContext){
             [(ShowViewController*)[segue destinationViewController] setContextPlaylist:self.playlistContext];
+            [(ShowViewController*)[segue destinationViewController] setPlaylistType:self.playlistType];
+            self.playlistContext = nil;
+            self.playlistType = nil;
         }
     }
     if([[segue destinationViewController] isKindOfClass:[RecentShowViewController class]]&&[sender isKindOfClass:[NLTFamily class]]){
@@ -564,6 +566,10 @@
     if([result objectForKey:@"type"]&&[(NSString*)[result objectForKey:@"type"] compare:@"show"]==NSOrderedSame){
         NLTShow* show = [self showAtIndex:indexPath.row];
         if(show && show.id_show){
+            if(self.playlistType == nil){
+                self.playlistType = @"émissions recherchées";
+            }
+
             [self performSegueWithIdentifier:@"DisplayRecentShow" sender:show];
         }
     }else{

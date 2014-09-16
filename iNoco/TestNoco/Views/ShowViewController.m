@@ -36,11 +36,14 @@
 @property (retain, nonatomic) UIAlertView* statusAlert;
 @property (retain, nonatomic) UIActionSheet* readSheet;
 @property (retain, nonatomic) UIActionSheet* statusSheet;
+@property (retain, nonatomic) UIActionSheet* playlistSheet;
 @property (retain, nonatomic) UIProgressView* downloadProgress;
 @property (retain, nonatomic) UIButton* downloadTextButton;
 @property (retain, nonatomic) UIButton* downloadImageButton;
 @property (retain, nonatomic) UIView* downloadView;
 @property (retain, nonatomic) NSError* readError;
+@property (retain, nonatomic) NSDate* playStart;
+@property (retain, nonatomic) NSTimer* playStartTimer;
 #ifdef LEGACY_MOVIE_PLAYER
 @property (retain, nonatomic) MPMoviePlayerController* moviePlayer;
 @property (retain, nonatomic) NSTimer* progressTimer;
@@ -51,6 +54,8 @@
 //TODO MOve this static strings in localisation file
 static NSString * const allReadMessage = @"l'émission et ses chapitres";
 static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
+static NSString * const playListOlderToNewer = @"de la + ancienne à la + récente";
+static NSString * const playListNewerToOlder  = @"de la + récente à la + ancienne";
 
 
 @implementation ShowViewController
@@ -124,6 +129,7 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
 
     
 #ifdef DEBUG
+    /*
     if(self.contextPlaylist){
         UIView* titleView = [[UIView alloc] initWithFrame:CGRectMake(10, 5, 100, 30)];
         UIButton* playlistButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -135,6 +141,7 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
         [titleView addSubview:playlistButton];
         self.navigationItem.titleView = titleView;
     }
+     */
 #endif
     
     if(ALLOW_DOWNLOADS){
@@ -242,6 +249,49 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationNocoDownloadsNotificationFinishDownloading:) name:@"NocoDownloadsNotificationFinishDownloading" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationNocoDownloadsNotificationProgress:) name:@"NocoDownloadsNotificationProgress" object:nil];
     
+    //Tooltip animation
+    if(self.contextPlaylist){
+        float tooltipX = 5;
+        float tooltipY = 43;
+        float tooltipWidth = 120;
+        float tooltipHeight = 95;
+        NSString* type = @"émissions";
+        if(self.playlistType){
+            type = self.playlistType;
+        }
+        if(UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone){
+            tooltipX = 105;
+            tooltipY = 103;
+        }
+        
+        UIView* tooltipView = [[UIView alloc] initWithFrame:CGRectMake(tooltipX, tooltipY, tooltipWidth, tooltipHeight)];
+        UITextView* tooltipText = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, tooltipWidth, tooltipHeight)];
+        tooltipText.text = [NSString stringWithFormat:@"Restez appuyé sur le bouton lecture pour lire les autre %@ après celle-ci",type];
+        tooltipText.backgroundColor = [UIColor clearColor];
+        tooltipText.textColor = [UIColor whiteColor];
+        tooltipView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.75];
+        tooltipView.alpha = 0;
+        tooltipText.textAlignment = NSTextAlignmentCenter;
+        [tooltipView.layer setCornerRadius:5.0f];
+        [tooltipView addSubview:tooltipText];
+        [self.imageView.superview addSubview:tooltipView];
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            tooltipView.alpha = 1;
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:5 animations:^{
+                tooltipView.frame = CGRectOffset(tooltipView.frame, 0, 6);
+                tooltipView.alpha = 0.8;
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:0.5 animations:^{
+                    tooltipView.alpha = 0;
+                } completion:^(BOOL finished) {
+                    
+                }];
+                
+            }];
+        }];
+    }
 }
 
 - (void)notificationNocoDownloadsNotificationFinishDownloading:(NSNotification*)notification{
@@ -287,17 +337,26 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
 
 - (void)launchPlaylist{
     if(self.contextPlaylist){
-        [[ShowPlayerManager sharedInstance] setDelegate:self];
-        NSMutableArray* playlist = self.contextPlaylist;
-        bool fromShow = true;
-        if(fromShow){
-            playlist = [NSMutableArray arrayWithCapacity:[self.contextPlaylist count]];
-            NSEnumerator*   reverseEnumerator = [self.contextPlaylist reverseObjectEnumerator];
-            for (id playlistItem in reverseEnumerator){
-                [playlist addObject:playlistItem];
+        NSString* title = @"l'émission";
+        NSString* type = @"émissions";
+        if(self.playlistType){
+            type = self.playlistType;
+        }
+        if(self.show.family_TT){
+            title = self.show.family_TT;
+            self.accessibilityLabel = self.show.family_TT;
+            if(self.show.episode_number && self.show.episode_number != 0){
+                if(self.show.season_number > 1){
+                    title = [title stringByAppendingFormat:@" - S%02iE%02i", self.show.season_number,self.show.episode_number];
+                    self.accessibilityLabel = [self.accessibilityLabel stringByAppendingFormat:@" , saison %i, épisode %i", self.show.season_number,self.show.episode_number];
+                }else{
+                    title = [title stringByAppendingFormat:@" - %i", self.show.episode_number];
+                    self.accessibilityLabel = [self.accessibilityLabel stringByAppendingFormat:@" , épisode %i",self.show.episode_number];
+                }
             }
         }
-        [[ShowPlayerManager sharedInstance] play:self.show withProgress:progress withImage:self.imageView.image withPlaylist:playlist];
+        self.playlistSheet = [[UIActionSheet alloc] initWithTitle:[NSString stringWithFormat:@"Lire \"%@\" puis les autres %@",title,type] delegate:self cancelButtonTitle:@"annuler" destructiveButtonTitle:nil otherButtonTitles:playListOlderToNewer,playListNewerToOlder, nil];
+        [self.playlistSheet showFromTabBar:self.tabBarController.tabBar];
     }
 }
 
@@ -380,7 +439,26 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
     [[ShowPlayerManager sharedInstance] tooglePlay];
 }
 
+- (IBAction)cancelPlayStart:(id)sender {
+    [self.playStartTimer invalidate];
+}
+
+- (IBAction)playStart:(id)sender {
+    self.playStart = [NSDate date];
+    self.playStartTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(longPlay) userInfo:nil repeats:NO];
+}
+
+- (void)longPlay{
+    [self launchPlaylist];
+
+}
 - (IBAction)play:(id)sender {
+    [self.playStartTimer invalidate];
+    if(self.playStart && [[NSDate date] timeIntervalSinceDate:self.playStart] > 1 && self.contextPlaylist){
+        [self longPlay];
+        return;
+    }
+    self.playStart = nil;
 #ifdef LEGACY_MOVIE_PLAYER
     [self play];
 #else
@@ -685,6 +763,7 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
 }
 
 -(void)dealloc{
+    [self.playStartTimer invalidate];
 #ifdef LEGACY_MOVIE_PLAYER
     [self.progressTimer invalidate];
 #else
@@ -734,10 +813,33 @@ static NSString * const removeFromWatchlist = @"retirer de la liste de lecture";
             }
         }
     }
+    
     if(actionSheet == self.statusSheet){
         if(actionSheet.cancelButtonIndex != buttonIndex){
             [self watchListClick:nil];
         }
+    }
+    
+    if(actionSheet == self.playlistSheet){
+        if(actionSheet.cancelButtonIndex != buttonIndex){
+            bool fromShow = false;
+            if([[actionSheet buttonTitleAtIndex:buttonIndex] compare:playListOlderToNewer]==NSOrderedSame){
+                fromShow = true;
+            }
+            if(self.contextPlaylist){
+                [[ShowPlayerManager sharedInstance] setDelegate:self];
+                NSMutableArray* playlist = self.contextPlaylist;
+                if(fromShow){
+                    playlist = [NSMutableArray arrayWithCapacity:[self.contextPlaylist count]];
+                    NSEnumerator*   reverseEnumerator = [self.contextPlaylist reverseObjectEnumerator];
+                    for (id playlistItem in reverseEnumerator){
+                        [playlist addObject:playlistItem];
+                    }
+                }
+                [[ShowPlayerManager sharedInstance] play:self.show withProgress:progress withImage:self.imageView.image withPlaylist:playlist withCurrentPlaylistItem:self.contextPlaylistCurrentItem];
+            }
+        }
+    
     }
 }
 
