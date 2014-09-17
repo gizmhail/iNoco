@@ -33,6 +33,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSString* version = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
+    self.versionLabel.text = [NSString stringWithFormat:@"%@",version];
+
 #warning TODO Fetch value from backend and fill segmented controls accordingly
     self.languageSegmentedEntriesValues = @[@"V.O.", @"en", @"fr", @"ja"];
     self.subtitleSegmentedEntriesValues = @[@"none", @"en", @"fr", @"ja"];

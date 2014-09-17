@@ -11,7 +11,7 @@
 @protocol RemoteControlEventHandlerProtocol <NSObject>
 - (void)tooglePlay;
 @end
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (assign, nonatomic) id<RemoteControlEventHandlerProtocol> remoteControlDelegate;

@@ -12,6 +12,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "NocoDownloadsManager.h"
 #import <Crashlytics/Crashlytics.h>
+#import "RecentShowViewController.h"
 
 void uncaughtExceptionHandler(NSException *exception) {
     NSLog(@"CRASH: %@", exception);
@@ -19,6 +20,9 @@ void uncaughtExceptionHandler(NSException *exception) {
     // Internal error reporting
 }
 
+@interface AppDelegate ()
+@property (retain,nonatomic)UIAlertView* interruptedAlertview;
+@end
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
@@ -83,6 +87,30 @@ void uncaughtExceptionHandler(NSException *exception) {
 
     //Lock screen audio events
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+
+    NSData* cacheData = [settings objectForKey:@"InterruptedShow" ];
+    NLTShow* interruptedShow = nil;
+    if(cacheData){
+        interruptedShow = [[NLTShow alloc] initWithDictionnary:[NSKeyedUnarchiver unarchiveObjectWithData:cacheData]];
+    }
+
+    if(interruptedShow && interruptedShow.id_show){
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSString* title = @"";
+            if(interruptedShow.family_TT){
+                title = interruptedShow.family_TT;
+                if(interruptedShow.episode_number && interruptedShow.episode_number != 0){
+                    if(interruptedShow.season_number > 1){
+                        title = [title stringByAppendingFormat:@" - S%02iE%02i", interruptedShow.season_number,interruptedShow.episode_number];
+                    }else{
+                        title = [title stringByAppendingFormat:@" - %i", interruptedShow.episode_number];
+                    }
+                }
+            }
+            self.interruptedAlertview = [[UIAlertView alloc] initWithTitle:@"Continuer la lecture ?" message:[NSString stringWithFormat:@"Voulez-vous reprendre la lecture de la dernière émission interrompue (%@) ?",title] delegate:self cancelButtonTitle:@"Non" otherButtonTitles:@"Oui", nil];
+            [self.interruptedAlertview show];
+        });
+    }
 
     return YES;
 }
@@ -182,6 +210,35 @@ void uncaughtExceptionHandler(NSException *exception) {
     return YES;
 }
 
+#pragma mark UIAlertviewDelegate
+
+-(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
+    if(alertView==self.interruptedAlertview){
+        self.interruptedAlertview = nil;
+        NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
+        NSData* cacheData = [settings objectForKey:@"InterruptedShow" ];
+        NLTShow* interruptedShow = nil;
+        if(cacheData){
+            interruptedShow = [[NLTShow alloc] initWithDictionnary:[NSKeyedUnarchiver unarchiveObjectWithData:cacheData]];
+        }
+        [settings removeObjectForKey:@"InterruptedShow"];
+        [settings synchronize];
+        
+        if(buttonIndex == alertView.cancelButtonIndex){
+            return;
+        }
+        if([self.window.rootViewController isKindOfClass:[UITabBarController class]]){
+
+            UIViewController* firstTabController = [[(UITabBarController*)self.window.rootViewController viewControllers] firstObject];
+            if([firstTabController isKindOfClass:[UINavigationController class]]&&[[(UINavigationController*)firstTabController topViewController] isKindOfClass:[RecentShowViewController class]]){
+                RecentShowViewController* recentShowController = (RecentShowViewController*)[(UINavigationController*)firstTabController topViewController];
+                recentShowController.playlistContext = nil;
+                recentShowController.playlistType = nil;
+                [recentShowController performSegueWithIdentifier:@"DisplayRecentShow" sender:interruptedShow];
+            }
+        }
+    }
+}
 
 
 @end

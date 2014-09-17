@@ -1040,6 +1040,13 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                                     <action selector="thirdPartyClick:" destination="5XC-dH-r0F" eventType="touchUpInside" id="hTu-eJ-VFq"/>
                                                 </connections>
                                             </button>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00.00.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DpK-Je-os0">
+                                                <rect key="frame" x="245" y="0.0" width="61" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                         </subviews>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.5" colorSpace="calibratedRGB"/>
                                     </view>
@@ -1096,6 +1103,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                         <outlet property="segmentedControl" destination="u8E-hp-gpu" id="XJI-oD-9gB"/>
                         <outlet property="settingsZone" destination="cf9-O5-Puz" id="2WL-12-PKx"/>
                         <outlet property="subtitleSegementedControl" destination="NT8-gD-H1s" id="fms-Ad-cSW"/>
+                        <outlet property="versionLabel" destination="DpK-Je-os0" id="wMm-n9-rwR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GQC-m9-bT7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1595,8 +1603,8 @@ Les geeks ont une vie. Même s'ils ne bougent pas beaucoup.</string>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Zd2-bH-dfy"/>
+        <segue reference="j4N-YV-D3C"/>
         <segue reference="WbY-uH-vXB"/>
-        <segue reference="SK6-5m-Pcy"/>
+        <segue reference="Zd2-bH-dfy"/>
     </inferredMetricsTieBreakers>
 </document>

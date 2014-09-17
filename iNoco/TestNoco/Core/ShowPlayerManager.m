@@ -85,15 +85,24 @@
                         [self play:result withProgress:0 withImage:[UIImage imageNamed:@"noco.png"]];
                     }else if (error){
                         //Skipping unusable show
+#ifdef DEBUG
+                        NSLog(@"Skipping next show (not known on backend)");
+#endif
                         [self switchToNextShow];
                     }
                 } withKey:self];
             }else{
                 //Skipping unusable show
+#ifdef DEBUG
+                NSLog(@"Skipping next show (not a show or an EPG entrydictionary)");
+#endif
                 [self switchToNextShow];
             }
         }else{
             //Skipping unusable show
+#ifdef DEBUG
+            NSLog(@"Skipping next show (not a show or an EPG entrydictionary)");
+#endif
             [self switchToNextShow];
         }
     }
@@ -184,8 +193,21 @@
     
     if(playbackCameToCompletion){
         self.currentShow = nil;
+#ifdef DEBUG
+        NSLog(@"Skipping next show (playback came to completion)");
+#endif
+        NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
+        [settings removeObjectForKey:@"InterruptedShow" ];
+        [settings synchronize];
+
         [self switchToNextShow];
     }else{
+        //User stopped playback before end
+        NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
+        NSData* cacheData = [NSKeyedArchiver archivedDataWithRootObject:self.currentShow.rawShow];
+
+        [settings setObject:cacheData forKey:@"InterruptedShow" ];
+        [settings synchronize];
         [self.moviePlayer.view removeFromSuperview];
     }
 }
@@ -251,12 +273,19 @@
                         [[[UIAlertView alloc] initWithTitle:@"Lecture impossible" message:@"Impossible de lire cette émission" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
                     }
                 }
+#ifdef DEBUG
+                NSLog(@"Skipping next show (you do not have acess to this video, subscription required)");
+#endif
+
                 [self switchToNextShow];
             } withKey:self withCacheDuration:60*10];
         }else{
             if([self displayAlerts]){
                 [[[UIAlertView alloc] initWithTitle:@"Lecture impossible" message:@"Impossible de lire cette émission" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
             }
+#ifdef DEBUG
+            NSLog(@"Skipping next show (you do not have acess to this video, unknown reason)");
+#endif
             [self switchToNextShow];
         }
         return;

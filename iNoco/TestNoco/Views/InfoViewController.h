@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UIView *settingsZone;
 @property (weak, nonatomic) IBOutlet UIView *iNocoZone;
 @property (weak, nonatomic) IBOutlet UIView *accountZone;
+@property (weak, nonatomic) IBOutlet UILabel *versionLabel;
 
 - (IBAction)disconnect:(id)sender;
 - (IBAction)catalogueChanged:(id)sender;
