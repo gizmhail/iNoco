@@ -236,7 +236,10 @@
     self.downloadInfos = [NSMutableArray array];
     NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
     NSData* cacheData = [settings objectForKey:@"NLTDownloadInfos"];
-    NSArray* cache = [NSKeyedUnarchiver unarchiveObjectWithData:cacheData];
+    NSArray* cache = nil;
+    if(cacheData){
+        cache = [NSKeyedUnarchiver unarchiveObjectWithData:cacheData];
+    }
     if(cache){
         NSMutableArray* infos = [NSMutableArray arrayWithArray:cache];
         self.downloadInfos = [NSMutableArray array];

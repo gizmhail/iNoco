@@ -115,7 +115,7 @@
 -(void)viewDidAppear:(BOOL)animated{
     self.initialAuthentCheckDone = FALSE;
     if(!self.noNetworkForAuth){
-        [self.view makeToastActivity];
+        [self showLoadingActivity];
         [self refreshResult];
     }else{
         //Back from auth try, with lacking network: we avoid, once, to try to reconnect
@@ -165,6 +165,16 @@
     }
 }
 
+#pragma mark Activity
+
+- (void)showLoadingActivity{
+    [self.view makeToastActivity];
+}
+
+- (void)hideLoadingActivity{
+    [self.view hideToastActivity];
+}
+
 
 #pragma mark ConnectionViewControllerDelegate
 
@@ -201,12 +211,11 @@
 #warning TODO Handle offline properly (add Reachability, ...)
         self.initialAuthentCheckDone = TRUE;
         if(!authenticated){
+            [weakSelf hideLoadingActivity];
             if([error.domain compare:NSURLErrorDomain]==NSOrderedSame && error.code == -1009){
-                [weakSelf.view hideToastActivity];
                 [weakSelf stopRefreshControl];
                 [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:self   cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             }else{
-                [weakSelf.view hideToastActivity];
                 //Segueue should not occur during viewWilll/DidAppear
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [weakSelf performSegueWithIdentifier:@"NotConnectedSegue" sender:self];
@@ -253,9 +262,9 @@
             if(authenticated){
                 if(weakSelf.filter && page > [weakSelf greatestFetchedPage]){
                     //If filtering, we don't download additionnal pages (unless some pages were missing, skipped due to high speed scrolling)
-                    [weakSelf.view hideToastActivity];
+                    [weakSelf hideLoadingActivity];
                 }else{
-                    [weakSelf.view makeToastActivity];
+                    [weakSelf showLoadingActivity];
                     pendingPageCalls++;
 #ifdef DEBUG_SHOWLIST_MAXSHOW
                     NSLog(@"pendingPageCalls++: %i", pendingPageCalls);
@@ -265,7 +274,7 @@
 #ifdef DEBUG_SHOWLIST_MAXSHOW
                         NSLog(@"pendingPageCalls--: %i", pendingPageCalls);
 #endif
-                        [weakSelf.view hideToastActivity];
+                        [weakSelf hideLoadingActivity];
                         [weakSelf stopRefreshControl];
                         if(error){
 #ifdef DEBUG_SHOWLIST_MAXSHOW
@@ -299,12 +308,12 @@
                 }
             }else{
 #warning TODO Handle offline
-                [weakSelf.view hideToastActivity];
+                [weakSelf hideLoadingActivity];
                 [weakSelf stopRefreshControl];
             }
         }];
     }else{
-        [self.view hideToastActivity];
+        [self hideLoadingActivity];
         [self stopRefreshControl];
     }
 }
@@ -349,10 +358,16 @@
             }
             emptyPageFound = TRUE;
         }
+        BOOL newPage = true;
+        if([self.resultByPage objectForKey:[NSNumber numberWithInt:page]]){
+            newPage = false;
+        }
         [self.resultByPage setObject:[NSMutableArray arrayWithArray:result] forKey:[NSNumber numberWithInt:page]];
         [self filterShowsAtPage:page];
-        [self.collectionView reloadData];
-        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.collectionView);
+        if(newPage){
+            [self.collectionView reloadData];
+            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.collectionView);
+        }
     }else{
         //TODO Handle error
         NSLog(@"Unexpected page result");
@@ -453,10 +468,11 @@
     NLTShow* show = [self resultAtIndex:showIndex];
     if(!show){
         //We want a bit to be sure the call call is still needed
+        __weak RecentShowViewController* weakSelf = self;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:showIndex inSection:0]];
-            if([[self.collectionView visibleCells] containsObject:cell]){
-                [self loadResultAtIndex:showIndex];
+            UICollectionViewCell* cell = [weakSelf.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:showIndex inSection:0]];
+            if([[weakSelf.collectionView visibleCells] containsObject:cell]){
+                [weakSelf loadResultAtIndex:showIndex];
             }else{
                 //Loading not needed anymore
                 //NSLog(@"Loading not needed");

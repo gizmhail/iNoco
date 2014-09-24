@@ -42,4 +42,6 @@
 - (void)launchFullsearchForFilter;
 - (BOOL)checkErrorForQuotaLimit:(NSError*)error;
 - (IBAction)watchSegmentedControlChange:(id)sender;
+- (void)hideLoadingActivity;
+- (void)showLoadingActivity;
 @end

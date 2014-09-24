@@ -69,11 +69,10 @@
 
 - (void)loadResultsAtPage:(int)page withResultBlock:(NLTCallResponseBlock)responseBlock{
     if(self.search && [self.search compare:@""]!=NSOrderedSame){
-        __weak RecentShowViewController* weakSelf = self;
-        [[NLTAPI sharedInstance] search:self.search atPage:page withResultBlock:^(id result, NSError *error) {
-            [weakSelf.view hideToastActivity];
+        __weak SearchViewController* weakSelf = self;
+        [[NLTAPI sharedInstance] search:weakSelf.search atPage:page withResultBlock:^(id result, NSError *error) {
             if(error){
-                [self checkErrorForQuotaLimit:error];
+                [weakSelf checkErrorForQuotaLimit:error];
             }
             if(responseBlock){
                 responseBlock(result, error);
@@ -83,7 +82,7 @@
         if(responseBlock){
             responseBlock([NSArray array], nil);
         }
-        //[self.view hideToastActivity];
+        //[self hideLoadingActivity];
     }
 }
 
@@ -305,10 +304,11 @@
     NLTFamily* family = [self loadedTableFamilyAtIndexPath:indexPath];
     if(!family){
         //We want a bit to be sure the call call is still needed
+        __weak SearchViewController* weakSelf = self;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            UITableViewCell* cell = [self.familyTableview cellForRowAtIndexPath:indexPath];
-            if([[self.familyTableview visibleCells] containsObject:cell]){
-                [self loadTableFamilyAtIndex:indexPath];
+            UITableViewCell* cell = [weakSelf.familyTableview cellForRowAtIndexPath:indexPath];
+            if([[weakSelf.familyTableview visibleCells] containsObject:cell]){
+                [weakSelf loadTableFamilyAtIndex:indexPath];
             }else{
                 //NSLog(@"Loading not needed");
             }
@@ -342,23 +342,23 @@
     if(![self.familiesByPage objectForKey:[NSNumber numberWithInt:page]]){
         [[NLTOAuth sharedInstance]isAuthenticatedAfterRefreshTokenUse:^(BOOL authenticated, NSError* error) {
             if(authenticated){
-                [weakSelf.view makeToastActivity];
+                [weakSelf showLoadingActivity];
                 pendingFamilyPageCalls++;
                 [[NLTAPI sharedInstance] familiesAtPage:page withResultBlock:^(id result, NSError *error) {
                     pendingFamilyPageCalls--;
-                    [weakSelf.view hideToastActivity];
+                    [weakSelf hideLoadingActivity];
                     if(error){
                         
-                        BOOL quotaError = [self checkErrorForQuotaLimit:error];
-                        maxFamily = [self tableEntriesCount];
+                        BOOL quotaError = [weakSelf checkErrorForQuotaLimit:error];
+                        maxFamily = [weakSelf tableEntriesCount];
 #ifdef DEBUG
                         NSLog(@"maxFamily (%i) set due to error in page fetching", maxFamily);
 #endif
-                        if(!self.errorAlert&&!quotaError){
-                            self.errorAlert = [[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:self   cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                            [self.errorAlert show];
+                        if(!weakSelf.errorAlert&&!quotaError){
+                            weakSelf.errorAlert = [[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:weakSelf   cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                            [weakSelf.errorAlert show];
                         }
-                        [weakSelf.collectionView reloadData];
+                        [weakSelf.familyTableview reloadData];
                     }else{
                         if(result&&[result isKindOfClass:[NSArray class]]){
                             if([(NSArray*)result count]<[[NLTAPI sharedInstance] resultsByPage]){
@@ -368,17 +368,20 @@
 #endif
                                 emptyFamilyPageFound = TRUE;
                             }
-                            [self.familiesByPage setObject:[NSMutableArray arrayWithArray:result] forKey:[NSNumber numberWithInt:page]];
-                            [self.familyTableview reloadData];
-                            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.familyTableview);
+                            if(![weakSelf.familiesByPage objectForKey:[NSNumber numberWithInt:page]]){
+                                [weakSelf.familiesByPage setObject:[NSMutableArray arrayWithArray:result] forKey:[NSNumber numberWithInt:page]];
+                                [weakSelf.familyTableview reloadData];
+                                UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, weakSelf.familyTableview);
+                            }
                         }else{
                             //TODO Handle error
                             NSLog(@"Unexpected page result");
                         }
                     }
+                    
                     if(emptyFamilyPageFound){
                         if(pendingFamilyPageCalls <= 0){
-                            maxFamily = [self tableEntriesCount];
+                            maxFamily = [weakSelf tableEntriesCount];
 #ifdef DEBUG
                             NSLog(@"maxFamily (%i) set due to current emptyFamilyPageFound and pendingFamilyPageCalls == 0", maxFamily);
 #endif
@@ -390,14 +393,14 @@
 #endif
                         }
                     }
-                } withKey:self];
+                } withKey:weakSelf];
             }else{
 #warning TODO Handle offline
-                [weakSelf.view hideToastActivity];
+                [weakSelf hideLoadingActivity];
             }
         }];
     }else{
-        [self.view hideToastActivity];
+        [self hideLoadingActivity];
     }
 }
 
@@ -510,10 +513,12 @@
     
     NSDictionary* result = [self resultAtIndex:indexPath.row];
     if(!result){
+        __weak SearchViewController* weakSelf = self;
+
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
-            if([[self.collectionView visibleCells] containsObject:cell]){
-                [self loadResultAtIndex:indexPath.row];
+            UICollectionViewCell* cell = [weakSelf.collectionView cellForItemAtIndexPath:indexPath];
+            if([[weakSelf.collectionView visibleCells] containsObject:cell]){
+                [weakSelf loadResultAtIndex:indexPath.row];
             }else{
                 //Loading not needed anymore
                 //NSLog(@"Loading not needed");

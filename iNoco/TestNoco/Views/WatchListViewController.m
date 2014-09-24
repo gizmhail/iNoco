@@ -58,7 +58,7 @@
 - (void)connectedToNoco{
     __weak WatchListViewController* weakSelf = self;
     [[NLTAPI sharedInstance] queueListShowIdsWithResultBlock:^(id result, NSError *error) {
-        [weakSelf.view hideToastActivity];
+        [weakSelf hideLoadingActivity];
         if(error){
 #warning TOOD Handle error
         }else{

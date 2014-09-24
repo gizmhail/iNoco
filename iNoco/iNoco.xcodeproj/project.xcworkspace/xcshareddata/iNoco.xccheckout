@@ -10,29 +10,29 @@
 	<string>iNoco</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>0448AB26-4F72-4E49-8AD3-E06A0203BBA1</key>
+		<key>90A1E2D7DDE67E46750CD52AACEE321CAC6391D2</key>
 		<string>https://github.com/gizmhail/iNoco.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>iNoco/iNoco.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>0448AB26-4F72-4E49-8AD3-E06A0203BBA1</key>
+		<key>90A1E2D7DDE67E46750CD52AACEE321CAC6391D2</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/gizmhail/iNoco.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>0448AB26-4F72-4E49-8AD3-E06A0203BBA1</string>
+	<string>90A1E2D7DDE67E46750CD52AACEE321CAC6391D2</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>0448AB26-4F72-4E49-8AD3-E06A0203BBA1</string>
+			<string>90A1E2D7DDE67E46750CD52AACEE321CAC6391D2</string>
 			<key>IDESourceControlWCCName</key>
 			<string>iNoco</string>
 		</dict>

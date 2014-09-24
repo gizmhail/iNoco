@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="8YX-ce-x5E">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="8YX-ce-x5E">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller - récents-->
+        <!--récents-->
         <scene sceneID="HUx-97-5J4">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" definesPresentationContext="YES" id="YOO-GI-Fnu" sceneMemberID="viewController">
@@ -59,7 +59,6 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <subviews>
                                                         <view alpha="0.64999997615814209" tag="305" contentMode="scaleToFill" id="DaU-67-Wbf">
-                                                            <rect key="frame" x="0.0" y="0.0" width="0.0" height="2"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                         </view>
@@ -229,7 +228,7 @@
             </objects>
             <point key="canvasLocation" x="1079" y="-879"/>
         </scene>
-        <!--Navigation Controller - à voir-->
+        <!--à voir-->
         <scene sceneID="5RQ-x8-HzH">
             <objects>
                 <navigationController definesPresentationContext="YES" id="hzk-bq-P1i" sceneMemberID="viewController">
@@ -294,7 +293,6 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <subviews>
                                                         <view alpha="0.64999997615814209" tag="305" contentMode="scaleToFill" id="juj-tm-5RR">
-                                                            <rect key="frame" x="0.0" y="0.0" width="0.0" height="2"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                         </view>
@@ -715,7 +713,6 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <subviews>
                                                                 <view alpha="0.64999997615814209" tag="305" contentMode="scaleToFill" id="A5h-8I-afe">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="0.0" height="2"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                 </view>
@@ -889,7 +886,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
             </objects>
             <point key="canvasLocation" x="-702" y="208"/>
         </scene>
-        <!--Info View Controller - info-->
+        <!--info-->
         <scene sceneID="GN2-S3-5x1">
             <objects>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="5XC-dH-r0F" customClass="InfoViewController" sceneMemberID="viewController">
@@ -1110,7 +1107,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
             </objects>
             <point key="canvasLocation" x="395" y="2726"/>
         </scene>
-        <!--Navigation Controller - info-->
+        <!--info-->
         <scene sceneID="YqI-is-Mwr">
             <objects>
                 <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="cNJ-OL-PBe" sceneMemberID="viewController">
@@ -1168,7 +1165,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
             </objects>
             <point key="canvasLocation" x="3687" y="482"/>
         </scene>
-        <!--NolifeEPG View Controller Table View Controller - Programmes Nolife-->
+        <!--Programmes Nolife-->
         <scene sceneID="YGv-qC-1xa">
             <objects>
                 <tableViewController id="byt-Az-g9A" customClass="NolifeEPGViewControllerTableViewController" sceneMemberID="viewController">
@@ -1261,7 +1258,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
             </objects>
             <point key="canvasLocation" x="1233" y="1288"/>
         </scene>
-        <!--Navigation Controller - Planning-->
+        <!--Planning-->
         <scene sceneID="NKr-B6-1IN">
             <objects>
                 <navigationController definesPresentationContext="YES" id="abr-Zi-f6j" sceneMemberID="viewController">
@@ -1324,7 +1321,6 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <subviews>
                                                         <view alpha="0.64999997615814209" tag="305" contentMode="scaleToFill" id="y2v-DZ-qBm">
-                                                            <rect key="frame" x="0.0" y="0.0" width="0.0" height="2"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                         </view>
@@ -1561,7 +1557,7 @@ Les geeks ont une vie. Même s'ils ne bougent pas beaucoup.</string>
             </objects>
             <point key="canvasLocation" x="354" y="495"/>
         </scene>
-        <!--Navigation Controller - recherche-->
+        <!--recherche-->
         <scene sceneID="mUz-2D-eWh">
             <objects>
                 <navigationController definesPresentationContext="YES" id="RBK-GO-aNx" sceneMemberID="viewController">
@@ -1603,8 +1599,8 @@ Les geeks ont une vie. Même s'ils ne bougent pas beaucoup.</string>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="j4N-YV-D3C"/>
-        <segue reference="WbY-uH-vXB"/>
-        <segue reference="Zd2-bH-dfy"/>
+        <segue reference="a1v-Eq-xu4"/>
+        <segue reference="kd9-uj-CES"/>
+        <segue reference="uN7-L9-3aO"/>
     </inferredMetricsTieBreakers>
 </document>

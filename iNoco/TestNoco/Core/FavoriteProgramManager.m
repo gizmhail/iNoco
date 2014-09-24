@@ -27,7 +27,10 @@
 - (FavoriteProgramManager*)init{
     NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
     self.favoriteFamilies = [NSMutableArray arrayWithObject:@"NOL/CU"];//101% by default ;)
-    NSArray* favoriteFamilies = [NSKeyedUnarchiver unarchiveObjectWithData:[settings objectForKey:@"favoriteFamilies"]];
+    NSArray* favoriteFamilies = nil;
+    if([settings objectForKey:@"favoriteFamilies"]){
+        favoriteFamilies = [NSKeyedUnarchiver unarchiveObjectWithData:[settings objectForKey:@"favoriteFamilies"]];
+    }
     if(favoriteFamilies){
         self.favoriteFamilies = [NSMutableArray arrayWithArray:favoriteFamilies];
     }
