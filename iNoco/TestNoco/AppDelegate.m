@@ -205,9 +205,37 @@ void uncaughtExceptionHandler(NSException *exception) {
                     [settings synchronize];
                 }
             }
+            
+            if([key compare:@"showId" options:NSCaseInsensitiveSearch]==NSOrderedSame){
+                long showId = [value integerValue];
+                [[NLTAPI sharedInstance] showWithId:showId withResultBlock:^(NLTShow* result, NSError *error) {
+                    [self openShowPage:result];
+                } withKey:self];
+            }
         }
     }
     return YES;
+}
+
+#pragma mark Direct actions
+
+- (void)openShowPage:(NLTShow*)show{
+    if(!show){
+        return;
+    }
+    UITabBarController* tabbarController = (UITabBarController*)self.window.rootViewController;
+    UIViewController* firstTabController = [[tabbarController viewControllers] firstObject];
+    if([firstTabController isKindOfClass:[UINavigationController class]]){
+        UINavigationController* firstNavigationController = (UINavigationController*)firstTabController;
+        [firstNavigationController popToRootViewControllerAnimated:NO];
+        RecentShowViewController* recentShowController = (RecentShowViewController*)[(UINavigationController*)firstTabController topViewController];
+        if([recentShowController isKindOfClass:[RecentShowViewController class]]){
+            [tabbarController setSelectedIndex:0];
+            recentShowController.playlistContext = nil;
+            recentShowController.playlistType = nil;
+            [recentShowController performSegueWithIdentifier:@"DisplayRecentShow" sender:show];
+        }
+    }
 }
 
 #pragma mark UIAlertviewDelegate
@@ -227,16 +255,8 @@ void uncaughtExceptionHandler(NSException *exception) {
         if(buttonIndex == alertView.cancelButtonIndex){
             return;
         }
-        if([self.window.rootViewController isKindOfClass:[UITabBarController class]]){
-
-            UIViewController* firstTabController = [[(UITabBarController*)self.window.rootViewController viewControllers] firstObject];
-            if([firstTabController isKindOfClass:[UINavigationController class]]&&[[(UINavigationController*)firstTabController topViewController] isKindOfClass:[RecentShowViewController class]]){
-                RecentShowViewController* recentShowController = (RecentShowViewController*)[(UINavigationController*)firstTabController topViewController];
-                recentShowController.playlistContext = nil;
-                recentShowController.playlistType = nil;
-                [recentShowController performSegueWithIdentifier:@"DisplayRecentShow" sender:interruptedShow];
-            }
-        }
+        
+        [self openShowPage:interruptedShow];
     }
 }
 
