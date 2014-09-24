@@ -528,9 +528,11 @@
         UINavigationController* searchNav = (UINavigationController*)[self.tabBarController.viewControllers objectAtIndex:2];
         [searchNav popToRootViewControllerAnimated:NO];
         SearchViewController* searchController = [[searchNav viewControllers] firstObject];
-        searchController.search = self.filter;
-        searchController.searchBar.text = self.filter;
-        [searchController.collectionView reloadData];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            searchController.search = self.filter;
+            searchController.searchBar.text = self.filter;
+            [searchController searchBarSearchButtonClicked:searchController.searchBar];
+        });
     }
 
 }
