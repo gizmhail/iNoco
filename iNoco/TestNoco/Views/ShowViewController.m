@@ -464,6 +464,8 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
 #else
     [[ShowPlayerManager sharedInstance] setDelegate:self];
     [[ShowPlayerManager sharedInstance] play:self.show withProgress:progress withImage:self.imageView.image];
+    //We update the UI in case of download error : we need to refresh the download button
+    [self updateInterctiveUI];
 #endif
 }
 
@@ -735,8 +737,8 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
             [self.statusAlert show];
         }
         [[NLTAPI sharedInstance] addToQueueList:self.show withResultBlock:^(id result, NSError *error) {
-            [self.statusAlert dismissWithClickedButtonIndex:0 animated:YES];
-            self.statusAlert = nil;
+            [weakSelf.statusAlert dismissWithClickedButtonIndex:0 animated:YES];
+            weakSelf.statusAlert = nil;
             if(error){
                 [weakSelf.tabBarController.view makeToast:[NSString stringWithFormat:@"Impossible de rajouter l'émission à la liste de lecture"] duration:2 position:@"bottom"];
             }else{
@@ -749,8 +751,8 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         self.statusAlert = [[UIAlertView alloc] initWithTitle:@"Connection en cours ..." message:@"L'émision est en train d'être retirée de la liste de lecture..." delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
         [self.statusAlert show];
         [[NLTAPI sharedInstance] removeFromQueueList:self.show withResultBlock:^(id result, NSError *error) {
-            [self.statusAlert dismissWithClickedButtonIndex:0 animated:YES];
-            self.statusAlert = nil;
+            [weakSelf.statusAlert dismissWithClickedButtonIndex:0 animated:YES];
+            weakSelf.statusAlert = nil;
             if(error){
                 [weakSelf.tabBarController.view makeToast:[NSString stringWithFormat:@"Impossible d'enlever l'émission de la liste de lecture"] duration:2 position:@"bottom"];
             }else{
@@ -806,8 +808,20 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
             if([[actionSheet buttonTitleAtIndex:buttonIndex] compare:allReadMessage]==NSOrderedSame){
                 int i = 0;
                 while(i<[self.chapters count]){
-                    NLTShow* chapterShow = [self showAtIndex:i];
-                    [self markRead:chapterShow];
+                    
+                    NSDictionary* chapter = [self.chapters objectAtIndex:i];
+                    NSNumber* idNumber =  [chapter objectForKey:@"id_show_sub"];
+                    if([[NLTAPI sharedInstance].showsById objectForKey:idNumber]){
+                        NLTShow* chapterShow = [[NLTAPI sharedInstance].showsById objectForKey:idNumber];
+                        [self markRead:chapterShow];
+                    }else{
+                        __weak ShowViewController* weakSelf = self;
+                        [[NLTAPI sharedInstance] showWithId:[idNumber integerValue] withResultBlock:^(NLTShow* chapterShow, NSError *error) {
+                            if(chapterShow){
+                                [weakSelf markRead:chapterShow];
+                            }
+                        } withKey:self];
+                    }
                     i++;
                 }
             }
@@ -888,10 +902,10 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     }
     __weak ShowViewController* weakSelf = self;
     
-    [[NLTAPI sharedInstance] setReadStatus:!self.readButton.selected forShow:show withResultBlock:^(id result, NSError *error) {
+    [[NLTAPI sharedInstance] setReadStatus:true forShow:show withResultBlock:^(id result, NSError *error) {
         unreadCalls--;
         if(error){
-            self.readError = error;
+            weakSelf.readError = error;
         }else{
             if(show==self.show){
                 weakSelf.readButton.selected = true;
@@ -900,7 +914,7 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         }
         if(unreadCalls == 0){
             [weakSelf.readAlert dismissWithClickedButtonIndex:0 animated:YES];
-            if(self.readError){
+            if(weakSelf.readError){
                 [weakSelf.tabBarController.view makeToast:[NSString stringWithFormat:@"Impossible de marquer comme lu"] duration:3 position:@"bottom"];
             }else{
             }

@@ -275,7 +275,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection{
 #ifdef DEBUG_NLT_CALL
-    NSLog(@" > finished call to %@",connection.originalRequest.URL.absoluteString);
+    //NSLog(@" > finished call to %@",connection.originalRequest.URL.absoluteString);
 #endif
     self.networkActivityCount--;
     if(self.handleNetworkActivityIndicator&&[[UIApplication sharedApplication] isNetworkActivityIndicatorVisible]){
@@ -834,6 +834,9 @@
     if(!isRead){
         method = @"DELETE";
     }
+#ifdef DEBUG
+    NSLog(@"Read %i -> %i ...",show.id_show,isRead);
+#endif
     [[NLTAPI sharedInstance] callAPI:urlStr withResultBlock:^(id result, NSError *error) {
         if(error){
             if(responseBlock){
@@ -853,7 +856,7 @@
             }
             if(responseBlock){
 #ifdef DEBUG
-                NSLog(@"Result %@",result);
+                NSLog(@"Result mark read : %i %@",isRead,result);
 #endif
                 responseBlock(result, nil);
             }

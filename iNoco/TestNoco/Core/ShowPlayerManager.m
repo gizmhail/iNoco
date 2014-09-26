@@ -293,17 +293,28 @@
     
     __weak ShowPlayerManager* weakSelf = self;
     
-    if([self.delegate respondsToSelector:@selector(startedLookingForMovieUrl)]){
-        [self.delegate startedLookingForMovieUrl];
-    }
-    
     NSURL* url = nil;
     if([[NocoDownloadsManager sharedInstance] isDownloaded:self.currentShow]){
         NSString* file = [[NocoDownloadsManager sharedInstance] downloadFilePathForShow:self.currentShow];
         if(file){
             url = [NSURL fileURLWithPath:file];
-        }
+            BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:file];
+            NSLog(@"%i",fileExists);
+            if(!fileExists){
+                [[NocoDownloadsManager sharedInstance] eraseDownloadForShow:self.currentShow];
+                if([self displayAlerts]){
+                    [[[UIAlertView alloc] initWithTitle:@"Emission effacée" message:@"Le fichier téléchargé n'est plus disponible.\nCela peut arriver lors d'une mise-à-jour de l'application.\nVeuillez le retélécharger." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
+                }
+                [self switchToNextShow];
+                return;
+            }
+       }
     }
+    
+    if([self.delegate respondsToSelector:@selector(startedLookingForMovieUrl)]){
+        [self.delegate startedLookingForMovieUrl];
+    }
+
     if(url){
         //Downloaded video
         [self playURL:url withProgress:progress withImage:image];
@@ -316,6 +327,7 @@
                 NSURL* url = nil;
                 if(file){
                     url = [NSURL URLWithString:file];
+
                 }
                 [weakSelf playURL:url withProgress:progress withImage:image];
             }else{
