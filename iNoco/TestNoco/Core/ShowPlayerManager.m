@@ -17,7 +17,7 @@
 @property (retain, nonatomic) NLTShow* currentShow;
 @property (retain, nonatomic) id currentPlaylistItem;
 @property (retain, nonatomic) NSMutableArray* showList;
-
+@property (retain,nonatomic) UIView* videoOverlayView;
 @end
 
 @implementation ShowPlayerManager
@@ -63,6 +63,7 @@
 
 - (void)switchToNextShow{
 #warning See if we should keep it in the superview
+    [self removeCustomUI];
     [self.moviePlayer.view removeFromSuperview];
     id nextShow = [self nextShow];
     if(nextShow == nil){
@@ -124,12 +125,12 @@
                                                object:nil];
 }
 
-
 - (void)notificationMPMoviePlayerLoadStateDidChangeNotification:(NSNotification*)notif{
 #ifdef DEBUG
     NSLog(@"Load state %li", (long)self.moviePlayer.loadState);
 #endif
     if(self.moviePlayer.loadState & MPMovieLoadStatePlayable){
+        [self playerCustomUI];
     }
 }
 
@@ -187,6 +188,7 @@
             [[[UIAlertView alloc] initWithTitle:@"Lecture impossible" message:@"Impossible de lire cette émission" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
         }
     }
+
     [self.moviePlayer setFullscreen:NO animated:YES];
     [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = [NSMutableDictionary dictionary];
     
@@ -208,6 +210,7 @@
 
         [settings setObject:cacheData forKey:@"InterruptedShow" ];
         [settings synchronize];
+        [self removeCustomUI];
         [self.moviePlayer.view removeFromSuperview];
     }
 }
@@ -359,6 +362,7 @@
     [self.moviePlayer prepareToPlay];
     self.moviePlayer.shouldAutoplay = TRUE;
     [self.moviePlayer setFullscreen:YES animated:YES];
+
     self.progressTimer = [NSTimer scheduledTimerWithTimeInterval:PROGRESS_UPDATE_UPLOAD_STEP_TIME target:self selector:@selector(progressUpdate) userInfo:nil repeats:YES];
     MPNowPlayingInfoCenter *infoCenter = [MPNowPlayingInfoCenter defaultCenter];
     NSMutableDictionary* info = [NSMutableDictionary dictionaryWithDictionary:infoCenter.nowPlayingInfo];
@@ -372,6 +376,39 @@
         [info setObject:[[MPMediaItemArtwork alloc] initWithImage:image] forKey:MPMediaItemPropertyArtwork];
     }
     infoCenter.nowPlayingInfo = info;
+}
+
+#pragma mark Custom UI
+
+- (void)playerCustomUI{
+#ifdef DEBUG
+#ifdef USE_CUSTOM_PLAYER_UI
+    NSLog(@"\n\n----\n\nCustom player only in debug mode \n\n----\n\n");
+    
+    NSArray *windows = [[UIApplication sharedApplication] windows];
+    if ([windows count] > 1){
+        self.videoOverlayView = [[UIView alloc] initWithFrame:self.moviePlayer.view.bounds];
+        self.videoOverlayView.backgroundColor = [UIColor redColor];
+        self.videoOverlayView.userInteractionEnabled = false;
+        
+        // Locate the movie player window
+        UIWindow *moviePlayerWindow = [[UIApplication sharedApplication] keyWindow];
+        if ([moviePlayerWindow viewWithTag:0x3939] == nil) {
+            self.videoOverlayView.tag = 0x3939;
+            [moviePlayerWindow addSubview:self.videoOverlayView];
+        }
+        [moviePlayerWindow bringSubviewToFront:self.videoOverlayView];
+    }
+#endif
+#endif
+}
+
+- (void)removeCustomUI{
+#ifdef DEBUG
+#ifdef USE_CUSTOM_PLAYER_UI
+    [self.videoOverlayView removeFromSuperview];
+#endif
+#endif
 }
 
 #pragma mark Delegate

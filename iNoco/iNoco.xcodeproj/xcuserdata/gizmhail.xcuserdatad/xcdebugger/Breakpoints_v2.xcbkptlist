@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TestNoco/Views/ShowViewController.m"
-            timestampString = "433450274.758006"
+            timestampString = "433584291.139746"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "961"
-            endingLineNumber = "961"
+            startingLineNumber = "960"
+            endingLineNumber = "960"
             landmarkName = "-showAtIndex:"
             landmarkType = "5">
          </BreakpointContent>
@@ -138,11 +138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TestNoco/NoLibTV/NLTAPI.m"
-            timestampString = "433449650.73693"
+            timestampString = "433603419.839757"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1125"
-            endingLineNumber = "1125"
+            startingLineNumber = "1147"
+            endingLineNumber = "1147"
             landmarkName = "-videoUrlForShow:withPreferedQuality:withPreferedLanguage:withPreferedSubtitleLanguage:withResultBlock:withKey:"
             landmarkType = "5">
          </BreakpointContent>
@@ -538,7 +538,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TestNoco/Core/ShowPlayerManager.m"
-            timestampString = "432674790.560726"
+            timestampString = "433605667.875996"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "183"
@@ -682,12 +682,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TestNoco/Views/ShowViewController.m"
-            timestampString = "433450274.758006"
+            timestampString = "433584291.139746"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "919"
-            endingLineNumber = "919"
+            startingLineNumber = "918"
+            endingLineNumber = "918"
             landmarkName = "-markRead:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TestNoco/AppDelegate.m"
+            timestampString = "433584145.925141"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "149"
+            endingLineNumber = "149"
+            landmarkName = "-remoteControlReceivedWithEvent:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TestNoco/Core/ShowPlayerManager.m"
+            timestampString = "433605667.875996"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "408"
+            endingLineNumber = "408"
+            landmarkName = "-removeCustomUI"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

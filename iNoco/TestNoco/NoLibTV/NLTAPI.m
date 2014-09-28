@@ -1068,32 +1068,54 @@
                 }
                 if(subLangInfo &&  [[subLangInfo objectForKey:@"quality_list"] isKindOfClass:[NSDictionary class]]){
                     //Searching for quality key in media is not really needed as the backend handles the adaptation if format is not availalbe
-                    qualityKey = preferedQuality;
-                    infoOk = TRUE;
-                    
-                    /*
-                    NSDictionary* qualityList = [subLangInfo objectForKey:@"quality_list"];
-                    //Searching for available quality matching request
-                    //NSDictionary* qualityInfo = nil;
-                    for (NSString* aivalableQuality in qualityList) {
-                        //NSDictionary* aivalableQualityInfo = [qualityList objectForKey:qualityList];
-                        if([aivalableQuality compare:preferedQuality options:NSCaseInsensitiveSearch]==NSOrderedSame){
-                            //Perfect match
-                            qualityKey = aivalableQuality;
-                            //qualityInfo = aivalableQualityInfo;
-                            infoOk = TRUE;
-                            perfectMatchQuality = true;
-                            break;
-                        }else{
-                            //Alternative match
-                            if(qualityKey == nil){
+                    BOOL trustBackendQualityAdaptation = false;
+#ifdef TRUST_BACKEND_QUALITY_ADAPTATION
+                    trustBackendQualityAdaptation = TRUST_BACKEND_QUALITY_ADAPTATION;
+#endif
+                    if(trustBackendQualityAdaptation){
+                        qualityKey = preferedQuality;
+                        infoOk = TRUE;
+                    }else{
+#warning TODO Fetch qualities from backend
+                        NSArray* allQualities = @[@"LQ",@"HQ",@"TV",@"HD_720",@"HD_1080"];
+                        int indexOfPreferredQuality = [allQualities indexOfObject:preferedQuality];
+                        
+                        NSDictionary* qualityList = [subLangInfo objectForKey:@"quality_list"];
+                        //Searching for available quality matching request
+                        //NSDictionary* qualityInfo = nil;
+                        for (NSString* aivalableQuality in qualityList) {
+                            //NSDictionary* aivalableQualityInfo = [qualityList objectForKey:qualityList];
+                            if([aivalableQuality compare:preferedQuality options:NSCaseInsensitiveSearch]==NSOrderedSame){
+                                //Perfect match
                                 qualityKey = aivalableQuality;
                                 //qualityInfo = aivalableQualityInfo;
                                 infoOk = TRUE;
+                                perfectMatchQuality = true;
+                                break;
+                            }else{
+                                //Alternative match
+                                if(qualityKey == nil){
+                                    qualityKey = aivalableQuality;
+                                    //qualityInfo = aivalableQualityInfo;
+                                    infoOk = TRUE;
+                                }else if([qualityKey compare:preferedQuality options:NSCaseInsensitiveSearch] != NSOrderedSame){
+                                    //The selected quality is an alternative match: we check that this new one isn't "closest" to prefered quality
+                                    int currentIndex = [allQualities indexOfObject:qualityKey];
+                                    int newIndex = [allQualities indexOfObject:aivalableQuality];
+                                    if(currentIndex!=NSNotFound&&newIndex!=NSNotFound&&indexOfPreferredQuality!=NSNotFound){
+                                        int currentDeltaQuality = indexOfPreferredQuality - currentIndex;
+                                        int newDeltaQuality = indexOfPreferredQuality - newIndex;
+                                        if( (currentDeltaQuality < 0) && (newDeltaQuality > 0) ){
+                                            //Current alternate match is bigger than expected, we choose the lower new one
+                                            qualityKey = aivalableQuality;
+                                        }else if( ABS(newDeltaQuality) < ABS(currentDeltaQuality) ){
+                                            qualityKey = aivalableQuality;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
-                    */
                 }
             }
             if(infoOk){
