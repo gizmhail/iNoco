@@ -59,6 +59,10 @@
 @property (retain, nonatomic) NSString* show_OT_lang;
 @property (retain, nonatomic) NSString* family_OT;
 @property (retain, nonatomic) NSString* family_OT_lang;
+
+/*
+ Show title (translated)
+ */
 @property (retain, nonatomic) NSString* show_TT;
 @property (retain, nonatomic) NSString* family_TT;
 @property (retain, nonatomic) NSString* show_resume; // type unknown by generator

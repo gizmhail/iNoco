@@ -51,6 +51,7 @@
 		4F45950F196328C60061381E /* Octicons-search.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F45950B196328C60061381E /* Octicons-search.png */; };
 		4F459510196328C60061381E /* Octicons-search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F45950C196328C60061381E /* Octicons-search@2x.png */; };
 		4F459513196330020061381E /* NLTFamily.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F459512196330020061381E /* NLTFamily.m */; };
+		4F57E2F519D9E0D700269473 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4F57E2F419D9E0D700269473 /* Settings.bundle */; };
 		4F636A471952F0DA004C0A18 /* NLTAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A461952F0DA004C0A18 /* NLTAPI.m */; };
 		4F636A4B1955C5F5004C0A18 /* EL_S14s25_1085838.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F636A4A1955C5F5004C0A18 /* EL_S14s25_1085838.jpg */; };
 		4F636A4E1955C7D4004C0A18 /* RecentShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A4D1955C7D4004C0A18 /* RecentShowViewController.m */; };
@@ -191,6 +192,7 @@
 		4F45950C196328C60061381E /* Octicons-search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-search@2x.png"; sourceTree = "<group>"; };
 		4F459511196330020061381E /* NLTFamily.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLTFamily.h; sourceTree = "<group>"; };
 		4F459512196330020061381E /* NLTFamily.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLTFamily.m; sourceTree = "<group>"; };
+		4F57E2F419D9E0D700269473 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		4F636A451952F0DA004C0A18 /* NLTAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLTAPI.h; sourceTree = "<group>"; };
 		4F636A461952F0DA004C0A18 /* NLTAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLTAPI.m; sourceTree = "<group>"; };
 		4F636A4A1955C5F5004C0A18 /* EL_S14s25_1085838.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = EL_S14s25_1085838.jpg; sourceTree = "<group>"; };
@@ -608,6 +610,7 @@
 				4FEECD6B1949D683002514CE /* iNoco-Prefix.pch */,
 				4FBD2B50196E72A40012A2E6 /* credentials.h */,
 				4F927855197F0DFD00DB138B /* crashlytics.sh */,
+				4F57E2F419D9E0D700269473 /* Settings.bundle */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -681,7 +684,7 @@
 					4FEECD591949D683002514CE = {
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -770,6 +773,7 @@
 				4F4594FC196324BA0061381E /* Icon-76.png in Resources */,
 				4FEECD681949D683002514CE /* InfoPlist.strings in Resources */,
 				4F927863198085F000DB138B /* Main_iPad.storyboard in Resources */,
+				4F57E2F519D9E0D700269473 /* Settings.bundle in Resources */,
 				4FEB0C701972D50700A84A39 /* downloadPending.png in Resources */,
 				4F4594F6196324BA0061381E /* Icon-40.png in Resources */,
 				4F92785C19807EC800DB138B /* Default768x1024.png in Resources */,

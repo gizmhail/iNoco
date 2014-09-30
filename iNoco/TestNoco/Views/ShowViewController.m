@@ -250,7 +250,12 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationNocoDownloadsNotificationProgress:) name:@"NocoDownloadsNotificationProgress" object:nil];
     
     //Tooltip animation
-    if(self.contextPlaylist){
+    NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
+    BOOL contextPlaylistTooltip = true;
+    if([settings objectForKey:@"contextPlaylistTooltip"]){
+        contextPlaylistTooltip = [settings boolForKey:@"contextPlaylistTooltip"];
+    }
+    if(self.contextPlaylist && contextPlaylistTooltip){
         float tooltipX = 5;
         float tooltipY = 43;
         float tooltipWidth = 120;

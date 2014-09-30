@@ -83,6 +83,15 @@ void uncaughtExceptionHandler(NSException *exception) {
     if([settings objectForKey:@"preferedQuality"]){
         [NLTAPI sharedInstance].preferedQuality = [settings objectForKey:@"preferedQuality"];
     }
+    
+#ifdef TRUST_BACKEND_QUALITY_ADAPTATION
+    [NLTAPI sharedInstance].trustBackendQualityAdaptation = TRUST_BACKEND_QUALITY_ADAPTATION;
+#endif
+    if([settings objectForKey:@"trustBackendQualityAdaptation" ]){
+        [NLTAPI sharedInstance].trustBackendQualityAdaptation = [settings boolForKey:@"trustBackendQualityAdaptation"];
+    }
+
+    [[NocoDownloadsManager sharedInstance] fixDownloadInfoPath];
 
 
     //Lock screen audio events
@@ -106,6 +115,10 @@ void uncaughtExceptionHandler(NSException *exception) {
                         title = [title stringByAppendingFormat:@" - %i", interruptedShow.episode_number];
                     }
                 }
+            }
+            if(interruptedShow.show_TT){
+                title = [title stringByAppendingFormat:@" - %@", interruptedShow.show_TT];
+
             }
             self.interruptedAlertview = [[UIAlertView alloc] initWithTitle:@"Continuer la lecture ?" message:[NSString stringWithFormat:@"Voulez-vous reprendre la lecture de la dernière émission interrompue (%@) ?",title] delegate:self cancelButtonTitle:@"Non" otherButtonTitles:@"Oui", nil];
             [self.interruptedAlertview show];

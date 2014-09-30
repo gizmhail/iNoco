@@ -44,6 +44,9 @@
     return self;
 }
 
+
+#pragma mark Directory structure
+
 - (BOOL)prepareStoreDirectory{
     BOOL ok = TRUE;
     NSString *appSupportDir = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject];
@@ -80,6 +83,42 @@
     }
     return success;
 }
+
+- (void)fixDownloadInfoPath{
+    //appSupportDir path change for each build ... but the path is stored in download info, that might become outdated during an update
+    NSString *appSupportDir = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject];
+    NSArray * directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:appSupportDir error:nil];
+    
+    for (NSString* fileName in directoryContents) {
+        NSString *downloadedFilePath = [appSupportDir stringByAppendingPathComponent:fileName];
+        BOOL fileNeeded = false;
+        for (NSDictionary* downloadInfo in [[NocoDownloadsManager sharedInstance] downloadInfos]) {
+            NSString* downloadInfoFilePath = [downloadInfo objectForKey:@"filePath"];
+            NSString* fixedDownloadInfoFilePath = [appSupportDir stringByAppendingPathComponent: [ downloadInfoFilePath lastPathComponent ] ];
+            if(downloadInfoFilePath && downloadedFilePath && [downloadInfoFilePath compare:downloadedFilePath]==NSOrderedSame){
+                fileNeeded = true;
+            }else if([fixedDownloadInfoFilePath compare:downloadedFilePath]==NSOrderedSame){
+                //Filename has changed (due to update ?)
+                NSLog(@"Filename has changed (due to update/new build ?) %@ -> %@", downloadInfoFilePath, fixedDownloadInfoFilePath);
+                NSUInteger index = [[NocoDownloadsManager sharedInstance].downloadInfos indexOfObject:downloadInfo];
+                if(index != NSNotFound){
+                    NSMutableDictionary* fixedDownloadInfo = [NSMutableDictionary dictionaryWithDictionary:downloadInfo];
+                    [fixedDownloadInfo setObject:fixedDownloadInfoFilePath forKey:@"filePath"];
+                    [[NocoDownloadsManager sharedInstance].downloadInfos replaceObjectAtIndex:index withObject:fixedDownloadInfo];
+                    [[NocoDownloadsManager sharedInstance] saveCache];
+                    fileNeeded = true;
+                }
+            }
+        }
+        if(!fileNeeded){
+            NSLog(@"Erase file not used anymore %@", downloadedFilePath);
+            NSURL *fileURL = [NSURL fileURLWithPath:downloadedFilePath ];
+            NSError* error = nil;
+            [[NSFileManager defaultManager] removeItemAtURL:fileURL error:&error];
+        }
+    }
+}
+#pragma mark Download Info
 
 - (NSMutableDictionary*)downloadInfoForShow:(NLTShow*)show{
     NSMutableDictionary* info = nil;

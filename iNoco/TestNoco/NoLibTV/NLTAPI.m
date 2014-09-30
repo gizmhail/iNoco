@@ -49,6 +49,7 @@
         self.familiesById = [NSMutableDictionary dictionary];
         self.familiesByKey = [NSMutableDictionary dictionary];
         self.partnersByKey = [NSMutableDictionary dictionary];
+        self.trustBackendQualityAdaptation = true;
         [self loadCache];
     }
     return self;
@@ -1068,17 +1069,13 @@
                 }
                 if(subLangInfo &&  [[subLangInfo objectForKey:@"quality_list"] isKindOfClass:[NSDictionary class]]){
                     //Searching for quality key in media is not really needed as the backend handles the adaptation if format is not availalbe
-                    BOOL trustBackendQualityAdaptation = false;
-#ifdef TRUST_BACKEND_QUALITY_ADAPTATION
-                    trustBackendQualityAdaptation = TRUST_BACKEND_QUALITY_ADAPTATION;
-#endif
-                    if(trustBackendQualityAdaptation){
+                    if(self.trustBackendQualityAdaptation){
                         qualityKey = preferedQuality;
                         infoOk = TRUE;
                     }else{
 #warning TODO Fetch qualities from backend
                         NSArray* allQualities = @[@"LQ",@"HQ",@"TV",@"HD_720",@"HD_1080"];
-                        int indexOfPreferredQuality = [allQualities indexOfObject:preferedQuality];
+                        NSUInteger indexOfPreferredQuality = [allQualities indexOfObject:preferedQuality];
                         
                         NSDictionary* qualityList = [subLangInfo objectForKey:@"quality_list"];
                         //Searching for available quality matching request
@@ -1100,11 +1097,11 @@
                                     infoOk = TRUE;
                                 }else if([qualityKey compare:preferedQuality options:NSCaseInsensitiveSearch] != NSOrderedSame){
                                     //The selected quality is an alternative match: we check that this new one isn't "closest" to prefered quality
-                                    int currentIndex = [allQualities indexOfObject:qualityKey];
-                                    int newIndex = [allQualities indexOfObject:aivalableQuality];
+                                    NSUInteger currentIndex = [allQualities indexOfObject:qualityKey];
+                                    NSUInteger newIndex = [allQualities indexOfObject:aivalableQuality];
                                     if(currentIndex!=NSNotFound&&newIndex!=NSNotFound&&indexOfPreferredQuality!=NSNotFound){
-                                        int currentDeltaQuality = indexOfPreferredQuality - currentIndex;
-                                        int newDeltaQuality = indexOfPreferredQuality - newIndex;
+                                        long currentDeltaQuality = (long)indexOfPreferredQuality - (long)currentIndex;
+                                        long newDeltaQuality = (long)indexOfPreferredQuality - (long)newIndex;
                                         if( (currentDeltaQuality < 0) && (newDeltaQuality > 0) ){
                                             //Current alternate match is bigger than expected, we choose the lower new one
                                             qualityKey = aivalableQuality;

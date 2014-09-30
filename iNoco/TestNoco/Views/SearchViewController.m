@@ -45,14 +45,12 @@
 }
 
 -(void)loadFamilyListPreference{
-    useFamilyList = TRUE;
-    /*
     NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
     useFamilyList = FALSE;
     if([settings objectForKey:@"FamilyList"]){
         useFamilyList = [[settings objectForKey:@"FamilyList"] boolValue];
     }
-    */ 
+
 }
 
 - (void)resetResult{

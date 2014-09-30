@@ -24,5 +24,8 @@ typedef void (^CompletionHandlerType)();
 - (void)eraseDownloadForShow:(NLTShow*)show;
 - (NSString*)downloadFilePathForShow:(NLTShow*)show;
 
+- (void) saveCache;
+- (void)fixDownloadInfoPath;
+
 - (void) addCompletionHandler: (CompletionHandlerType) handler forSession: (NSString *)identifier;
 @end
