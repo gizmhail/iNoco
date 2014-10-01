@@ -72,6 +72,7 @@
             [self scrollToNow];
         }
     } withCacheDuration:60*10];
+    [super viewDidAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning

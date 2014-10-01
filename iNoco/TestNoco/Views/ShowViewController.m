@@ -75,8 +75,10 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     [super viewDidLoad];
 #ifdef LEGACY_MOVIE_PLAYER
     [self playerNotificationSubscription];
-#else ifdef DEBUG
+#else 
+#ifdef DEBUG
     NSLog(@"\n\n!!!!\n\nPlease remove LEGACY_MOVIE_PLAYER code before release\n\n!!!!\n\n");
+#endif
 #endif
     self.automaticallyAdjustsScrollViewInsets = NO;
     
@@ -330,6 +332,7 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
 -(void)viewWillAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = FALSE;
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setRemoteControlDelegate:self];
+    [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning

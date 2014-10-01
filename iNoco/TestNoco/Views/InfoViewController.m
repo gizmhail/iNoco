@@ -72,10 +72,12 @@
 -(void)viewDidAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = TRUE;
     [self updateUI];
+    [super viewDidAppear:animated];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     self.navigationController.navigationBarHidden = FALSE;
+    [super viewWillDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning

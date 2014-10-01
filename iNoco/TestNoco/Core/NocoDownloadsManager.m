@@ -97,7 +97,7 @@
             NSString* fixedDownloadInfoFilePath = [appSupportDir stringByAppendingPathComponent: [ downloadInfoFilePath lastPathComponent ] ];
             if(downloadInfoFilePath && downloadedFilePath && [downloadInfoFilePath compare:downloadedFilePath]==NSOrderedSame){
                 fileNeeded = true;
-            }else if([fixedDownloadInfoFilePath compare:downloadedFilePath]==NSOrderedSame){
+            }else if(downloadedFilePath&&fixedDownloadInfoFilePath&&[fixedDownloadInfoFilePath compare:downloadedFilePath]==NSOrderedSame){
                 //Filename has changed (due to update ?)
                 NSLog(@"Filename has changed (due to update/new build ?) %@ -> %@", downloadInfoFilePath, fixedDownloadInfoFilePath);
                 NSUInteger index = [[NocoDownloadsManager sharedInstance].downloadInfos indexOfObject:downloadInfo];

@@ -94,10 +94,12 @@
         self.favoriteFamilly.selected = [[FavoriteProgramManager sharedInstance] isFavoriteForFamilyKey:self.family.family_key withPartnerKey:self.family.partner_key];
     }
     [self fixNavigationBarRelativePosition];
+    [super viewWillAppear:animated];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     self.navigationItem.rightBarButtonItem = nil;
+    [super viewWillDisappear:animated];
 }
 
 - (IBAction)favoriteFamillyClick:(id)sender {
@@ -121,7 +123,7 @@
         //Back from auth try, with lacking network: we avoid, once, to try to reconnect
         self.noNetworkForAuth = FALSE;
     }
-
+    [super viewDidAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning

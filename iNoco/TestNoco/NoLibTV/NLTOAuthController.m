@@ -36,6 +36,7 @@
 -(void)viewDidAppear:(BOOL)animated{
     NSString* urlStr = [NSString stringWithFormat:@"%@/OAuth2/authorize.php?response_type=code&client_id=%@&state=STATE",NOCO_ENDPOINT,[NLTOAuth sharedInstance].clientId];
     [self.webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]]];
+    [super viewDidAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning
