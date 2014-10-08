@@ -9,6 +9,8 @@
 #import "NLTOAuth.h"
 #import "Base64.h"
 
+#import "GroupSettingsManager.h"
+
 @interface NLTOAuth ()
 @property (retain,nonatomic) NSString* oauthCode;
 @property (copy,nonatomic) NLTAuthResponseBlock authResponseBlock;
@@ -182,6 +184,8 @@
 }
 
 - (void)displayOAuthControllerOverlay{
+#ifndef NLTOAUTH_NO_LOGINCONTROLLER
+
     self.oauthController = [[NLTOAuthController alloc] init];
     UIViewController* controller = [[[UIApplication sharedApplication] keyWindow] rootViewController];
     //Handle already present modal view
@@ -189,16 +193,20 @@
         controller = controller.presentedViewController;
     }
     [self requestAccessTokenWebviewFrom:controller];
+#endif
 }
 
 - (void)requestAccessTokenWebviewFrom:(UIViewController*)controller{
+#ifndef NLTOAUTH_NO_LOGINCONTROLLER
     self.oauthController = [[NLTOAuthController alloc] init];
     [controller presentViewController:self.oauthController animated:YES completion:^{
         
     }];
+#endif
 }
 
 - (void)errorDuringNLTOAuthControllerDisplay:(NSError*)error{
+#ifndef NLTOAUTH_NO_LOGINCONTROLLER
     [self.oauthController dismissViewControllerAnimated:YES completion:^{
         if(self.authResponseBlock){
             self.authResponseBlock(error);
@@ -206,6 +214,7 @@
         }
     }];
     self.oauthController = nil;
+#endif
 }
 
 - (void)fetchAccessTokenFromAuthCode:(NSString*)code{
@@ -213,8 +222,10 @@
     NSLog(@"fetchAccessTokenFromAuthCode");
 #endif
     //OAuthController can be dismissed
+#ifndef NLTOAUTH_NO_LOGINCONTROLLER
     [self.oauthController dismissViewControllerAnimated:YES completion:nil];
     self.oauthController = nil;
+#endif
     
     self.oauthCode = code;
     self.oauthAccessToken = nil;
@@ -278,7 +289,7 @@
 }
 
 - (void)saveOAuthInfo{
-    NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
+    GroupSettingsManager* settings = [GroupSettingsManager sharedInstance];
     if(self.oauthAccessToken){
         [settings setObject:self.oauthAccessToken forKey:@"NLTOAuth_oauthAccessToken"];
     }else{
@@ -303,7 +314,7 @@
 }
 
 - (void)loadOauthInfo{
-    NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
+    GroupSettingsManager* settings = [GroupSettingsManager sharedInstance];
     self.oauthAccessToken = [settings objectForKey:@"NLTOAuth_oauthAccessToken"];
     self.oauthRefreshToken = [settings objectForKey:@"NLTOAuth_oauthRefreshToken"];
     self.oauthExpirationDate = [settings objectForKey:@"NLTOAuth_oauthExpirationDate"];

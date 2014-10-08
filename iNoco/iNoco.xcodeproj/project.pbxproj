@@ -98,6 +98,33 @@
 		4F927863198085F000DB138B /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F927862198085F000DB138B /* Main_iPad.storyboard */; };
 		4FA802FC1962017900E820B9 /* WatchListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA802FB1962017900E820B9 /* WatchListViewController.m */; };
 		4FA802FE19621E7000E820B9 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FA802FD19621E7000E820B9 /* AVFoundation.framework */; };
+		4FC35B7B19E477090069C0DD /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FC35B7A19E477090069C0DD /* NotificationCenter.framework */; };
+		4FC35B8119E477090069C0DD /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC35B8019E477090069C0DD /* TodayViewController.m */; };
+		4FC35B8319E477090069C0DD /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FC35B8219E477090069C0DD /* MainInterface.storyboard */; };
+		4FC35B8619E477090069C0DD /* iNocoToday.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4FC35B7919E477090069C0DD /* iNocoToday.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4FC35B9019E478380069C0DD /* GroupSettingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC35B8F19E478380069C0DD /* GroupSettingsManager.m */; };
+		4FC35B9519E47EE70069C0DD /* GroupSettingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC35B8F19E478380069C0DD /* GroupSettingsManager.m */; };
+		4FC35B9619E483C90069C0DD /* NLTOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1254B51951D457003FEEA5 /* NLTOAuth.m */; };
+		4FC35B9719E483CC0069C0DD /* NLTAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A461952F0DA004C0A18 /* NLTAPI.m */; };
+		4FC35B9819E483CF0069C0DD /* NLTShow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636AAD195CB5D0004C0A18 /* NLTShow.m */; };
+		4FC35B9919E483D30069C0DD /* NLTFamily.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F459512196330020061381E /* NLTFamily.m */; };
+		4FC9220F19E4ABE400B367F3 /* NLTEPG.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F37F3721969EF5900D0AACC /* NLTEPG.m */; };
+		4FC9225019E5B69A00B367F3 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1254C11951F5E8003FEEA5 /* Base64.m */; };
+		4FC9225119E5B6F400B367F3 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A7619577726004C0A18 /* UIImageView+WebCache.m */; };
+		4FC9225219E5B70800B367F3 /* SDWebImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A6719577726004C0A18 /* SDWebImageManager.m */; };
+		4FC9225319E5B71800B367F3 /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A5919577726004C0A18 /* MKAnnotationView+WebCache.m */; };
+		4FC9225419E5B71C00B367F3 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A5B19577726004C0A18 /* NSData+ImageContentType.m */; };
+		4FC9225519E5B72000B367F3 /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A5D19577726004C0A18 /* SDImageCache.m */; };
+		4FC9225619E5B72400B367F3 /* SDWebImageCompat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A5F19577726004C0A18 /* SDWebImageCompat.m */; };
+		4FC9225719E5B72700B367F3 /* SDWebImageDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A6119577726004C0A18 /* SDWebImageDecoder.m */; };
+		4FC9225819E5B72B00B367F3 /* SDWebImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A6319577726004C0A18 /* SDWebImageDownloader.m */; };
+		4FC9225919E5B75E00B367F3 /* SDWebImageDownloaderOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A6519577726004C0A18 /* SDWebImageDownloaderOperation.m */; };
+		4FC9225A19E5B76500B367F3 /* SDWebImagePrefetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A6A19577726004C0A18 /* SDWebImagePrefetcher.m */; };
+		4FC9225B19E5B76900B367F3 /* UIButton+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A6C19577726004C0A18 /* UIButton+WebCache.m */; };
+		4FC9225C19E5B76D00B367F3 /* UIImage+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A6E19577726004C0A18 /* UIImage+GIF.m */; };
+		4FC9225D19E5B77000B367F3 /* UIImage+MultiFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A7019577726004C0A18 /* UIImage+MultiFormat.m */; };
+		4FC9225E19E5B77400B367F3 /* UIImage+WebP.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A7219577726004C0A18 /* UIImage+WebP.m */; };
+		4FC9225F19E5B77700B367F3 /* UIImageView+HighlightedWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A7419577726004C0A18 /* UIImageView+HighlightedWebCache.m */; };
 		4FD0848E19756AA100A99958 /* noco-app-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD0848D19756AA100A99958 /* noco-app-logo.png */; };
 		4FD084931978778800A99958 /* csa_10_black.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD0848F1978778800A99958 /* csa_10_black.png */; };
 		4FD084941978778800A99958 /* csa_12_black.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD084901978778800A99958 /* csa_12_black.png */; };
@@ -124,6 +151,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4FC35B8419E477090069C0DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4FEECD521949D683002514CE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4FC35B7819E477090069C0DD;
+			remoteInfo = iNocoToday;
+		};
+		4FC35B8719E477090069C0DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4FEECD521949D683002514CE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4FC35B7819E477090069C0DD;
+			remoteInfo = iNocoToday;
+		};
 		4FEECD861949D683002514CE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4FEECD521949D683002514CE /* Project object */;
@@ -132,6 +173,20 @@
 			remoteInfo = TestNoco;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4FC35B8C19E477090069C0DD /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				4FC35B8619E477090069C0DD /* iNocoToday.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4F11173819823A7A00242C22 /* EPGTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EPGTableViewCell.h; sourceTree = "<group>"; };
@@ -265,6 +320,17 @@
 		4FA802FB1962017900E820B9 /* WatchListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WatchListViewController.m; sourceTree = "<group>"; };
 		4FA802FD19621E7000E820B9 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4FBD2B50196E72A40012A2E6 /* credentials.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = credentials.h; sourceTree = "<group>"; };
+		4FC35B7419E473AE0069C0DD /* iNoco.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = iNoco.entitlements; sourceTree = "<group>"; };
+		4FC35B7919E477090069C0DD /* iNocoToday.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = iNocoToday.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FC35B7A19E477090069C0DD /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
+		4FC35B7E19E477090069C0DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4FC35B7F19E477090069C0DD /* TodayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayViewController.h; sourceTree = "<group>"; };
+		4FC35B8019E477090069C0DD /* TodayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayViewController.m; sourceTree = "<group>"; };
+		4FC35B8219E477090069C0DD /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
+		4FC35B8E19E478380069C0DD /* GroupSettingsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupSettingsManager.h; sourceTree = "<group>"; };
+		4FC35B8F19E478380069C0DD /* GroupSettingsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupSettingsManager.m; sourceTree = "<group>"; };
+		4FC35B9219E4786C0069C0DD /* iNocoToday.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = iNocoToday.entitlements; sourceTree = "<group>"; };
+		4FC9224F19E5B0D100B367F3 /* commonSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = commonSettings.h; sourceTree = "<group>"; };
 		4FD0848D19756AA100A99958 /* noco-app-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "noco-app-logo.png"; sourceTree = "<group>"; };
 		4FD0848F1978778800A99958 /* csa_10_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = csa_10_black.png; sourceTree = "<group>"; };
 		4FD084901978778800A99958 /* csa_12_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = csa_12_black.png; sourceTree = "<group>"; };
@@ -297,6 +363,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4FC35B7619E477090069C0DD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FC35B7B19E477090069C0DD /* NotificationCenter.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4FEECD571949D683002514CE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -487,6 +561,7 @@
 		4F636A56195776FE004C0A18 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				4FC35B8D19E477D30069C0DD /* GroupSettingsManager */,
 				4F37F3701969EF3700D0AACC /* NLEPG */,
 				4F636AAF195CCABB004C0A18 /* Toast */,
 				4F636A5719577726004C0A18 /* SDWebImage */,
@@ -548,12 +623,43 @@
 			name = iPad;
 			sourceTree = "<group>";
 		};
+		4FC35B7C19E477090069C0DD /* iNocoToday */ = {
+			isa = PBXGroup;
+			children = (
+				4FC35B9219E4786C0069C0DD /* iNocoToday.entitlements */,
+				4FC35B7F19E477090069C0DD /* TodayViewController.h */,
+				4FC35B8019E477090069C0DD /* TodayViewController.m */,
+				4FC35B8219E477090069C0DD /* MainInterface.storyboard */,
+				4FC35B7D19E477090069C0DD /* Supporting Files */,
+			);
+			path = iNocoToday;
+			sourceTree = "<group>";
+		};
+		4FC35B7D19E477090069C0DD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4FC35B7E19E477090069C0DD /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4FC35B8D19E477D30069C0DD /* GroupSettingsManager */ = {
+			isa = PBXGroup;
+			children = (
+				4FC35B8E19E478380069C0DD /* GroupSettingsManager.h */,
+				4FC35B8F19E478380069C0DD /* GroupSettingsManager.m */,
+			);
+			name = GroupSettingsManager;
+			sourceTree = "<group>";
+		};
 		4FEECD511949D683002514CE = {
 			isa = PBXGroup;
 			children = (
+				4FC35B7419E473AE0069C0DD /* iNoco.entitlements */,
 				4F9278571980449800DB138B /* iPad */,
 				4FEECD631949D683002514CE /* TestNoco */,
 				4FEECD881949D683002514CE /* TestNocoTests */,
+				4FC35B7C19E477090069C0DD /* iNocoToday */,
 				4FEECD5C1949D683002514CE /* Frameworks */,
 				4FEECD5B1949D683002514CE /* Products */,
 			);
@@ -564,6 +670,7 @@
 			children = (
 				4FEECD5A1949D683002514CE /* iNoco.app */,
 				4FEECD811949D683002514CE /* iNocoTests.xctest */,
+				4FC35B7919E477090069C0DD /* iNocoToday.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -578,6 +685,7 @@
 				4FEECD5F1949D683002514CE /* CoreGraphics.framework */,
 				4FEECD611949D683002514CE /* UIKit.framework */,
 				4FEECD821949D683002514CE /* XCTest.framework */,
+				4FC35B7A19E477090069C0DD /* NotificationCenter.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -608,6 +716,7 @@
 				4FEECD661949D683002514CE /* InfoPlist.strings */,
 				4FEECD691949D683002514CE /* main.m */,
 				4FEECD6B1949D683002514CE /* iNoco-Prefix.pch */,
+				4FC9224F19E5B0D100B367F3 /* commonSettings.h */,
 				4FBD2B50196E72A40012A2E6 /* credentials.h */,
 				4F927855197F0DFD00DB138B /* crashlytics.sh */,
 				4F57E2F419D9E0D700269473 /* Settings.bundle */,
@@ -636,6 +745,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		4FC35B7819E477090069C0DD /* iNocoToday */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4FC35B8919E477090069C0DD /* Build configuration list for PBXNativeTarget "iNocoToday" */;
+			buildPhases = (
+				4FC35B7519E477090069C0DD /* Sources */,
+				4FC35B7619E477090069C0DD /* Frameworks */,
+				4FC35B7719E477090069C0DD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = iNocoToday;
+			productName = iNocoToday;
+			productReference = 4FC35B7919E477090069C0DD /* iNocoToday.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		4FEECD591949D683002514CE /* iNoco */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4FEECD921949D683002514CE /* Build configuration list for PBXNativeTarget "iNoco" */;
@@ -644,10 +770,13 @@
 				4FEECD571949D683002514CE /* Frameworks */,
 				4FEECD581949D683002514CE /* Resources */,
 				4F927852197F019E00DB138B /* ShellScript */,
+				4FC35B8C19E477090069C0DD /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				4FC35B8519E477090069C0DD /* PBXTargetDependency */,
+				4FC35B8819E477090069C0DD /* PBXTargetDependency */,
 			);
 			name = iNoco;
 			productName = TestNoco;
@@ -681,8 +810,21 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Sébastien Poivre";
 				TargetAttributes = {
-					4FEECD591949D683002514CE = {
+					4FC35B7819E477090069C0DD = {
+						CreatedOnToolsVersion = 6.0.1;
+						DevelopmentTeam = PBY238DS28;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
+					4FEECD591949D683002514CE = {
+						DevelopmentTeam = PBY238DS28;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
 							com.apple.BackgroundModes = {
 								enabled = 0;
 							};
@@ -708,11 +850,20 @@
 			targets = (
 				4FEECD591949D683002514CE /* iNoco */,
 				4FEECD801949D683002514CE /* iNocoTests */,
+				4FC35B7819E477090069C0DD /* iNocoToday */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4FC35B7719E477090069C0DD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FC35B8319E477090069C0DD /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4FEECD581949D683002514CE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -809,6 +960,36 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4FC35B7519E477090069C0DD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FC9225F19E5B77700B367F3 /* UIImageView+HighlightedWebCache.m in Sources */,
+				4FC9225019E5B69A00B367F3 /* Base64.m in Sources */,
+				4FC9225319E5B71800B367F3 /* MKAnnotationView+WebCache.m in Sources */,
+				4FC9220F19E4ABE400B367F3 /* NLTEPG.m in Sources */,
+				4FC35B9519E47EE70069C0DD /* GroupSettingsManager.m in Sources */,
+				4FC35B8119E477090069C0DD /* TodayViewController.m in Sources */,
+				4FC9225619E5B72400B367F3 /* SDWebImageCompat.m in Sources */,
+				4FC35B9619E483C90069C0DD /* NLTOAuth.m in Sources */,
+				4FC9225719E5B72700B367F3 /* SDWebImageDecoder.m in Sources */,
+				4FC9225919E5B75E00B367F3 /* SDWebImageDownloaderOperation.m in Sources */,
+				4FC9225A19E5B76500B367F3 /* SDWebImagePrefetcher.m in Sources */,
+				4FC9225D19E5B77000B367F3 /* UIImage+MultiFormat.m in Sources */,
+				4FC9225819E5B72B00B367F3 /* SDWebImageDownloader.m in Sources */,
+				4FC9225119E5B6F400B367F3 /* UIImageView+WebCache.m in Sources */,
+				4FC9225B19E5B76900B367F3 /* UIButton+WebCache.m in Sources */,
+				4FC35B9819E483CF0069C0DD /* NLTShow.m in Sources */,
+				4FC9225219E5B70800B367F3 /* SDWebImageManager.m in Sources */,
+				4FC35B9919E483D30069C0DD /* NLTFamily.m in Sources */,
+				4FC9225519E5B72000B367F3 /* SDImageCache.m in Sources */,
+				4FC9225419E5B71C00B367F3 /* NSData+ImageContentType.m in Sources */,
+				4FC9225C19E5B76D00B367F3 /* UIImage+GIF.m in Sources */,
+				4FC35B9719E483CC0069C0DD /* NLTAPI.m in Sources */,
+				4FC9225E19E5B77400B367F3 /* UIImage+WebP.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4FEECD561949D683002514CE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -821,6 +1002,7 @@
 				4F636AB2195CCADB004C0A18 /* UIView+Toast.m in Sources */,
 				4F37F3731969EF5900D0AACC /* NLTEPG.m in Sources */,
 				4F636A7E19577726004C0A18 /* SDWebImageManager.m in Sources */,
+				4FC35B9019E478380069C0DD /* GroupSettingsManager.m in Sources */,
 				4F37F368196612FE00D0AACC /* FavoriteProgramManager.m in Sources */,
 				4F636AAE195CB5D0004C0A18 /* NLTShow.m in Sources */,
 				4F636A471952F0DA004C0A18 /* NLTAPI.m in Sources */,
@@ -868,6 +1050,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4FC35B8519E477090069C0DD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4FC35B7819E477090069C0DD /* iNocoToday */;
+			targetProxy = 4FC35B8419E477090069C0DD /* PBXContainerItemProxy */;
+		};
+		4FC35B8819E477090069C0DD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4FC35B7819E477090069C0DD /* iNocoToday */;
+			targetProxy = 4FC35B8719E477090069C0DD /* PBXContainerItemProxy */;
+		};
 		4FEECD871949D683002514CE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 4FEECD591949D683002514CE /* iNoco */;
@@ -903,6 +1095,54 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		4FC35B8A19E477090069C0DD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_ENTITLEMENTS = iNocoToday/iNocoToday.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					"NLTOAUTH_NO_LOGINCONTROLLER=1",
+					"NLTAPI_NO_NETWORKACTIVITY=1",
+					"TARGET_IS_EXTENSION=1",
+				);
+				INFOPLIST_FILE = iNocoToday/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		4FC35B8B19E477090069C0DD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_ENTITLEMENTS = iNocoToday/iNocoToday.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"NLTOAUTH_NO_LOGINCONTROLLER=1",
+					"NLTAPI_NO_NETWORKACTIVITY=1",
+					"TARGET_IS_EXTENSION=1",
+				);
+				INFOPLIST_FILE = iNocoToday/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		4FEECD901949D683002514CE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -978,6 +1218,9 @@
 		4FEECD931949D683002514CE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = iNoco.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -987,6 +1230,7 @@
 				INFOPLIST_FILE = "TestNoco/iNoco-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = iNoco;
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -995,6 +1239,9 @@
 		4FEECD941949D683002514CE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = iNoco.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1004,6 +1251,7 @@
 				INFOPLIST_FILE = "TestNoco/iNoco-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = iNoco;
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1052,6 +1300,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4FC35B8919E477090069C0DD /* Build configuration list for PBXNativeTarget "iNocoToday" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FC35B8A19E477090069C0DD /* Debug */,
+				4FC35B8B19E477090069C0DD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		4FEECD551949D683002514CE /* Build configuration list for PBXProject "iNoco" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

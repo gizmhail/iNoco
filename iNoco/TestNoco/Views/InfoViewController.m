@@ -11,6 +11,7 @@
 #import "NLTAPI.h"
 #import "UIImageView+WebCache.h"
 #import "WebViewDetailsViewController.h"
+#import "GroupSettingsManager.h"
 
 @interface InfoViewController ()
 @property(retain, nonatomic) NSArray* languageSegmentedEntriesValues;
@@ -111,7 +112,7 @@
 }
 
 - (IBAction)catalogueChanged:(id)sender {
-    NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
+    GroupSettingsManager* settings = [GroupSettingsManager sharedInstance];
     if(self.segmentedControl.selectedSegmentIndex == 0){
         //Only nolife
         [settings setObject:@"NOL" forKey:@"SELECTED_CATALOG"];
@@ -194,11 +195,12 @@
     [[NLTOAuth sharedInstance] isAuthenticatedAfterRefreshTokenUse:^(BOOL authenticated, NSError* error) {
         if(authenticated){
             self.settingsZone.hidden = FALSE;
+            GroupSettingsManager* groupSettings = [GroupSettingsManager sharedInstance];
             NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
             //Catalog
             NSString* catalog = DEFAULT_CATALOG;
-            if([settings objectForKey:@"SELECTED_CATALOG"]){
-                catalog = [settings objectForKey:@"SELECTED_CATALOG"];
+            if([groupSettings objectForKey:@"SELECTED_CATALOG"]){
+                catalog = [groupSettings objectForKey:@"SELECTED_CATALOG"];
             }            
             if([catalog compare:ALL_SUBSCRIPTED_CATALOG]==NSOrderedSame){
                 self.segmentedControl.selectedSegmentIndex = 2;

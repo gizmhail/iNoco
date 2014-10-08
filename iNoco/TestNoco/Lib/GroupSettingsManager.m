@@ -1,0 +1,224 @@
+//
+//  GroupSettingsManager.m
+//
+//  Created by Sébastien POIVRE on 05/10/2014.
+//  Copyright (c) 2014 Sébastien Poivre. All rights reserved.
+//
+
+#import "GroupSettingsManager.h"
+
+#pragma clang diagnostic ignored "-Wincomplete-implementation"
+@implementation GroupSettingsManager
+
++ (instancetype)sharedInstance{
+    static GroupSettingsManager* _sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        if(!_sharedInstance){
+            _sharedInstance = [[self alloc] init];
+        }
+    });
+    return _sharedInstance;
+}
+
+- (id)init{
+    if(self = [super init]){
+    }
+    return self;
+}
+
+- (BOOL) groupSupport:(NSString*)suiteName{
+    BOOL groupSupport = false;
+    if(self.defaultSuiteName){
+        if([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0){
+            groupSupport = true;
+        }
+    }
+    return groupSupport;
+}
+
+#pragma mark - NSUserDefault proxy
+//Ideas found in this article: https://www.mikeash.com/pyblog/friday-qa-2009-03-27-objective-c-message-forwarding.html
+
+-(id)forwardingTargetForSelector:(SEL)aSelector{
+    return self;
+}
+
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)sel{
+    NSMethodSignature *sig = [super methodSignatureForSelector:sel];
+    if(!sig){
+        sig = [[NSUserDefaults standardUserDefaults] methodSignatureForSelector:sel];
+    }
+    return sig;
+}
+
+- (void)forwardInvocation:(NSInvocation *)inv{
+    NSString* selectorName = NSStringFromSelector(inv.selector);
+    if([selectorName rangeOfString:@"set"].location==0){
+        //set method
+        NSUserDefaults* localDefaults = [NSUserDefaults standardUserDefaults];
+        [inv invokeWithTarget:localDefaults];
+        if([self groupSupport:self.defaultSuiteName]){
+            NSUserDefaults* suiteDefaults = [[NSUserDefaults alloc] initWithSuiteName:self.defaultSuiteName];
+            [inv invokeWithTarget:suiteDefaults];
+        }
+        
+        //Add date storage
+        NSString* key = nil;
+        [inv getArgument:&key atIndex:3];
+        [inv invokeWithTarget:[self userDefaultsStoring:key withSuiteName:nil]];
+        if(key){
+            NSString* updateKey = [NSString stringWithFormat:@"%@%@",key,GSM_SETTINGS_UPDATE_SUFFIX];
+            NSDate* now = [NSDate date];
+            [localDefaults setObject:now forKey:updateKey];
+            if([self groupSupport:self.defaultSuiteName]){
+                NSUserDefaults* suiteDefaults = [[NSUserDefaults alloc] initWithSuiteName:self.defaultSuiteName];
+                [suiteDefaults setObject:now forKey:updateKey];
+            }
+
+        }
+    }else{
+        //get method
+        NSString* key = nil;
+        if([selectorName rangeOfString:@":"].location!=NSNotFound){
+            //Selector expect at least one argument
+            [inv getArgument:&key atIndex:2];
+            [inv invokeWithTarget:[self userDefaultsStoring:key withSuiteName:nil]];
+        }
+    }
+}
+
+#pragma mark - Read
+
+- (NSUserDefaults*)userDefaultsStoring:(NSString*)key withSuiteName:(NSString*)suiteName{
+    if(!suiteName){
+        suiteName = self.defaultSuiteName;
+    }
+    NSUserDefaults* defaults = nil;
+    NSUserDefaults* localDefaults = [NSUserDefaults standardUserDefaults];
+    if([self groupSupport:suiteName]){
+        NSUserDefaults* suiteDefaults = [[NSUserDefaults alloc] initWithSuiteName:suiteName];
+        if(suiteDefaults){
+            NSString* updateKey = [NSString stringWithFormat:@"%@%@",key,GSM_SETTINGS_UPDATE_SUFFIX];
+            
+            id localObject = [localDefaults objectForKey:key];
+            NSDate* localObjectUpdateDate = [localDefaults objectForKey:updateKey];
+            id suiteObject = [suiteDefaults objectForKey:updateKey];
+            NSDate* suiteObjectUpdateDate = [suiteDefaults objectForKey:updateKey];
+
+            defaults = localDefaults;
+            if(!localObject){
+                defaults = suiteDefaults;
+            }else{
+                if(suiteObject&&localObjectUpdateDate&&suiteObjectUpdateDate){
+                    if([suiteObjectUpdateDate compare:localObjectUpdateDate]==NSOrderedDescending){
+                        defaults = suiteDefaults;
+                    }
+                }
+            }
+
+
+
+
+#warning ADD _lastUpdate (in set and remove too)
+            if([localDefaults objectForKey:key]){
+                defaults = localDefaults;
+            }else{
+                defaults = suiteDefaults;
+            }
+        }else{
+            defaults = localDefaults;
+        }
+    }else{
+        defaults = localDefaults;
+    }
+    return defaults;
+}
+
+- (id)objectForKey:(NSString*)key{
+    return [self objectForKey:key withSuiteName:nil];
+}
+
+- (id)objectForKey:(NSString*)key withSuiteName:(NSString*)suiteName{
+    NSUserDefaults* defaults = [self userDefaultsStoring:key withSuiteName:suiteName];
+    return [defaults objectForKey:key];
+}
+
+#pragma mark - Write
+
+- (void)setObject:(id)object forKey:(NSString*)key{
+    [self setObject:object forKey:key withSuiteName:nil];
+}
+
+- (void)setObject:(id)object forKey:(NSString*)key withSuiteName:(NSString*)suiteName{
+    NSDate* now = [NSDate date];
+    NSString* updateKey = [NSString stringWithFormat:@"%@%@",key,GSM_SETTINGS_UPDATE_SUFFIX];
+    NSUserDefaults* localDefaults = [NSUserDefaults standardUserDefaults];
+    [localDefaults setObject:object forKey:key];
+    [localDefaults setObject:now forKey:updateKey];
+    if(!suiteName){
+        suiteName = self.defaultSuiteName;
+    }
+    if([self groupSupport:suiteName]){
+        NSUserDefaults* suiteDefaults = [[NSUserDefaults alloc] initWithSuiteName:suiteName];
+        [suiteDefaults setObject:object forKey:key];
+        [suiteDefaults setObject:now forKey:updateKey];
+    }
+}
+
+- (void)removeObjectForKey:(NSString *)key{
+    [self removeObjectForKey:key withSuiteName:nil];
+}
+
+- (void)removeObjectForKey:(NSString *)key withSuiteName:(NSString*)suiteName{
+    NSUserDefaults* localDefaults = [NSUserDefaults standardUserDefaults];
+    [localDefaults removeObjectForKey:key];
+    if(!suiteName){
+        suiteName = self.defaultSuiteName;
+    }
+    if([self groupSupport:suiteName]){
+        NSUserDefaults* suiteDefaults = [[NSUserDefaults alloc] initWithSuiteName:suiteName];
+        [suiteDefaults removeObjectForKey:key];
+    }
+}
+
+- (void)synchronize{
+    [self synchronizeWithSuiteName:nil];
+}
+- (void)synchronizeWithSuiteName:(NSString*)suiteName{
+    NSUserDefaults* localDefaults = [NSUserDefaults standardUserDefaults];
+    [localDefaults synchronize];
+    if(!suiteName){
+        suiteName = self.defaultSuiteName;
+    }
+    if([self groupSupport:suiteName]){
+        NSUserDefaults* suiteDefaults = [[NSUserDefaults alloc] initWithSuiteName:suiteName];
+        [suiteDefaults synchronize];
+    }
+}
+
+#pragma mark - Migration
+
+- (void)copyIfNeededFromLocalKeys:(NSArray*)keys{
+    [self copyIfNeededFromLocalKeys:keys toSuitName:nil];
+}
+
+- (void)copyIfNeededFromLocalKeys:(NSArray*)keys toSuitName:(NSString*)suiteName{
+    if(!suiteName){
+        suiteName = self.defaultSuiteName;
+    }
+    if(keys&&[self groupSupport:suiteName]){
+        NSUserDefaults* suiteDefaults = [[NSUserDefaults alloc] initWithSuiteName:suiteName];
+        NSUserDefaults* localDefaults = [NSUserDefaults standardUserDefaults];
+        for (NSString*key in keys) {
+            if(![suiteDefaults objectForKey:key]){
+                id localObject = [localDefaults objectForKey:key];
+                if(localObject){
+                    [suiteDefaults setObject:localObject forKey:key];
+                }
+            }
+        }
+    }
+}
+
+@end

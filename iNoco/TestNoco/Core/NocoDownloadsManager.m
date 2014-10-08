@@ -92,7 +92,8 @@
     for (NSString* fileName in directoryContents) {
         NSString *downloadedFilePath = [appSupportDir stringByAppendingPathComponent:fileName];
         BOOL fileNeeded = false;
-        for (NSDictionary* downloadInfo in [[NocoDownloadsManager sharedInstance] downloadInfos]) {
+        NSArray* downloadInfos = [[[NocoDownloadsManager sharedInstance] downloadInfos] copy];
+        for (NSDictionary* downloadInfo in downloadInfos) {
             NSString* downloadInfoFilePath = [downloadInfo objectForKey:@"filePath"];
             NSString* fixedDownloadInfoFilePath = [appSupportDir stringByAppendingPathComponent: [ downloadInfoFilePath lastPathComponent ] ];
             if(downloadInfoFilePath && downloadedFilePath && [downloadInfoFilePath compare:downloadedFilePath]==NSOrderedSame){

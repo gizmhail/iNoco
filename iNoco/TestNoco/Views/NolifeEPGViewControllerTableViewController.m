@@ -308,7 +308,7 @@
         NSDictionary* bestShow = nil;
         for (NSDictionary* show in dayContents) {
             NSDate* broadcastDate = [formater dateFromString:[show objectForKey:@"dateUTC"]];
-            if(ABS([broadcastDate timeIntervalSinceDate:now])<closestDistance){
+            if([broadcastDate timeIntervalSinceDate:now]<0 && ABS([broadcastDate timeIntervalSinceDate:now])<closestDistance){
                 row = currentIndex;
                 bestShow = show;
                 closestDistance = ABS([broadcastDate timeIntervalSinceDate:now]);

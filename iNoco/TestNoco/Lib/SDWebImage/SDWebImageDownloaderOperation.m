@@ -67,6 +67,7 @@
         }
 
 #if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
+#ifndef TARGET_IS_EXTENSION
         if ([self shouldContinueWhenAppEntersBackground]) {
             __weak __typeof__ (self) wself = self;
             self.backgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
@@ -80,6 +81,7 @@
                 }
             }];
         }
+#endif
 #endif
 
         self.executing = YES;
@@ -117,10 +119,13 @@
     }
 
 #if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
+#ifndef TARGET_IS_EXTENSION
+
     if (self.backgroundTaskId != UIBackgroundTaskInvalid) {
         [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskId];
         self.backgroundTaskId = UIBackgroundTaskInvalid;
     }
+#endif
 #endif
 }
 

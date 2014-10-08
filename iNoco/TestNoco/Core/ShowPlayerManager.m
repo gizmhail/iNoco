@@ -380,26 +380,54 @@
 
 #pragma mark Custom UI
 
-- (void)playerCustomUI{
+- (BOOL)browseViewHierarchyFrom:(UIView*)view collectClassPrefix:(NSString*)classPrefix expectedParentClassPrefix:(NSString*)parentExpectedPrefix expectedParentFound:(BOOL)parentOk targetArray:(NSMutableArray*)results debugIndent:(NSString*)indent {
+    NSString* className = NSStringFromClass([view class]);
+    NSString* subIndent = nil;
 #ifdef DEBUG
-#ifdef USE_CUSTOM_PLAYER_UI
-    NSLog(@"\n\n----\n\nCustom player only in debug mode \n\n----\n\n");
-    
-    NSArray *windows = [[UIApplication sharedApplication] windows];
-    if ([windows count] > 1){
-        self.videoOverlayView = [[UIView alloc] initWithFrame:self.moviePlayer.view.bounds];
-        self.videoOverlayView.backgroundColor = [UIColor redColor];
-        self.videoOverlayView.userInteractionEnabled = false;
-        
-        // Locate the movie player window
-        UIWindow *moviePlayerWindow = [[UIApplication sharedApplication] keyWindow];
-        if ([moviePlayerWindow viewWithTag:0x3939] == nil) {
-            self.videoOverlayView.tag = 0x3939;
-            [moviePlayerWindow addSubview:self.videoOverlayView];
-        }
-        [moviePlayerWindow bringSubviewToFront:self.videoOverlayView];
+    if(indent){
+        NSLog(@"%@[%@] %@",indent,className,view);
+        subIndent = [NSString stringWithFormat:@"%@ ",indent];
     }
 #endif
+    if(!parentExpectedPrefix||[className rangeOfString:parentExpectedPrefix].location != NSNotFound){
+        parentOk = TRUE;
+    }
+
+    if(parentOk&&classPrefix&&[className rangeOfString:classPrefix].location != NSNotFound){
+        [results addObject:view];
+    }
+    
+    for (UIView*subview in [view subviews]) {
+        NSMutableArray* subviewResults = [NSMutableArray array];
+        BOOL expectedParentOk = [self browseViewHierarchyFrom:subview collectClassPrefix:classPrefix expectedParentClassPrefix:parentExpectedPrefix expectedParentFound:parentOk targetArray:subviewResults debugIndent:subIndent];
+        if(expectedParentOk){
+            [results addObjectsFromArray:subviewResults];
+            parentOk = true;
+        }
+    }
+    return parentOk;
+}
+
+- (void)playerCustomUI{
+
+#ifdef DEBUG
+
+    NSArray *windows = [[UIApplication sharedApplication] windows];
+    for (UIWindow*window in windows) {
+        
+        NSLog(@"---------");
+        //UIView* mainView = [window viewWithTag:0];
+        //UIView* mainViewV2 = [[window rootViewController]view];
+        NSMutableArray* playerButtons = [NSMutableArray array];
+        [self browseViewHierarchyFrom:window collectClassPrefix:@"MPKnockoutButton" expectedParentClassPrefix:nil expectedParentFound:NO targetArray:playerButtons debugIndent:@""];
+#warning TODO
+#warning TODO
+#warning TODO
+#warning TODO
+#warning TODO
+#warning TODO
+#warning TODO
+    }
 #endif
 }
 

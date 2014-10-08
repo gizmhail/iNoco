@@ -1101,6 +1101,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                         <outlet property="segmentedControl" destination="oYy-On-y3F" id="dId-mC-Ukd"/>
                         <outlet property="settingsZone" destination="vf5-3E-vgJ" id="Hql-2X-LeH"/>
                         <outlet property="subtitleSegementedControl" destination="MOI-Wb-pg6" id="H3N-BV-QLl"/>
+                        <outlet property="versionLabel" destination="zpJ-RA-Uds" id="orx-yb-0jW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dEV-CR-PDZ" userLabel="First Responder" sceneMemberID="firstResponder"/>

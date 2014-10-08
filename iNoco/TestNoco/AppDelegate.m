@@ -13,6 +13,8 @@
 #import "NocoDownloadsManager.h"
 #import <Crashlytics/Crashlytics.h>
 #import "RecentShowViewController.h"
+#import "GroupSettingsManager.h"
+#import "NolifeEPGViewControllerTableViewController.h"
 
 void uncaughtExceptionHandler(NSException *exception) {
     NSLog(@"CRASH: %@", exception);
@@ -47,9 +49,22 @@ void uncaughtExceptionHandler(NSException *exception) {
     //NLTAPI conf
     
     NSString* catalog = DEFAULT_CATALOG;
+    GroupSettingsManager* groupSettings = [GroupSettingsManager sharedInstance];
+    groupSettings.defaultSuiteName = INOCO_GROUPNAME;
+    //Migration of shared keys (between app and extension when first having extension update
+    [groupSettings copyIfNeededFromLocalKeys:@[
+                                               @"NLTAPI_cachedResults",
+                                               @"NLTOAuth_oauthAccessToken",
+                                               @"NLTOAuth_oauthRefreshToken",
+                                               @"NLTOAuth_oauthExpirationDate",
+                                               @"NLTOAuth_oauthTokenType",
+                                               @"NLTAPI_cachedResults",
+                                               @"SELECTED_CATALOG"
+                                               ]];
+    
     NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
-    if([settings objectForKey:@"SELECTED_CATALOG"]){
-        catalog = [settings objectForKey:@"SELECTED_CATALOG"];
+    if([groupSettings objectForKey:@"SELECTED_CATALOG"]){
+        catalog = [groupSettings objectForKey:@"SELECTED_CATALOG"];
     }
     
 #ifdef DEBUG
@@ -225,6 +240,13 @@ void uncaughtExceptionHandler(NSException *exception) {
                     [self openShowPage:result];
                 } withKey:self];
             }
+            
+            if([key compare:@"action" options:NSCaseInsensitiveSearch]==NSOrderedSame){
+                NSString* action = value;
+                if([action compare:@"now"]==NSOrderedSame){
+                    [self openNowOnNolife];
+                }
+            }
         }
     }
     return YES;
@@ -247,6 +269,22 @@ void uncaughtExceptionHandler(NSException *exception) {
             recentShowController.playlistContext = nil;
             recentShowController.playlistType = nil;
             [recentShowController performSegueWithIdentifier:@"DisplayRecentShow" sender:show];
+        }
+    }
+}
+
+- (void)openNowOnNolife{
+    UITabBarController* tabbarController = (UITabBarController*)self.window.rootViewController;
+    if([[tabbarController viewControllers] count]<4){
+        return;
+    }
+    UIViewController* epgTabController = [[tabbarController viewControllers] objectAtIndex:3];
+    if([epgTabController isKindOfClass:[UINavigationController class]]){
+        UINavigationController* epgNavigationController = (UINavigationController*)epgTabController;
+        [epgNavigationController popToRootViewControllerAnimated:NO];
+        NolifeEPGViewControllerTableViewController* epgController = (NolifeEPGViewControllerTableViewController*)[(UINavigationController*)epgNavigationController topViewController];
+        if([epgController isKindOfClass:[NolifeEPGViewControllerTableViewController class]]){
+            [tabbarController setSelectedIndex:3];
         }
     }
 }
