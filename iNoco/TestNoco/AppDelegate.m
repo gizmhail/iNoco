@@ -285,6 +285,9 @@ void uncaughtExceptionHandler(NSException *exception) {
         NolifeEPGViewControllerTableViewController* epgController = (NolifeEPGViewControllerTableViewController*)[(UINavigationController*)epgNavigationController topViewController];
         if([epgController isKindOfClass:[NolifeEPGViewControllerTableViewController class]]){
             [tabbarController setSelectedIndex:3];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [epgController scrollToNow];
+            });
         }
     }
 }

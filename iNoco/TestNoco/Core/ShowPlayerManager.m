@@ -17,7 +17,7 @@
 @property (retain, nonatomic) NLTShow* currentShow;
 @property (retain, nonatomic) id currentPlaylistItem;
 @property (retain, nonatomic) NSMutableArray* showList;
-@property (retain,nonatomic) UIView* videoOverlayView;
+@property (retain, nonatomic) NSMutableArray* chapters;
 @end
 
 @implementation ShowPlayerManager
@@ -61,26 +61,45 @@
     return nextShow;
 }
 
+- (id)previousShow{
+    NLTShow* previousShow = nil;
+    if(self.currentPlaylistItem && self.showList){
+        NSUInteger index = [self.showList indexOfObject:self.currentPlaylistItem];
+        index--;
+        if(index > 0 && index < [self.showList count]){
+            previousShow = [self.showList objectAtIndex:index];
+        }
+    }
+    return previousShow;
+}
+
 - (void)switchToNextShow{
+    [self switchToSiblingFollowing:TRUE];
+}
+
+- (void)switchToSiblingFollowing:(BOOL)isNext{
 #warning See if we should keep it in the superview
     [self removeCustomUI];
     [self.moviePlayer.view removeFromSuperview];
-    id nextShow = [self nextShow];
-    if(nextShow == nil){
+    id siblingShow = [self nextShow];
+    if(!isNext){
+        siblingShow = [self previousShow];
+    }
+    if(siblingShow == nil){
         //Playlist is finished
         self.showList = nil;
         self.currentShow = nil;
         self.currentPlaylistItem = nil;
     }else{
-        self.currentPlaylistItem = nextShow;
-        if([nextShow isKindOfClass:[NLTShow class]]){
+        self.currentPlaylistItem = siblingShow;
+        if([siblingShow isKindOfClass:[NLTShow class]]){
 #warning TODO Add image =>> add UIIMage attribute to NLTShow
-            [self play:(NLTShow*)nextShow withProgress:0 withImage:[UIImage imageNamed:@"noco.png"]];
-        }else if([nextShow isKindOfClass:[NSDictionary class]]){
-            NSDictionary* showInfo = (NSDictionary*)nextShow;
+            [self play:(NLTShow*)siblingShow withProgress:0 withImage:[UIImage imageNamed:@"noco.png"]];
+        }else if([siblingShow isKindOfClass:[NSDictionary class]]){
+            NSDictionary* showInfo = (NSDictionary*)siblingShow;
             if([[showInfo objectForKey:@"NolifeOnlineURL"] isKindOfClass:[NSString class]]&&[(NSString*)[showInfo objectForKey:@"NolifeOnlineURL"] compare:@""]!=NSOrderedSame){
                 NSString* nocoUrl = (NSString*)[showInfo objectForKey:@"NolifeOnlineURL"];
-                int nocoId = [[nocoUrl lastPathComponent] integerValue];
+                long nocoId = [[nocoUrl lastPathComponent] integerValue];
                 [[NLTAPI sharedInstance] showWithId:nocoId withResultBlock:^(id result, NSError *error) {
                     if(result){
                         [self play:result withProgress:0 withImage:[UIImage imageNamed:@"noco.png"]];
@@ -89,7 +108,7 @@
 #ifdef DEBUG
                         NSLog(@"Skipping next show (not known on backend)");
 #endif
-                        [self switchToNextShow];
+                        [self switchToSiblingFollowing:isNext];
                     }
                 } withKey:self];
             }else{
@@ -97,14 +116,14 @@
 #ifdef DEBUG
                 NSLog(@"Skipping next show (not a show or an EPG entrydictionary)");
 #endif
-                [self switchToNextShow];
+                [self switchToSiblingFollowing:isNext];
             }
         }else{
             //Skipping unusable show
 #ifdef DEBUG
             NSLog(@"Skipping next show (not a show or an EPG entrydictionary)");
 #endif
-            [self switchToNextShow];
+            [self switchToSiblingFollowing:isNext];
         }
     }
 }
@@ -293,7 +312,7 @@
         }
         return;
     }
-    
+    [self fetchShowChapters];
     __weak ShowPlayerManager* weakSelf = self;
     
     NSURL* url = nil;
@@ -383,7 +402,7 @@
 - (BOOL)browseViewHierarchyFrom:(UIView*)view collectClassPrefix:(NSString*)classPrefix expectedParentClassPrefix:(NSString*)parentExpectedPrefix expectedParentFound:(BOOL)parentOk targetArray:(NSMutableArray*)results debugIndent:(NSString*)indent {
     NSString* className = NSStringFromClass([view class]);
     NSString* subIndent = nil;
-#ifdef DEBUG
+#ifdef DEBUG_MOVIEPLAYER_VIEW
     if(indent){
         NSLog(@"%@[%@] %@",indent,className,view);
         subIndent = [NSString stringWithFormat:@"%@ ",indent];
@@ -409,34 +428,106 @@
 }
 
 - (void)playerCustomUI{
-
-#ifdef DEBUG
-
     NSArray *windows = [[UIApplication sharedApplication] windows];
     for (UIWindow*window in windows) {
-        
-        NSLog(@"---------");
-        //UIView* mainView = [window viewWithTag:0];
-        //UIView* mainViewV2 = [[window rootViewController]view];
         NSMutableArray* playerButtons = [NSMutableArray array];
         [self browseViewHierarchyFrom:window collectClassPrefix:@"MPKnockoutButton" expectedParentClassPrefix:nil expectedParentFound:NO targetArray:playerButtons debugIndent:@""];
-#warning TODO
-#warning TODO
-#warning TODO
-#warning TODO
-#warning TODO
-#warning TODO
-#warning TODO
+        float maxY = 0;
+        NSMutableArray* buttonOnBottomLine = [NSMutableArray array];
+        for (UIButton* button in playerButtons) {
+            CGPoint position = [button convertPoint:CGPointMake(0, 0) toView:window];
+            if(position.y > maxY){
+                maxY = position.y;
+                buttonOnBottomLine = [NSMutableArray array];
+            }
+            if(position.y == maxY){
+                [buttonOnBottomLine addObject:button];
+            }
+        }
+        [buttonOnBottomLine sortUsingComparator:^NSComparisonResult(UIButton* button1, UIButton* button2) {
+            CGPoint position1 = [button1 convertPoint:CGPointMake(0, 0) toView:window];
+            CGPoint position2 = [button2 convertPoint:CGPointMake(0, 0) toView:window];
+            if(position1.x < position2.x){
+                return NSOrderedAscending;
+            }
+            if(position1.x > position2.x){
+                return NSOrderedDescending;
+            }
+            return NSOrderedSame;
+        }];
+        if([buttonOnBottomLine count]==3){
+            UIButton* prevButton = [buttonOnBottomLine firstObject];
+            UIButton* nextButton = [buttonOnBottomLine lastObject];
+            [prevButton removeTarget:nil
+                              action:NULL
+                    forControlEvents:UIControlEventAllEvents];
+            [nextButton removeTarget:nil
+                              action:NULL
+                    forControlEvents:UIControlEventAllEvents];
+            [prevButton addTarget:self action:@selector(prev) forControlEvents:UIControlEventTouchUpInside];
+            [nextButton addTarget:self action:@selector(next) forControlEvents:UIControlEventTouchUpInside];
+        }
     }
-#endif
+}
+
+- (void)next{
+    if(!self.chapters||[self.chapters count]==0){
+        [self switchToNextShow];
+    }else{
+        NSDictionary* nextChapter = nil;
+        for (NSDictionary* chapter in self.chapters) {
+            if(([[chapter objectForKey:@"timecode_ms"] floatValue]/1000.0)>(self.moviePlayer.currentPlaybackTime + 5) ){
+                nextChapter = chapter;
+                break;
+            }
+        }
+        if(nextChapter){
+            [self.moviePlayer setCurrentPlaybackTime:([[nextChapter objectForKey:@"timecode_ms"] floatValue]/1000.0)];
+        }else{
+            [self switchToNextShow];
+        }
+    }
+}
+
+- (void)prev{
+    if(!self.chapters||[self.chapters count]==0){
+        [self switchToSiblingFollowing:FALSE];
+    }else{
+        NSDictionary* prevChapter = nil;
+        for (NSDictionary* chapter in self.chapters) {
+            if(([[chapter objectForKey:@"timecode_ms"] floatValue]/1000.0)<(self.moviePlayer.currentPlaybackTime - 5) ){
+                prevChapter = chapter;
+            }else{
+                break;
+            }
+        }
+        if(prevChapter){
+            [self.moviePlayer setCurrentPlaybackTime:([[prevChapter objectForKey:@"timecode_ms"] floatValue]/1000.0)];
+        }else{
+            [self switchToSiblingFollowing:FALSE];
+
+        }
+    }
 }
 
 - (void)removeCustomUI{
-#ifdef DEBUG
-#ifdef USE_CUSTOM_PLAYER_UI
-    [self.videoOverlayView removeFromSuperview];
-#endif
-#endif
+
+}
+
+#pragma mark Chaper
+
+- (void)fetchShowChapters{
+    self.chapters = nil;
+    NSString* urlStr = [NSString stringWithFormat:@"chapters/id_show/%i",self.currentShow.id_show];
+    [[NLTAPI sharedInstance] callAPI:urlStr withResultBlock:^(NSArray* result, NSError *error) {
+        if(result&&[result isKindOfClass:[NSArray class]]){
+            self.chapters = [NSMutableArray array];
+            for (NSDictionary* chapter in result) {
+                [self.chapters addObject:chapter];
+            }
+        }
+    } withKey:self];
+
 }
 
 #pragma mark Delegate

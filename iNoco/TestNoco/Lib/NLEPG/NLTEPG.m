@@ -74,27 +74,46 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection{
-    self.parser = [[NSXMLParser alloc] initWithData:self.data];
-    self.parser.delegate = self;
-    self.parserError = nil;
-    self.cache = [NSMutableArray array];
-    [self.parser parse];
-    if(self.parserError){
+    if(!self.data){
         if(self.responseBlock){
-            self.responseBlock(nil, self.parserError);
+            NSError* error = [NSError errorWithDomain:@"NLTEPGDomain" code:530 userInfo:@{@"message":@"No data"}];
+            self.responseBlock(nil, error);
             self.responseBlock = nil;
-            self.parserError = nil;
         }
     }else{
-        if(self.responseBlock){
-            self.responseBlock(self.cache, nil);
-            self.responseBlock = nil;
+        self.parser = [[NSXMLParser alloc] initWithData:self.data];
+        self.parser.delegate = self;
+        self.parserError = nil;
+        self.cache = [NSMutableArray array];
+        [self.parser parse];
+        
+        
+        if(self.parserError){
+            self.cache = nil;
+            if(self.responseBlock){
+                self.responseBlock(nil, self.parserError);
+                self.responseBlock = nil;
+                self.parserError = nil;
+            }
+        }else{
+            if(self.responseBlock){
+                NSError* error = nil;
+                if(!self.cache){
+                    error = [NSError errorWithDomain:@"NLTEPGDomain" code:520 userInfo:@{@"message":@"Unknown parse error"}];
+                }
+                self.responseBlock(self.cache, error);
+                self.responseBlock = nil;
+            }
         }
     }
+
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
     if(self.responseBlock){
+        if(!error){
+            error = [NSError errorWithDomain:@"NLTEPGDomain" code:510 userInfo:@{@"message":@"Unknown error"}];
+        }
         self.responseBlock(nil, error);
         self.responseBlock = nil;
     }

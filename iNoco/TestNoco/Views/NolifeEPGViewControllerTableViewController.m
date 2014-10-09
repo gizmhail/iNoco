@@ -317,8 +317,10 @@
         }
         NSLog(@"%@",bestShow);
     }
-    NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    if([self numberOfSectionsInTableView:self.tableView]>section && [self tableView:self.tableView numberOfRowsInSection:section]>row){
+        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    }
 }
 
 

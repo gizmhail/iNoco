@@ -59,6 +59,27 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated{
+    self.currentEPGShow = nil;
+    [self updateCurrentShow];
+    [self updateDisplay];
+    [[NLTAPI sharedInstance] showsAtPage:0 withResultBlock:^(NSArray* results, NSError *error) {
+        if(results){
+            if([results count]>0){
+                self.latestShow = [results objectAtIndex:0];
+                NSLog(@"Latest show : %@",self.latestShow);
+            }else{
+                NSLog(@"Extension list show error: %@",[error description]);
+            }
+        }else{
+            NSLog(@"Extension list show error: %@",[error description]);
+        }
+        [self updateDisplay];
+    } withFamilyKey:nil withKey:nil];
+/*
+ self.latestShow = nil;
+    self.infoLabel.text = @"Chargement en cours....";
+    [self updateDisplay];
+
     [[NLTEPG sharedInstance] fetchEPG:^(NSArray *results, NSError *error) {
         if(results&&[results count]>0){
             self.epgShows = results;
@@ -67,10 +88,15 @@
         if(self.currentEPGShow){
             self.infoLabel.text = @"En ce moment sur Nolife";
         }else{
+            //self.infoLabel.font = [UIFont systemFontOfSize:5];
+            //self.infoLabel.text = [NSString stringWithFormat:@"%lu %@ %@",(unsigned long)[results count],[error description],results];
+            NSLog(@"EPG error: %@ (%@)", error, results);
             self.infoLabel.text = @"Impossible de récupérer l'EPG de Nolife pour le moment";
         }
         [self updateDisplay];
+ 
     } withCacheDuration:3600*5];
+ */
 }
 
 - (void)widgetPerformUpdateWithCompletionHandler:(void (^)(NCUpdateResult))completionHandler {
@@ -81,7 +107,6 @@
     // If there's an update, use NCUpdateResultNewData
 
     self.infoLabel.text = @"Chargement en cours....";
-    self.nowView.hidden = TRUE;
     self.currentEPGShow = nil;
     self.latestShow = nil;
     [self updateDisplay];
@@ -129,9 +154,11 @@
     }
 
     if(self.latestShow){
+        self.info2.hidden = FALSE;
         self.recentView.hidden = FALSE;
         updatedSize.height = 205.0;
     }else{
+        self.info2.hidden = TRUE;
         self.recentView.hidden = TRUE;
     }
 
@@ -145,8 +172,6 @@
         return;
     }
     NLTShow* show = self.latestShow;
-  
-    
     
     UILabel* timeLabel = (UILabel*)[self.recentView viewWithTag:100];
     UILabel* titleLabel = (UILabel*)[self.recentView viewWithTag:110];
@@ -218,6 +243,10 @@
     
     if(imageUrl){
         [imageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"nolife.png"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            imageView.image = image;
+            if(error){
+                imageView.image = [UIImage imageNamed:@"nolife.png"];
+            }
             imageView.contentMode = UIViewContentModeScaleAspectFit;
         }];
     }
@@ -284,6 +313,9 @@
             closestDistance = ABS([broadcastDate timeIntervalSinceDate:now]);
         }
         currentIndex++;
+    }
+    if(!bestShow){
+        NSLog(@"Unable to find best show among %i shows (best distance %i)",[self.epgShows count], closestDistance);
     }
     self.currentEPGShow = bestShow;
 }
