@@ -70,4 +70,9 @@ typedef void (^NLTCallResponseBlock)(id result, NSError *error);
  * Internal usage : doesn't need to be manually called
  */
 - (void)errorDuringNLTOAuthControllerDisplay:(NSError*)error;
+
+/**
+ * Load info stored in settings
+ */
+- (void)loadOauthInfo;
 @end

@@ -36,6 +36,9 @@
 #pragma mark NSURLConnectionDataDelegate
 
 - (void)fetchEPG:(NLTEPGResponseBlock)responseBlock withCacheDuration:(int)cacheDuration{
+    if([self.cache count] == 0){
+        NSLog(@"False EPG cache (should not occur)");
+    }
     if(self.cache&&[[NSDate date] compare:self.cacheValidityEnd]==NSOrderedAscending){
         if(responseBlock){
             responseBlock(self.cache,nil);
@@ -110,6 +113,7 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
+    self.cache = nil;
     if(self.responseBlock){
         if(!error){
             error = [NSError errorWithDomain:@"NLTEPGDomain" code:510 userInfo:@{@"message":@"Unknown error"}];

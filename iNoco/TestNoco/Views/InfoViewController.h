@@ -30,5 +30,7 @@
 - (IBAction)qualityChanged:(id)sender;
 - (IBAction)languageChanged:(id)sender;
 - (IBAction)subtitleChanged:(id)sender;
+- (IBAction)debugTouchDown:(id)sender;
+- (IBAction)debugTouchUpOutside:(id)sender;
 
 @end

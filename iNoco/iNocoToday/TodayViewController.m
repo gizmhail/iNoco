@@ -39,16 +39,47 @@
     }
 }
 
+- (void)epgTitleTap{
+    NSLog(@"epgTitleTap");
+    self.infoLabel.text = @"Chargement en cours....";
+    [[NLTEPG sharedInstance] fetchEPG:^(NSArray *results, NSError *error) {
+        if(results&&[results count]>0){
+            self.epgShows = results;
+            [self updateCurrentShow];
+        }
+        if(self.currentEPGShow){
+            self.infoLabel.text = @"En ce moment sur Nolife";
+        }else{
+            self.infoLabel.text = @"Impossible de récupérer l'EPG de Nolife pour le moment";
+        }
+        [self updateDisplay];
+    } withCacheDuration:3600*5];
+
+}
+
+#pragma mark Wake up
+
+- (void)wakeup{
+    [[GroupSettingsManager sharedInstance] setDefaultSuiteName:INOCO_GROUPNAME];
+    [[GroupSettingsManager sharedInstance] synchronize];
+    [[NLTOAuth sharedInstance] loadOauthInfo];
+    [[NLTAPI sharedInstance] loadCache];
+}
+
 #pragma mark View handling
 - (void)viewDidLoad {
+    [self wakeup];
+    [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidLoad" withUserInfo:nil];
+
     [super viewDidLoad];
     
     UITapGestureRecognizer* epgTag = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(epgTap)];
     [self.nowView addGestureRecognizer:epgTag];
     UITapGestureRecognizer* recentTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(recentTap)];
     [self.recentView addGestureRecognizer:recentTap];
+    UITapGestureRecognizer* epgTitleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(epgTitleTap)];
+    [self.infoLabel addGestureRecognizer:epgTitleTap];
 
-    [[GroupSettingsManager sharedInstance] setDefaultSuiteName:INOCO_GROUPNAME];
     [[NLTOAuth sharedInstance] configureWithClientId:nolibtv_client_id withClientSecret:nolibtv_client_secret withRedirectUri:nolibtv_redirect_uri];
     [[NLTAPI sharedInstance] setAutoLaunchAuthentificationView:FALSE];
 }
@@ -59,47 +90,27 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated{
+    [self wakeup];
+    NSMutableArray* logs = [[GroupSettingsManager sharedInstance] logs];
+    NSLog(@"%@",logs);
+    [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidAppear" withUserInfo:nil];
+    
     self.currentEPGShow = nil;
     [self updateCurrentShow];
+    if(self.currentEPGShow == nil){
+        NSLog(@"Unable to find current show");
+        self.infoLabel.text = @"Impossible de récupérer l'EPG de Nolife pour le moment";
+    }
     [self updateDisplay];
-    [[NLTAPI sharedInstance] showsAtPage:0 withResultBlock:^(NSArray* results, NSError *error) {
-        if(results){
-            if([results count]>0){
-                self.latestShow = [results objectAtIndex:0];
-                NSLog(@"Latest show : %@",self.latestShow);
-            }else{
-                NSLog(@"Extension list show error: %@",[error description]);
-            }
-        }else{
-            NSLog(@"Extension list show error: %@",[error description]);
-        }
-        [self updateDisplay];
-    } withFamilyKey:nil withKey:nil];
-/*
- self.latestShow = nil;
-    self.infoLabel.text = @"Chargement en cours....";
-    [self updateDisplay];
-
-    [[NLTEPG sharedInstance] fetchEPG:^(NSArray *results, NSError *error) {
-        if(results&&[results count]>0){
-            self.epgShows = results;
-            [self updateCurrentShow];
-        }
-        if(self.currentEPGShow){
-            self.infoLabel.text = @"En ce moment sur Nolife";
-        }else{
-            //self.infoLabel.font = [UIFont systemFontOfSize:5];
-            //self.infoLabel.text = [NSString stringWithFormat:@"%lu %@ %@",(unsigned long)[results count],[error description],results];
-            NSLog(@"EPG error: %@ (%@)", error, results);
-            self.infoLabel.text = @"Impossible de récupérer l'EPG de Nolife pour le moment";
-        }
-        [self updateDisplay];
- 
-    } withCacheDuration:3600*5];
- */
+    
+    //TODO Fetch info if available in cache : no calls
+    
 }
 
 - (void)widgetPerformUpdateWithCompletionHandler:(void (^)(NCUpdateResult))completionHandler {
+    [self wakeup];
+    [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_widgetPerformUpdateWithCompletion" withUserInfo:nil];
+
     // Perform any setup necessary in order to update the view.
     
     // If an error is encountered, use NCUpdateResultFailed
@@ -315,7 +326,7 @@
         currentIndex++;
     }
     if(!bestShow){
-        NSLog(@"Unable to find best show among %i shows (best distance %i)",[self.epgShows count], closestDistance);
+        NSLog(@"Unable to find best show among %lu shows (best distance %li)",(unsigned long)[self.epgShows count], closestDistance);
     }
     self.currentEPGShow = bestShow;
 }

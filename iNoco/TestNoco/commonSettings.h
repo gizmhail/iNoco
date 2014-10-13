@@ -32,9 +32,14 @@
 
 #define ALLOW_DOWNLOADS 1
 
+
 #pragma mark -
 #pragma mark Extensions
 
 #define INOCO_GROUPNAME @"group.name.poivre.iNoco"
+
+//Debugging group logs
+//#define NLT_RECORD_LOGS 1
+
 
 #endif

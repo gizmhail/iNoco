@@ -142,4 +142,6 @@
 - (void)videoUrlForShow:(NLTShow*)show withPreferedQuality:(NSString*)preferedQuality withPreferedLanguage:(NSString*)preferedLanguage withPreferedSubtitleLanguage:(NSString*)preferedSubtitleLanguage withResultBlock:(NLTCallResponseBlock)responseBlock withKey:(id)key;
 //Use NLTAPI object prefered criteria
 - (void)videoUrlForShow:(NLTShow*)show withResultBlock:(NLTCallResponseBlock)responseBlock withKey:(id)key;
+
+- (void)loadCache;
 @end

@@ -94,6 +94,7 @@
     if(!suiteName){
         suiteName = self.defaultSuiteName;
     }
+    BOOL useLocalSettings = true;
     NSUserDefaults* defaults = nil;
     NSUserDefaults* localDefaults = [NSUserDefaults standardUserDefaults];
     if([self groupSupport:suiteName]){
@@ -108,29 +109,34 @@
 
             defaults = localDefaults;
             if(!localObject){
+                //NSLog(@"No local settings, using suiteName %@",suiteName);
                 defaults = suiteDefaults;
+                useLocalSettings = false;
             }else{
                 if(suiteObject&&localObjectUpdateDate&&suiteObjectUpdateDate){
                     if([suiteObjectUpdateDate compare:localObjectUpdateDate]==NSOrderedDescending){
+                        //NSLog(@"GRoup settings for suiteName %@ are more recent",suiteName);
                         defaults = suiteDefaults;
+                        useLocalSettings = false;
+                    }else{
+                        //NSLog(@"Group settings for suiteName %@ are older",suiteName);
                     }
+                }else{
+                    //NSLog(@"Not all data to compare with suiteName %@, usiong local settings",suiteName);
                 }
             }
-
-
-
-
-#warning ADD _lastUpdate (in set and remove too)
-            if([localDefaults objectForKey:key]){
-                defaults = localDefaults;
-            }else{
-                defaults = suiteDefaults;
-            }
         }else{
+            //NSLog(@"No group settings for suitname %@",suiteName);
             defaults = localDefaults;
         }
     }else{
+        //NSLog(@"No group support for suitName %@",suiteName);
         defaults = localDefaults;
+    }
+    if(useLocalSettings){
+        //NSLog(@"Fetching object from local settings with key %@",key);
+    }else{
+        //NSLog(@"Fetching object from %@ settings with key %@",suiteName,key);
     }
     return defaults;
 }
@@ -156,11 +162,13 @@
     NSUserDefaults* localDefaults = [NSUserDefaults standardUserDefaults];
     [localDefaults setObject:object forKey:key];
     [localDefaults setObject:now forKey:updateKey];
+    //NSLog(@"Set local settings ; Key %@ ",key);
     if(!suiteName){
         suiteName = self.defaultSuiteName;
     }
     if([self groupSupport:suiteName]){
         NSUserDefaults* suiteDefaults = [[NSUserDefaults alloc] initWithSuiteName:suiteName];
+        //NSLog(@"Set %@ settings ; Key %@ ",suiteName,key);
         [suiteDefaults setObject:object forKey:key];
         [suiteDefaults setObject:now forKey:updateKey];
     }
@@ -219,6 +227,40 @@
             }
         }
     }
+}
+
+#pragma mark Log
+
+- (NSMutableArray*)logs{
+    NSMutableArray* logs = nil;
+    if([self objectForKey:@"GSM_Logs"]){
+        NSArray* logsSaved = [NSKeyedUnarchiver unarchiveObjectWithData:[self objectForKey:@"GSM_Logs"]];
+
+        logs = [NSMutableArray arrayWithArray:logsSaved ];
+    }else{
+        logs = [NSMutableArray array];
+    }
+    return logs;
+}
+
+- (void)logEvent:(NSString*)event withUserInfo:(NSDictionary*)userInfo{
+    NSString* bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+    NSDate* date = [NSDate date];
+    NSMutableArray* logs = [self logs];
+    NSMutableDictionary* log = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                event,@"event",
+                                bundleIdentifier,@"bundleId",
+                                date,@"date",
+                                nil];
+    if(userInfo){
+        [log setObject:userInfo forKey:@"userInfo"];
+    }
+    [logs addObject:log];
+    NSData* logsData = [NSKeyedArchiver archivedDataWithRootObject:logs ];
+
+    [self setObject:logsData forKey:@"GSM_Logs"];
+    [self synchronize];
+    NSLog(@"Logging %@",log);
 }
 
 @end

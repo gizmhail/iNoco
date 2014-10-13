@@ -51,4 +51,7 @@
 - (void)setBool:(BOOL)value forKey:(NSString *)defaultName;
 - (void)setURL:(NSURL *)url forKey:(NSString *)defaultName;
 
+- (void)logEvent:(NSString*)event withUserInfo:(NSDictionary*)userInfo;
+- (NSMutableArray*)logs;
+
 @end

@@ -17,6 +17,7 @@
 @property(retain, nonatomic) NSArray* languageSegmentedEntriesValues;
 @property(retain, nonatomic) NSArray* subtitleSegmentedEntriesValues;
 @property(retain, nonatomic) NSArray* qualitySegmentedEntriesValues;
+@property(retain, nonatomic) NSDate* debugDate;
 
 @end
 
@@ -169,6 +170,21 @@
 #ifdef DEBUG
         NSLog(@"Problem with segemented control");
 #endif
+    }
+}
+
+- (IBAction)debugTouchDown:(id)sender {
+    self.debugDate = [NSDate date];
+}
+
+- (IBAction)debugTouchUpOutside:(id)sender {
+    NSTimeInterval delta = [[NSDate date] timeIntervalSinceDate:self.debugDate];
+    self.debugDate = nil;
+    if(delta > 1){
+        NSMutableArray* logs = [[GroupSettingsManager sharedInstance] logs];
+        NSLog(@"\n%@\n",logs);
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        pasteboard.string = [logs description];
     }
 }
 
