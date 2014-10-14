@@ -98,6 +98,7 @@
 		4F927863198085F000DB138B /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F927862198085F000DB138B /* Main_iPad.storyboard */; };
 		4FA802FC1962017900E820B9 /* WatchListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA802FB1962017900E820B9 /* WatchListViewController.m */; };
 		4FA802FE19621E7000E820B9 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FA802FD19621E7000E820B9 /* AVFoundation.framework */; };
+		4FA8125A19ED39D600548794 /* noco.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F636A881957878E004C0A18 /* noco.png */; };
 		4FC35B7B19E477090069C0DD /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FC35B7A19E477090069C0DD /* NotificationCenter.framework */; };
 		4FC35B8119E477090069C0DD /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC35B8019E477090069C0DD /* TodayViewController.m */; };
 		4FC35B8319E477090069C0DD /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FC35B8219E477090069C0DD /* MainInterface.storyboard */; };
@@ -860,6 +861,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FA8125A19ED39D600548794 /* noco.png in Resources */,
 				4FC35B8319E477090069C0DD /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

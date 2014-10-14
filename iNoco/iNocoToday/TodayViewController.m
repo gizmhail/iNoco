@@ -70,8 +70,23 @@
 - (void)viewDidLoad {
     [self wakeup];
     [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidLoad" withUserInfo:nil];
-
-    [super viewDidLoad];
+    NSString* catalog = DEFAULT_CATALOG;
+    
+    if([[GroupSettingsManager sharedInstance] objectForKey:@"SELECTED_CATALOG"]){
+        catalog = [[GroupSettingsManager sharedInstance] objectForKey:@"SELECTED_CATALOG"];
+    }
+    
+    [[NLTAPI sharedInstance] setSubscribedOnly:false];
+    [[NLTAPI sharedInstance] setPartnerKey:nil];
+    if([catalog compare:ALL_SUBSCRIPTED_CATALOG]==NSOrderedSame){
+        [[NLTAPI sharedInstance] setSubscribedOnly:TRUE];
+    }else if([catalog compare:ALL_NOCO_CATALOG]==NSOrderedSame){
+        [[NLTAPI sharedInstance] setSubscribedOnly:false];
+        [[NLTAPI sharedInstance] setPartnerKey:nil];
+    }else if(catalog != nil){
+        [[NLTAPI sharedInstance] setSubscribedOnly:false];
+        [[NLTAPI sharedInstance] setPartnerKey:catalog];
+    }
     
     UITapGestureRecognizer* epgTag = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(epgTap)];
     [self.nowView addGestureRecognizer:epgTag];
@@ -82,6 +97,7 @@
 
     [[NLTOAuth sharedInstance] configureWithClientId:nolibtv_client_id withClientSecret:nolibtv_client_secret withRedirectUri:nolibtv_redirect_uri];
     [[NLTAPI sharedInstance] setAutoLaunchAuthentificationView:FALSE];
+    [super viewDidLoad];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -95,11 +111,15 @@
     NSLog(@"%@",logs);
     [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidAppear" withUserInfo:nil];
     
+    if(!self.epgShows || [self.epgShows count] == 0){
+        self.epgShows = [NLTEPG sharedInstance].cachedEPG;
+    }
     self.currentEPGShow = nil;
     [self updateCurrentShow];
     if(self.currentEPGShow == nil){
         NSLog(@"Unable to find current show");
         self.infoLabel.text = @"Impossible de récupérer l'EPG de Nolife pour le moment";
+        [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidAppear_NoCurrentEPG" withUserInfo:@{@"cachedEPG":self.epgShows}];
     }
     [self updateDisplay];
     
@@ -131,6 +151,11 @@
             self.infoLabel.text = @"En ce moment sur Nolife";
         }else{
             self.infoLabel.text = @"Impossible de récupérer l'EPG de Nolife pour le moment";
+            if(error){
+                [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_widgetPerformUpdateWithCompletion_NoCurrentEPG" withUserInfo:@{@"error":[error description]}];
+            }else if(results){
+                [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_widgetPerformUpdateWithCompletion_NoCurrentEPG" withUserInfo:@{@"results":results}];
+            }
         }
         [self updateDisplay];
         

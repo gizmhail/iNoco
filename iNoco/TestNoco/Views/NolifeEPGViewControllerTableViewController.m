@@ -174,7 +174,7 @@
     self.playlistCurrentItem = show;
     if(show && [[show objectForKey:@"NolifeOnlineURL"] isKindOfClass:[NSString class]]&&[(NSString*)[show objectForKey:@"NolifeOnlineURL"] compare:@""]!=NSOrderedSame){
         NSString* nocoUrl = (NSString*)[show objectForKey:@"NolifeOnlineURL"];
-        int nocoId = [[nocoUrl lastPathComponent] integerValue];
+        NSInteger nocoId = [[nocoUrl lastPathComponent] integerValue];
         cellSelected = true;
         [[NLTAPI sharedInstance] showWithId:nocoId withResultBlock:^(id result, NSError *error) {
             cellSelected = false;

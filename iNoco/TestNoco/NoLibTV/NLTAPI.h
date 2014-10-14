@@ -21,7 +21,7 @@
 #define NLT_MARKREADSHOWS_CACHE_DURATION 60*10
 #define NLT_FAMILY_CACHE_DURATION 3600*24
 
-#warning TODO Define all error codes
+//#warning TODO Define all error codes
 #define NLTAPI_ERROR_VIDEO_UNAVAILABLE_WITH_POPMESSAGE 405
 #define NLTAPI_NOCO_ERROR 510
 

@@ -74,6 +74,7 @@
     if(self.oauthAccessToken && self.oauthTokenType && self.oauthExpirationDate && [[NSDate date] compare:self.oauthExpirationDate] == NSOrderedAscending){
         return TRUE;
     }else if(self.oauthAccessToken){
+        [self logAuthEvent:@"Access token outdated"];
         self.oauthAccessToken = nil;
         self.oauthExpirationDate = nil;
     }
@@ -102,6 +103,7 @@
                 //Return error
                 if(error){
                     if(responseBlock){
+                        [weakSelf logAuthEvent:@"isAuthenticatedAfterRefreshTokenUse_auth_error" withDetails:[error description]];
                         responseBlock(FALSE, error);
                     }
                 }else if([weakSelf isAuthenticated]){
@@ -111,6 +113,7 @@
                     }
                 }else{
                     //Was tring to use a refresh token which was probably outdated
+                    [weakSelf logAuthEvent:@"isAuthenticatedAfterRefreshTokenUse_auth_failed"];
                     responseBlock(FALSE, nil);
                 }
             };
@@ -347,6 +350,10 @@
         [self saveOAuthInfo];
     }else if(jsonError){
         [[GroupSettingsManager sharedInstance] logEvent:@"OAuthJsonError" withUserInfo:@{@"jsonError":jsonError,@"answer":answer}];
+    }else if(!self.data){
+        [self logAuthEvent:@"fetchAccessToken failure - no data"];
+    }else{
+        [[GroupSettingsManager sharedInstance] logEvent:@"fetchAccessToken failure - data problem" withUserInfo:@{@"data":[[NSString alloc] initWithData:self.data encoding:NSUTF8StringEncoding]}];
     }
     //Callback, error handling
     if(self.oauthAccessToken){
@@ -391,12 +398,23 @@
 
 #pragma mark Debug
 
+- (void)logAuthEvent:(NSString*)event withDetails:(NSString*)details{
+#ifdef NLT_RECORD_LOGS
+    NSMutableDictionary* info = [self authInfo];
+    if(details){
+        [info setObject:details forKey:@"details"];
+    }
+    [[GroupSettingsManager sharedInstance] logEvent:event withUserInfo:info];
+#endif
+}
+
 - (void)logAuthEvent:(NSString*)event{
 #ifdef NLT_RECORD_LOGS
     [[GroupSettingsManager sharedInstance] logEvent:event withUserInfo:[self authInfo]];
 #endif
 }
-- (NSDictionary*)authInfo{
+
+- (NSMutableDictionary*)authInfo{
     NSMutableDictionary* info = [NSMutableDictionary dictionary];
     if(self.oauthAccessToken){
         [info setObject:@"oauthAccessToken" forKey:self.oauthAccessToken];

@@ -256,6 +256,9 @@
         [log setObject:userInfo forKey:@"userInfo"];
     }
     [logs addObject:log];
+    if([logs count]>200){
+        [logs removeObjectsInRange:NSMakeRange(0, 50)];
+    }
     NSData* logsData = [NSKeyedArchiver archivedDataWithRootObject:logs ];
 
     [self setObject:logsData forKey:@"GSM_Logs"];
