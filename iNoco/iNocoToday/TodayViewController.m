@@ -64,6 +64,7 @@
     [[GroupSettingsManager sharedInstance] synchronize];
     [[NLTOAuth sharedInstance] loadOauthInfo];
     [[NLTAPI sharedInstance] loadCache];
+    [NLTEPG sharedInstance].useManualParsing = TRUE;
 }
 
 #pragma mark View handling
@@ -111,20 +112,60 @@
     NSLog(@"%@",logs);
     [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidAppear" withUserInfo:nil];
     
+    //We save the cachedEPG as fetchEPG parsing is prone to errors in viewDidAppear (problem with NSXMLParser ?)
     if(!self.epgShows || [self.epgShows count] == 0){
-        self.epgShows = [NLTEPG sharedInstance].cachedEPG;
+        if([[NLTEPG sharedInstance].cachedEPG count]>0){
+            self.epgShows = [NLTEPG sharedInstance].cachedEPG;
+        }
+    }
+    
+    __weak TodayViewController* weakSelf = self;
+
+    [[NLTEPG sharedInstance] fetchEPG:^(NSArray *result, NSError *error) {
+        if(error){
+            NSLog(@"EPG Error: %@",error);
+        }
+        [weakSelf viewDidAppearRefreshEPG];
+    } withCacheDuration:5*3600];
+    
+    [[NLTAPI sharedInstance] showsAtPage:0 withResultBlock:^(NSArray* results, NSError *showsError) {
+        if(results&&[results count]>0){
+            NSLog(@"Latest show ok");
+            weakSelf.latestShow = [results objectAtIndex:0];
+        }else {
+            if(showsError){
+                [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidAppear_NoLatestShow" withUserInfo:@{@"error":showsError}];
+            }else{
+                [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidAppear_NoLatestShows" withUserInfo:nil];
+            }
+        }
+        [weakSelf updateDisplay];
+    } withFamilyKey:nil withKey:nil];
+}
+
+- (void)viewDidAppearRefreshEPG{
+    if(!self.epgShows || [self.epgShows count] == 0){
+        if([[NLTEPG sharedInstance].cachedEPG count]>0){
+            self.epgShows = [NLTEPG sharedInstance].cachedEPG;
+        }
     }
     self.currentEPGShow = nil;
     [self updateCurrentShow];
     if(self.currentEPGShow == nil){
         NSLog(@"Unable to find current show");
         self.infoLabel.text = @"Impossible de récupérer l'EPG de Nolife pour le moment";
-        [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidAppear_NoCurrentEPG" withUserInfo:@{@"cachedEPG":self.epgShows}];
+        if(self.epgShows){
+            [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidAppear_NoCurrentEPG" withUserInfo:@{@"cachedEPG":self.epgShows}];
+        }else{
+            [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidAppear_NoEPG" withUserInfo:nil];
+        }
+    }else{
+        NSLog(@"EPG Ok");
     }
     [self updateDisplay];
     
     //TODO Fetch info if available in cache : no calls
-    
+
 }
 
 - (void)widgetPerformUpdateWithCompletionHandler:(void (^)(NCUpdateResult))completionHandler {
@@ -142,34 +183,48 @@
     self.latestShow = nil;
     [self updateDisplay];
     
+    __weak TodayViewController* weakSelf = self;
+
     [[NLTEPG sharedInstance] fetchEPG:^(NSArray *results, NSError *error) {
         if(results&&[results count]>0){
-            self.epgShows = results;
-            [self updateCurrentShow];
+            weakSelf.epgShows = results;
+            [weakSelf updateCurrentShow];
         }
-        if(self.currentEPGShow){
-            self.infoLabel.text = @"En ce moment sur Nolife";
+        BOOL epgOk = true;
+        if(weakSelf.currentEPGShow){
+            weakSelf.infoLabel.text = @"En ce moment sur Nolife";
         }else{
-            self.infoLabel.text = @"Impossible de récupérer l'EPG de Nolife pour le moment";
+            epgOk = false;
+            weakSelf.infoLabel.text = @"Impossible de récupérer l'EPG de Nolife pour le moment";
             if(error){
                 [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_widgetPerformUpdateWithCompletion_NoCurrentEPG" withUserInfo:@{@"error":[error description]}];
             }else if(results){
                 [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_widgetPerformUpdateWithCompletion_NoCurrentEPG" withUserInfo:@{@"results":results}];
             }
         }
-        [self updateDisplay];
+        [weakSelf updateDisplay];
         
-        [[NLTAPI sharedInstance] showsAtPage:0 withResultBlock:^(NSArray* results, NSError *error) {
+        [[NLTAPI sharedInstance] showsAtPage:0 withResultBlock:^(NSArray* results, NSError *showsError) {
             if(results){
                 if([results count]>0){
-                    self.latestShow = [results objectAtIndex:0];
+                    weakSelf.latestShow = [results objectAtIndex:0];
                 }
-                completionHandler(NCUpdateResultNewData);
+                if(epgOk){
+                    NSLog(@"epgOk & showOk");
+                    completionHandler(NCUpdateResultNewData);
+                }else{
+                    NSLog(@"epgKO & showOk");
+                    completionHandler(NCUpdateResultFailed);
+                }
             }else{
-
+                if(error){
+                    [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_widgetPerformUpdateWithCompletion_NoShows" withUserInfo:@{@"error":showsError}];
+                }else{
+                    [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_widgetPerformUpdateWithCompletion_NoShows" withUserInfo:nil];
+                }
                 completionHandler(NCUpdateResultFailed);
             }
-            [self updateDisplay];
+            [weakSelf updateDisplay];
         } withFamilyKey:nil withKey:nil];
 
     } withCacheDuration:3600*5];
@@ -181,12 +236,13 @@
     [self updateRecent];
     
     CGSize updatedSize = [self preferredContentSize];
-    updatedSize.height = 30.0;
+    updatedSize.height = 100.0;
     if(self.currentEPGShow){
         self.nowView.hidden = FALSE;
         updatedSize.height = 100.0;
     }else{
         self.nowView.hidden = TRUE;
+        updatedSize.height = 30.0;
     }
 
     if(self.latestShow){

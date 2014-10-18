@@ -11,6 +11,8 @@
 typedef void (^NLTEPGResponseBlock)(NSArray* result, NSError *error);
 
 @interface NLTEPG : NSObject<NSURLConnectionDataDelegate, NSXMLParserDelegate>
+@property(assign,nonatomic)BOOL useManualParsing;
+
 + (instancetype)sharedInstance;
 - (void)fetchEPG:(NLTEPGResponseBlock)responseBlock withCacheDuration:(int)cacheDuration;
 - (NSArray*)cachedEPG;

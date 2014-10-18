@@ -33,11 +33,19 @@
     return _sharedInstance;
 }
 
+- (id)init{
+    if(self = [super init]){
+        self.useManualParsing = FALSE;
+    }
+    return self;
+}
+
 #pragma mark NSURLConnectionDataDelegate
 
 - (void)fetchEPG:(NLTEPGResponseBlock)responseBlock withCacheDuration:(int)cacheDuration{
     if([self.cache count] == 0){
-        NSLog(@"False EPG cache (should not occur)");
+        NSLog(@"Empty EPG cache");
+        self.cache = nil;
     }
     if(self.cache&&[[NSDate date] compare:self.cacheValidityEnd]==NSOrderedAscending){
         if(responseBlock){
@@ -50,15 +58,24 @@
         NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
         self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
         if(self.connection){
+            NLTEPGResponseBlock previousblock = nil;
             if(self.responseBlock){
-                NSError* error = [NSError errorWithDomain:@"NLTEPGDomain" code:500 userInfo:@{@"message":@"Another call cancelled this one"}];
-                self.responseBlock(nil, error);
+                previousblock = self.responseBlock;
             }
-            self.responseBlock = responseBlock;
+            self.responseBlock = ^(NSArray *result, NSError *error) {
+                if(previousblock){
+                    previousblock(result,error);
+                }
+                if(responseBlock){
+                    responseBlock(result, error);
+                }
+            };
+            if(!previousblock){
 #ifdef DEBUG
-            NSLog(@"Connecting to %@",urlStr);
+                NSLog(@"Connecting to %@",urlStr);
 #endif
-            [self.connection start];
+                [self.connection start];            
+            }
         }else{
             NSError* error = [NSError errorWithDomain:@"NLTEPGDomain" code:500 userInfo:@{@"message":@"Unable to create connection"}];
             if(responseBlock){
@@ -84,11 +101,15 @@
             self.responseBlock = nil;
         }
     }else{
-        self.parser = [[NSXMLParser alloc] initWithData:self.data];
-        self.parser.delegate = self;
-        self.parserError = nil;
         self.cache = [NSMutableArray array];
-        [self.parser parse];
+        if(self.useManualParsing){
+            [self manualParsing];
+        }else{
+            self.parser = [[NSXMLParser alloc] initWithData:self.data];
+            self.parser.delegate = self;
+            self.parserError = nil;
+            [self.parser parse];
+        }
         
         
         if(self.parserError){
@@ -99,6 +120,9 @@
                 self.parserError = nil;
             }
         }else{
+            if([self.cache count]==0){
+                self.cache = nil;
+            }
             if(self.responseBlock){
                 NSError* error = nil;
                 if(!self.cache){
@@ -133,6 +157,40 @@
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError{
     self.parserError = parseError;
+    NSLog(@"Parser error (%@). Trying to manually parse (as extension might block parser",parseError);
+    [self manualParsing];
+}
+
+- (BOOL)manualParsing{
+    BOOL parsingOk = false;
+    if(self.data){
+        NSString* raw = [[NSString alloc] initWithData:self.data encoding:NSUTF8StringEncoding];
+        if(raw){
+            NSError  *error  = NULL;
+            
+            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"<slot([^>]*)>" options:0 error:&error];
+            NSRegularExpression *regexAttribute = [NSRegularExpression regularExpressionWithPattern:@"([^=]*)=\"([^\"]*)\"" options:0 error:&error];
+            
+            [regex enumerateMatchesInString:raw options:0 range:NSMakeRange(0, [raw length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+                NSString* slotContent = [raw substringWithRange:[result rangeAtIndex:1]];
+                if(slotContent){
+                    NSMutableDictionary* slot = [NSMutableDictionary dictionary];
+                    [regexAttribute enumerateMatchesInString:slotContent options:0 range:NSMakeRange(0, [slotContent length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+                        NSString* kind = [slotContent substringWithRange:[result rangeAtIndex:1]];
+                        NSString* value = [slotContent substringWithRange:[result rangeAtIndex:2]];
+                        if(kind&&value){
+                            kind = [kind stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                            value = [value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                            [slot setObject:value forKey:kind];
+                        }
+                        
+                    }];
+                    [self.cache addObject:slot];
+                }
+            }];
+        }
+    }
+    return parsingOk;
 }
 
 - (NSArray*)cachedEPG{

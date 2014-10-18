@@ -16,24 +16,34 @@
 
 @property(retain,nonatomic) NSString* defaultSuiteName;
 
-#pragma mark Real methods
+#pragma mark - Real  methods
 
 + (instancetype)sharedInstance;
-
+#pragma mark
 - (void)synchronize;
 - (void)synchronizeWithSuiteName:(NSString*)suiteName;
 
+#pragma mark Read methods: will read the value in the most recently used storage between standardUserSettings and suiteName settings
 - (id)objectForKey:(NSString*)key;
 - (id)objectForKey:(NSString*)key withSuiteName:(NSString*)suiteName;
+
+#pragma mark Set methods: will write the value in both standardUserSettings and suiteName settings
+
 - (void)setObject:(id)object forKey:(NSString*)key;
 - (void)setObject:(id)object forKey:(NSString*)key withSuiteName:(NSString*)suiteName;
+
 - (void)removeObjectForKey:(NSString *)key;
 - (void)removeObjectForKey:(NSString *)key withSuiteName:(NSString*)suiteName;
 
+#pragma mark Migration methods (to fill suitName NSUserDefaults with local values
 - (void)copyIfNeededFromLocalKeys:(NSArray*)keys;
 - (void)copyIfNeededFromLocalKeys:(NSArray*)keys toSuitName:(NSString*)suiteName;
 
-#pragma mark Proxified methods (towards proper NSUserdefaults, either standardUserDefaults or defaultSuiteName one)
+#pragma mark Debugging methods (will use shared NSUserSettings through GroupSettingsManager to store the logs - synchronize call not needed, as it is handled in logEvent)
+- (void)logEvent:(NSString*)event withUserInfo:(NSDictionary*)userInfo;
+- (NSMutableArray*)logs;
+
+#pragma mark - Proxified methods (towards proper NSUserdefaults, either standardUserDefaults or defaultSuiteName one)
 - (NSString *)stringForKey:(NSString *)defaultName;
 - (NSArray *)arrayForKey:(NSString *)defaultName;
 - (NSDictionary *)dictionaryForKey:(NSString *)defaultName;
@@ -50,8 +60,5 @@
 - (void)setDouble:(double)value forKey:(NSString *)defaultName;
 - (void)setBool:(BOOL)value forKey:(NSString *)defaultName;
 - (void)setURL:(NSURL *)url forKey:(NSString *)defaultName;
-
-- (void)logEvent:(NSString*)event withUserInfo:(NSDictionary*)userInfo;
-- (NSMutableArray*)logs;
 
 @end

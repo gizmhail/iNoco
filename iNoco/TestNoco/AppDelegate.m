@@ -111,13 +111,18 @@ void uncaughtExceptionHandler(NSException *exception) {
 
     //Lock screen audio events
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    
+    return YES;
+}
 
+- (void)handleInterruptedShow{
+    NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
     NSData* cacheData = [settings objectForKey:@"InterruptedShow" ];
     NLTShow* interruptedShow = nil;
     if(cacheData){
         interruptedShow = [[NLTShow alloc] initWithDictionnary:[NSKeyedUnarchiver unarchiveObjectWithData:cacheData]];
     }
-
+    
     if(interruptedShow && interruptedShow.id_show){
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             NSString* title = @"";
@@ -133,14 +138,12 @@ void uncaughtExceptionHandler(NSException *exception) {
             }
             if(interruptedShow.show_TT){
                 title = [title stringByAppendingFormat:@" - %@", interruptedShow.show_TT];
-
+                
             }
             self.interruptedAlertview = [[UIAlertView alloc] initWithTitle:@"Continuer la lecture ?" message:[NSString stringWithFormat:@"Voulez-vous reprendre la lecture de la dernière émission interrompue (%@) ?",title] delegate:self cancelButtonTitle:@"Non" otherButtonTitles:@"Oui", nil];
             [self.interruptedAlertview show];
         });
     }
-
-    return YES;
 }
 
 
@@ -172,10 +175,10 @@ void uncaughtExceptionHandler(NSException *exception) {
     NSMutableArray* logs = [[GroupSettingsManager sharedInstance] logs];
     NSLog(@"%@",logs);
     
-    
     [[GroupSettingsManager sharedInstance] logEvent:@"iNoco_DidBecomeActive" withUserInfo:nil];
     
-    
+    [self handleInterruptedShow];
+
 
 }
 

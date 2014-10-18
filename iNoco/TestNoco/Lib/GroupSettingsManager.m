@@ -256,7 +256,7 @@
         [log setObject:userInfo forKey:@"userInfo"];
     }
     [logs addObject:log];
-    if([logs count]>200){
+    if([logs count]>90){
         [logs removeObjectsInRange:NSMakeRange(0, 50)];
     }
     NSData* logsData = [NSKeyedArchiver archivedDataWithRootObject:logs ];

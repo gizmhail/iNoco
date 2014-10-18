@@ -342,6 +342,7 @@
         answer = [NSJSONSerialization JSONObjectWithData:self.data options:NSJSONReadingAllowFragments error:&jsonError];
     }
     if(!jsonError&&[answer isKindOfClass:[NSDictionary class]]){
+        [[GroupSettingsManager sharedInstance] logEvent:@"OAuthAnswerReceived" withUserInfo:@{@"answer":answer}];
         self.oauthAccessToken = [answer objectForKey:@"access_token"];
         self.oauthRefreshToken = [answer objectForKey:@"refresh_token"];
         self.oauthTokenType = [answer objectForKey:@"token_type"];
