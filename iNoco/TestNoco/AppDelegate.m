@@ -172,10 +172,13 @@ void uncaughtExceptionHandler(NSException *exception) {
     [[NLTOAuth sharedInstance] loadOauthInfo];
     [[NLTAPI sharedInstance] loadCache];
     
+    
+#ifdef NLT_RECORD_LOGS
     NSMutableArray* logs = [[GroupSettingsManager sharedInstance] logs];
-    NSLog(@"%@",logs);
+    //NSLog(@"%@",logs);
     
     [[GroupSettingsManager sharedInstance] logEvent:@"iNoco_DidBecomeActive" withUserInfo:nil];
+#endif
     
     [self handleInterruptedShow];
 

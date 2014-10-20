@@ -39,7 +39,7 @@
 #define INOCO_GROUPNAME @"group.name.poivre.iNoco"
 
 //Debugging group logs
-#define NLT_RECORD_LOGS 1
+//#define NLT_RECORD_LOGS 1
 
 
 #endif

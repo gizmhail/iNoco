@@ -115,7 +115,7 @@
             }else{
                 if(suiteObject&&localObjectUpdateDate&&suiteObjectUpdateDate){
                     if([suiteObjectUpdateDate compare:localObjectUpdateDate]==NSOrderedDescending){
-                        //NSLog(@"GRoup settings for suiteName %@ are more recent",suiteName);
+                        //NSLog(@"Group settings for suiteName %@ are more recent",suiteName);
                         defaults = suiteDefaults;
                         useLocalSettings = false;
                     }else{
@@ -135,8 +135,14 @@
     }
     if(useLocalSettings){
         //NSLog(@"Fetching object from local settings with key %@",key);
+        if([key compare:@"NLTOAuth_oauthRefreshToken"]==NSOrderedSame){
+            [self logEvent:@"LocalSourceForNLTOAuth_oauthRefreshToken" withUserInfo:nil];
+        }
     }else{
         //NSLog(@"Fetching object from %@ settings with key %@",suiteName,key);
+        if([key compare:@"NLTOAuth_oauthRefreshToken"]==NSOrderedSame){
+            [self logEvent:@"GroupSourceForNLTOAuth_oauthRefreshToken" withUserInfo:nil];
+        }
     }
     return defaults;
 }
@@ -256,8 +262,8 @@
         [log setObject:userInfo forKey:@"userInfo"];
     }
     [logs addObject:log];
-    if([logs count]>90){
-        [logs removeObjectsInRange:NSMakeRange(0, 50)];
+    if([logs count]>200){
+        [logs removeObjectsInRange:NSMakeRange(0, 150)];
     }
     NSData* logsData = [NSKeyedArchiver archivedDataWithRootObject:logs ];
 

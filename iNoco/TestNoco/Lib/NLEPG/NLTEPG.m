@@ -157,8 +157,6 @@
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError{
     self.parserError = parseError;
-    NSLog(@"Parser error (%@). Trying to manually parse (as extension might block parser",parseError);
-    [self manualParsing];
 }
 
 - (BOOL)manualParsing{

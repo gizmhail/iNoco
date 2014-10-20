@@ -349,7 +349,7 @@
         long expiresIn = [[answer objectForKey:@"expires_in"] integerValue];
         self.oauthExpirationDate = [[NSDate date] dateByAddingTimeInterval:expiresIn];
         [self saveOAuthInfo];
-    }else if(jsonError){
+    }else if(jsonError&&answer){
         [[GroupSettingsManager sharedInstance] logEvent:@"OAuthJsonError" withUserInfo:@{@"jsonError":jsonError,@"answer":answer}];
     }else if(!self.data){
         [self logAuthEvent:@"fetchAccessToken failure - no data"];

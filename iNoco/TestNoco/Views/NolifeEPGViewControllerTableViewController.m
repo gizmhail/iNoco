@@ -304,7 +304,7 @@
         section = [self.epgDays indexOfObject:header];
         NSArray* dayContents = [self.dayContents objectForKey:header];
         long currentIndex = 0;
-        long closestDistance = 2*3600;
+        long closestDistance = 10*3600;
         NSDictionary* bestShow = nil;
         for (NSDictionary* show in dayContents) {
             NSDate* broadcastDate = [formater dateFromString:[show objectForKey:@"dateUTC"]];

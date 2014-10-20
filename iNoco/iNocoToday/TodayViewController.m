@@ -70,7 +70,9 @@
 #pragma mark View handling
 - (void)viewDidLoad {
     [self wakeup];
+#ifdef NLT_RECORD_LOGS
     [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidLoad" withUserInfo:nil];
+#endif
     NSString* catalog = DEFAULT_CATALOG;
     
     if([[GroupSettingsManager sharedInstance] objectForKey:@"SELECTED_CATALOG"]){
@@ -108,9 +110,11 @@
 
 - (void)viewDidAppear:(BOOL)animated{
     [self wakeup];
+#ifdef NLT_RECORD_LOGS
     NSMutableArray* logs = [[GroupSettingsManager sharedInstance] logs];
-    NSLog(@"%@",logs);
+    //NSLog(@"%@",logs);
     [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidAppear" withUserInfo:nil];
+#endif
     
     //We save the cachedEPG as fetchEPG parsing is prone to errors in viewDidAppear (problem with NSXMLParser ?)
     if(!self.epgShows || [self.epgShows count] == 0){
@@ -128,19 +132,23 @@
         [weakSelf viewDidAppearRefreshEPG];
     } withCacheDuration:5*3600];
     
+    
     [[NLTAPI sharedInstance] showsAtPage:0 withResultBlock:^(NSArray* results, NSError *showsError) {
         if(results&&[results count]>0){
             NSLog(@"Latest show ok");
             weakSelf.latestShow = [results objectAtIndex:0];
         }else {
+#ifdef NLT_RECORD_LOGS
             if(showsError){
                 [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidAppear_NoLatestShow" withUserInfo:@{@"error":showsError}];
             }else{
                 [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidAppear_NoLatestShows" withUserInfo:nil];
             }
+#endif
         }
         [weakSelf updateDisplay];
     } withFamilyKey:nil withKey:nil];
+    [super viewDidAppear:animated];
 }
 
 - (void)viewDidAppearRefreshEPG{
@@ -154,11 +162,13 @@
     if(self.currentEPGShow == nil){
         NSLog(@"Unable to find current show");
         self.infoLabel.text = @"Impossible de récupérer l'EPG de Nolife pour le moment";
+#ifdef NLT_RECORD_LOGS
         if(self.epgShows){
-            [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidAppear_NoCurrentEPG" withUserInfo:@{@"cachedEPG":self.epgShows}];
+            [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidAppear_NoCurrentEPG" withUserInfo:nil];
         }else{
             [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidAppear_NoEPG" withUserInfo:nil];
         }
+#endif
     }else{
         NSLog(@"EPG Ok");
     }
@@ -170,8 +180,9 @@
 
 - (void)widgetPerformUpdateWithCompletionHandler:(void (^)(NCUpdateResult))completionHandler {
     [self wakeup];
+#ifdef NLT_RECORD_LOGS
     [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_widgetPerformUpdateWithCompletion" withUserInfo:nil];
-
+#endif
     // Perform any setup necessary in order to update the view.
     
     // If an error is encountered, use NCUpdateResultFailed
@@ -196,11 +207,13 @@
         }else{
             epgOk = false;
             weakSelf.infoLabel.text = @"Impossible de récupérer l'EPG de Nolife pour le moment";
+#ifdef NLT_RECORD_LOGS
             if(error){
                 [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_widgetPerformUpdateWithCompletion_NoCurrentEPG" withUserInfo:@{@"error":[error description]}];
             }else if(results){
                 [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_widgetPerformUpdateWithCompletion_NoCurrentEPG" withUserInfo:@{@"results":results}];
             }
+#endif
         }
         [weakSelf updateDisplay];
         
@@ -217,11 +230,14 @@
                     completionHandler(NCUpdateResultFailed);
                 }
             }else{
+                NSLog(@"showKO");
+#ifdef NLT_RECORD_LOGS
                 if(error){
                     [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_widgetPerformUpdateWithCompletion_NoShows" withUserInfo:@{@"error":showsError}];
                 }else{
                     [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_widgetPerformUpdateWithCompletion_NoShows" withUserInfo:nil];
                 }
+#endif
                 completionHandler(NCUpdateResultFailed);
             }
             [weakSelf updateDisplay];
@@ -395,7 +411,7 @@
     [formater setTimeZone:timeZone];
 
     long currentIndex = 0;
-    long closestDistance = 2*3600;
+    long closestDistance = 10*3600;
     NSDate* now = [NSDate date];
     NSDictionary* bestShow = nil;
     for (NSDictionary* show in self.epgShows) {

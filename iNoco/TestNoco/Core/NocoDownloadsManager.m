@@ -36,7 +36,12 @@
         self.tasks = [NSMutableDictionary dictionary];
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            self.backgroundConfigObject = [NSURLSessionConfiguration backgroundSessionConfiguration: @"iNocoBackgroundSessionIdentifier"];
+            if([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0){
+                self.backgroundConfigObject = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"iNocoBackgroundSessionIdentifier"];
+            }else{
+                self.backgroundConfigObject = [NSURLSessionConfiguration backgroundSessionConfiguration: @"iNocoBackgroundSessionIdentifier"];
+            }
+            self.backgroundConfigObject.sharedContainerIdentifier = INOCO_GROUPNAME;
             self.backgroundSession = [NSURLSession sessionWithConfiguration: self.backgroundConfigObject delegate: self delegateQueue: [NSOperationQueue mainQueue]];
         });
 
