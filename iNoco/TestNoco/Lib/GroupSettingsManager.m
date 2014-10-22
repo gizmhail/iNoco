@@ -30,7 +30,7 @@
 - (BOOL) groupSupport:(NSString*)suiteName{
     BOOL groupSupport = false;
     if(self.defaultSuiteName){
-        if([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0){
+        if([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0){
             groupSupport = true;
         }
     }
@@ -94,6 +94,11 @@
     if(!suiteName){
         suiteName = self.defaultSuiteName;
     }
+#ifdef DEBUG
+    if(suiteName == nil){
+        NSLog(@"Trying to use group settings without a suiteName: might be an error");
+    }
+#endif
     BOOL useLocalSettings = true;
     NSUserDefaults* defaults = nil;
     NSUserDefaults* localDefaults = [NSUserDefaults standardUserDefaults];
@@ -133,15 +138,38 @@
         //NSLog(@"No group support for suitName %@",suiteName);
         defaults = localDefaults;
     }
-    if(useLocalSettings){
-        //NSLog(@"Fetching object from local settings with key %@",key);
-        if([key compare:@"NLTOAuth_oauthRefreshToken"]==NSOrderedSame){
-            [self logEvent:@"LocalSourceForNLTOAuth_oauthRefreshToken" withUserInfo:nil];
+    
+    if(self.debugKeys&&[self.debugKeys containsObject:key]){
+        NSMutableDictionary* debugInfo = [NSMutableDictionary dictionary];
+        NSString* updateKey = [NSString stringWithFormat:@"%@%@",key,GSM_SETTINGS_UPDATE_SUFFIX];
+        NSUserDefaults* suiteDefaults = nil;
+        if([self groupSupport:suiteName]){
+            suiteDefaults = [[NSUserDefaults alloc] initWithSuiteName:suiteName];
         }
-    }else{
-        //NSLog(@"Fetching object from %@ settings with key %@",suiteName,key);
-        if([key compare:@"NLTOAuth_oauthRefreshToken"]==NSOrderedSame){
-            [self logEvent:@"GroupSourceForNLTOAuth_oauthRefreshToken" withUserInfo:nil];
+        if([defaults objectForKey:key]){
+            [debugInfo setObject:[defaults objectForKey:key] forKey:@"selected"];
+        }
+        if([localDefaults objectForKey:key]){
+            [debugInfo setObject:[defaults objectForKey:key] forKey:@"local"];
+        }
+        if([localDefaults objectForKey:updateKey]){
+            [debugInfo setObject:[defaults objectForKey:updateKey] forKey:@"localDate"];
+        }
+        if([suiteDefaults objectForKey:key]){
+            [debugInfo setObject:[defaults objectForKey:key] forKey:@"group"];
+        }
+        if([suiteDefaults objectForKey:updateKey]){
+            [debugInfo setObject:[defaults objectForKey:updateKey] forKey:@"groupDate"];
+        }
+        
+        if(useLocalSettings){
+            //NSLog(@"Fetching object from local settings with key %@",key);
+            NSString* event = [NSString stringWithFormat:@"LocalSourceFor%@",key];
+            [self logEvent:event withUserInfo:debugInfo];
+        }else{
+            //NSLog(@"Fetching object from %@ settings with key %@",suiteName,key);
+            NSString* event = [NSString stringWithFormat:@"GroupSourceFor%@",key];
+            [self logEvent:event withUserInfo:debugInfo];
         }
     }
     return defaults;
@@ -168,11 +196,22 @@
     NSUserDefaults* localDefaults = [NSUserDefaults standardUserDefaults];
     [localDefaults setObject:object forKey:key];
     [localDefaults setObject:now forKey:updateKey];
+    
+    if(self.debugKeys&&[self.debugKeys containsObject:key]){
+        NSString* event = [NSString stringWithFormat:@"LocalSetFor%@",key];
+        [self logEvent:event withUserInfo:@{@"value":object}];
+    }
+
     //NSLog(@"Set local settings ; Key %@ ",key);
     if(!suiteName){
         suiteName = self.defaultSuiteName;
     }
     if([self groupSupport:suiteName]){
+        if(self.debugKeys&&[self.debugKeys containsObject:key]){
+            NSString* event = [NSString stringWithFormat:@"GroupSetFor%@",key];
+            [self logEvent:event withUserInfo:@{@"value":object}];
+        }
+        
         NSUserDefaults* suiteDefaults = [[NSUserDefaults alloc] initWithSuiteName:suiteName];
         //NSLog(@"Set %@ settings ; Key %@ ",suiteName,key);
         [suiteDefaults setObject:object forKey:key];

@@ -61,6 +61,10 @@
 
 - (void)wakeup{
     [[GroupSettingsManager sharedInstance] setDefaultSuiteName:INOCO_GROUPNAME];
+#ifdef NLT_RECORD_LOGS
+    [GroupSettingsManager sharedInstance].debugKeys = @[@"NLTOAuth_oauthAccessToken",
+                                @"NLTOAuth_oauthRefreshToken"];
+#endif
     [[GroupSettingsManager sharedInstance] synchronize];
     [[NLTOAuth sharedInstance] loadOauthInfo];
     [[NLTAPI sharedInstance] loadCache];

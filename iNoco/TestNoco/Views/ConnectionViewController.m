@@ -64,8 +64,13 @@
                 [weakSelf dismissViewControllerAnimated:YES completion:^{
                 }];
             }
+            
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+                if([error.domain compare:@"NLTErrorDomain"]==NSOrderedSame && error.code == 666){
+                    [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Les serveurs d'authentification de noco sont actuellement indisponibles. Veuillez réessayer plus tard, désolé pour ce dérangement." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+                }else{
+                    [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+                }
             });
         }
     }];

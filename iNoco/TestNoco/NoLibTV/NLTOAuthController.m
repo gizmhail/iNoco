@@ -90,6 +90,13 @@
              break;\
          }\
      }"];
+    NSString *html = [self.webview stringByEvaluatingJavaScriptFromString:@"document.body.innerHTML"];
+    if(html && [html rangeOfString:@"Fatal error"].location != NSNotFound){
+        NSLog(@"Noco auth server is dead (Fatal error in output)");
+        NSError* error = [NSError errorWithDomain:@"NLTErrorDomain" code:666 userInfo:@{@"oauthError":@"Auth serveur down"}];
+        [[NLTOAuth sharedInstance] errorDuringNLTOAuthControllerDisplay:error];
+    }
+
 #endif
 }
 

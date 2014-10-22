@@ -41,7 +41,7 @@
             }else{
                 self.backgroundConfigObject = [NSURLSessionConfiguration backgroundSessionConfiguration: @"iNocoBackgroundSessionIdentifier"];
             }
-            self.backgroundConfigObject.sharedContainerIdentifier = INOCO_GROUPNAME;
+            //self.backgroundConfigObject.sharedContainerIdentifier = INOCO_GROUPNAME;
             self.backgroundSession = [NSURLSession sessionWithConfiguration: self.backgroundConfigObject delegate: self delegateQueue: [NSOperationQueue mainQueue]];
         });
 
@@ -380,6 +380,9 @@
         NSLog(@"Missing showinfo in downloadInfo %@ (probably canceling)", downloadInfo);
 #endif
     }
+#ifdef DEBUG
+    //NSLog(@"Progress %f %lld %lld",progress,totalBytesWritten,totalBytesExpectedToWrite);
+#endif
     NLTShow* downloadShow = [[NLTShow alloc] initWithDictionnary:[downloadInfo objectForKey:@"showInfo"]];
     //NSLog(@"[Show %i] Session download task wrote (%i%%) an additional %lld bytes (total %lld bytes) out of an expected %lld bytes.\n", downloadShow.id_show,(int)(progress*100), bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
     [downloadInfo setObject:[NSNumber numberWithFloat:progress] forKey:@"progress"];

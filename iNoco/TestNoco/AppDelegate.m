@@ -33,6 +33,13 @@ void uncaughtExceptionHandler(NSException *exception) {
 #endif
     [Crashlytics startWithAPIKey:CRASHLITICS_KEY afterDelay:5];
 
+    GroupSettingsManager* groupSettings = [GroupSettingsManager sharedInstance];
+    groupSettings.defaultSuiteName = INOCO_GROUPNAME;
+#ifdef NLT_RECORD_LOGS
+    groupSettings.debugKeys = @[@"NLTOAuth_oauthAccessToken",
+                                @"NLTOAuth_oauthRefreshToken"];
+#endif
+
 #ifdef DEBUG
     //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
 #endif
@@ -49,8 +56,6 @@ void uncaughtExceptionHandler(NSException *exception) {
     //NLTAPI conf
     
     NSString* catalog = DEFAULT_CATALOG;
-    GroupSettingsManager* groupSettings = [GroupSettingsManager sharedInstance];
-    groupSettings.defaultSuiteName = INOCO_GROUPNAME;
     //Migration of shared keys (between app and extension when first having extension update
     [groupSettings copyIfNeededFromLocalKeys:@[
                                                @"NLTAPI_cachedResults",

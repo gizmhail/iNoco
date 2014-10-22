@@ -15,6 +15,8 @@
 @interface GroupSettingsManager : NSObject
 
 @property(retain,nonatomic) NSString* defaultSuiteName;
+//Array of keys that need deep debugging with logs
+@property(retain,nonatomic) NSArray*debugKeys;
 
 #pragma mark - Real  methods
 
