@@ -38,6 +38,8 @@
 @property (retain, nonatomic) NSError* readError;
 @property (retain, nonatomic) NSDate* playStart;
 @property (retain, nonatomic) NSTimer* playStartTimer;
+@property (assign, nonatomic) float imageContainerSize;
+@property (assign, nonatomic) float imageContainerOrigin;
 @end
 
 //TODO MOve this static strings in localisation file
@@ -72,6 +74,7 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     [self.watchListButton.layer setCornerRadius:2.0f];
     [self.watchListBackground.layer setCornerRadius:5.0f];
     [self.readBackground.layer setCornerRadius:5.0f];
+    
     
     self.csaImageView.image = nil;
     if([self.show.rating_fr intValue] == 10){
@@ -806,6 +809,29 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         controller.show = show;
         [self.navigationController pushViewController:controller animated:YES];
     }
+}
+
+#pragma mark UIScrollViewDelegate
+
+- (void) scrollViewDidScroll:(UIScrollView *)scrollView{
+    if(scrollView == self.collectionView){
+        return;
+    }
+    if (scrollView.contentOffset.y <=0){
+        UIView*container = self.imageView.superview;
+        if(self.imageContainerSize == 0){
+            self.imageContainerSize = container.frame.size.height;
+            self.imageContainerOrigin = container.frame.origin.y;
+            container.backgroundColor = [UIColor redColor];
+        }
+        container.frame = CGRectMake(
+                                     container.frame.origin.x,
+                                     self.imageContainerOrigin + scrollView.contentOffset.y,
+                                     container.frame.size.width,
+                                     self.imageContainerSize - scrollView.contentOffset.y
+        );
+    }
+
 }
 
 @end

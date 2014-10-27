@@ -275,7 +275,7 @@
     for (NSDictionary* show in epg) {
         NSDate* broadcastDate = [formater dateFromString:[show objectForKey:@"dateUTC"]];
         NSDateComponents* components = [calendar components:NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit fromDate:broadcastDate];
-        NSString* headerLabel = [NSString stringWithFormat:@"%02i/%02i/%i",[components day], [components month], [components year]];
+        NSString* headerLabel = [NSString stringWithFormat:@"%02li/%02li/%li",(long)[components day], (long)[components month], (long)[components year]];
         if(![sections containsObject:headerLabel]){
             [sections addObject:headerLabel];
         }
@@ -297,7 +297,7 @@
     [formater setTimeZone:timeZone];
     NSCalendar* calendar = [NSCalendar currentCalendar];
     NSDateComponents* components = [calendar components:NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit fromDate:now];
-    NSString* header = [NSString stringWithFormat:@"%02i/%02i/%i",[components day], [components month], [components year]];
+    NSString* header = [NSString stringWithFormat:@"%02li/%02li/%li",(long)[components day], (long)[components month], (long)[components year]];
     long section = 0;
     long row = 0;
     if([self.epgDays containsObject:header]){

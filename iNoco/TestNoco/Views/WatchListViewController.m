@@ -70,7 +70,7 @@
 
 }
 
-- (void)indexDataUnavailable:(int)index{
+- (void)indexDataUnavailable:(long)index{
     if(index < [self.watchlistIds count]){
         NSNumber* idNumber =  [self.watchlistIds objectAtIndex:index];
         [self.watchlistIds removeObject:idNumber];

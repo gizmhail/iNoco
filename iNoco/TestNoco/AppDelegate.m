@@ -179,7 +179,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     
     
 #ifdef NLT_RECORD_LOGS
-    NSMutableArray* logs = [[GroupSettingsManager sharedInstance] logs];
+    //NSMutableArray* logs = [[GroupSettingsManager sharedInstance] logs];
     //NSLog(@"%@",logs);
     
     [[GroupSettingsManager sharedInstance] logEvent:@"iNoco_DidBecomeActive" withUserInfo:nil];

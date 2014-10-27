@@ -538,12 +538,12 @@
     }
 }
 
-- (void)familiesAtPage:(int)page withResultBlock:(NLTCallResponseBlock)responseBlock withKey:(id)key{
+- (void)familiesAtPage:(long)page withResultBlock:(NLTCallResponseBlock)responseBlock withKey:(id)key{
     NSString* baseCall = @"families";
     if(self.subscribedOnly){
         baseCall = @"families/subscribed";
     }
-    NSString* urlStr = [NSString stringWithFormat:@"%@?page=%i&elements_per_page=%i", baseCall, page, [self resultsByPage]];
+    NSString* urlStr = [NSString stringWithFormat:@"%@?page=%li&elements_per_page=%i", baseCall, page, [self resultsByPage]];
     //We do not add partner key if a specific family is requested
     if(self.partnerKey){
         urlStr = [urlStr stringByAppendingFormat:@"&partner_key=%@", self.partnerKey];

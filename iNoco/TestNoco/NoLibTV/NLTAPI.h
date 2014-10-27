@@ -92,7 +92,7 @@
 - (void)familyWithFamilyMergedKey:(NSString*)familyMergedKey withResultBlock:(NLTCallResponseBlock)responseBlock withKey:(id)key;
 
 #pragma mark Families list
-- (void)familiesAtPage:(int)page withResultBlock:(NLTCallResponseBlock)responseBlock withKey:(id)key;
+- (void)familiesAtPage:(long)page withResultBlock:(NLTCallResponseBlock)responseBlock withKey:(id)key;
 
 #pragma mark Shows list
 //Response block  will contain an array of NLTShow objects

@@ -16,10 +16,10 @@
 #import "FamilyTableViewCell.h"
 
 @interface SearchViewController (){
-    int maxShows;
+    long maxShows;
     BOOL emptyFamilyPageFound;
     int pendingFamilyPageCalls;
-    int maxFamily;
+    long maxFamily;
     BOOL useFamilyList;
 }
 
@@ -89,7 +89,7 @@
     [self.collectionView reloadData];
 }
 
-- (void)filterShowsAtPage:(int)page{
+- (void)filterShowsAtPage:(long)page{
 }
 
 - (NLTShow*)showAtIndex:(long)showIndex{
@@ -261,11 +261,11 @@
     long page = 0;
     long indexInPage = 0;
     long remainingIndex = indexPath.row;
-    int currentPage = 0;
+    long currentPage = 0;
     while(remainingIndex >= 0){
         //Default page count if page not fetched
         long pageCount = (long)[[NLTAPI sharedInstance] resultsByPage];
-        NSArray* resultsInPage = [self.familiesByPage objectForKey:[NSNumber numberWithInt:currentPage]];
+        NSArray* resultsInPage = [self.familiesByPage objectForKey:[NSNumber numberWithLong:currentPage]];
         if(resultsInPage){
             pageCount = [resultsInPage count];
         }
@@ -287,7 +287,7 @@
     long indexInPage = positionInResults.row;
 
     id result = nil;
-    NSArray* pageResults = [self.familiesByPage objectForKey:[NSNumber numberWithInt:(int)page]];
+    NSArray* pageResults = [self.familiesByPage objectForKey:[NSNumber numberWithLong:page]];
     if(pageResults){
         if([pageResults count]>indexInPage){
             result = [pageResults objectAtIndex:indexInPage];
@@ -337,7 +337,7 @@
     NSIndexPath* positionInResults = [self positionInResultsForTableFamilyAtIndexPath:indexPath];
     long page = positionInResults.section;
     __weak SearchViewController* weakSelf = self;
-    if(![self.familiesByPage objectForKey:[NSNumber numberWithInt:page]]){
+    if(![self.familiesByPage objectForKey:[NSNumber numberWithLong:page]]){
         [[NLTOAuth sharedInstance]isAuthenticatedAfterRefreshTokenUse:^(BOOL authenticated, NSError* error) {
             if(authenticated){
                 [weakSelf showLoadingActivity];
@@ -350,7 +350,7 @@
                         BOOL quotaError = [weakSelf checkErrorForQuotaLimit:error];
                         maxFamily = [weakSelf tableEntriesCount];
 #ifdef DEBUG
-                        NSLog(@"maxFamily (%i) set due to error in page fetching", maxFamily);
+                        NSLog(@"maxFamily (%li) set due to error in page fetching", maxFamily);
 #endif
                         if(!weakSelf.errorAlert&&!quotaError){
                             weakSelf.errorAlert = [[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:weakSelf   cancelButtonTitle:@"Ok" otherButtonTitles:nil];
@@ -362,12 +362,12 @@
                             if([(NSArray*)result count]<[[NLTAPI sharedInstance] resultsByPage]){
                                 //End of available shows (not a full page of results)
 #ifdef DEBUG
-                                NSLog(@"Empty family page found (%i)",page);
+                                NSLog(@"Empty family page found (%li)",page);
 #endif
                                 emptyFamilyPageFound = TRUE;
                             }
-                            if(![weakSelf.familiesByPage objectForKey:[NSNumber numberWithInt:page]]){
-                                [weakSelf.familiesByPage setObject:[NSMutableArray arrayWithArray:result] forKey:[NSNumber numberWithInt:page]];
+                            if(![weakSelf.familiesByPage objectForKey:[NSNumber numberWithLong:page]]){
+                                [weakSelf.familiesByPage setObject:[NSMutableArray arrayWithArray:result] forKey:[NSNumber numberWithLong:page]];
                                 [weakSelf.familyTableview reloadData];
                                 UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, weakSelf.familyTableview);
                             }
@@ -381,7 +381,7 @@
                         if(pendingFamilyPageCalls <= 0){
                             maxFamily = [weakSelf tableEntriesCount];
 #ifdef DEBUG
-                            NSLog(@"maxFamily (%i) set due to current emptyFamilyPageFound and pendingFamilyPageCalls == 0", maxFamily);
+                            NSLog(@"maxFamily (%li) set due to current emptyFamilyPageFound and pendingFamilyPageCalls == 0", maxFamily);
 #endif
                             
                             [weakSelf.familyTableview reloadData];
@@ -496,7 +496,7 @@
     if(!self.search || [self.search compare:@""]==NSOrderedSame){
         return 0;
     }
-    int resultCount = [super collectionView:collectionView numberOfItemsInSection:section];
+    long resultCount = [super collectionView:collectionView numberOfItemsInSection:section];
     if(resultCount == 0){
         self.noResultLabel.hidden = FALSE;
     }else{

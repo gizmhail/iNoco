@@ -11,7 +11,7 @@
 #import "AppDelegate.h"
 #import "ShowPlayerManager.h"
 
-@interface ShowViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UIActionSheetDelegate,RemoteControlEventHandlerProtocol,UIAlertViewDelegate,ShowPlayerManagerDelegate>
+@interface ShowViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UIActionSheetDelegate,RemoteControlEventHandlerProtocol,UIAlertViewDelegate,ShowPlayerManagerDelegate,UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *famillyLabel;
 @property (weak, nonatomic) IBOutlet UILabel *episodeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;

@@ -115,7 +115,7 @@
 - (void)viewDidAppear:(BOOL)animated{
     [self wakeup];
 #ifdef NLT_RECORD_LOGS
-    NSMutableArray* logs = [[GroupSettingsManager sharedInstance] logs];
+    //NSMutableArray* logs = [[GroupSettingsManager sharedInstance] logs];
     //NSLog(@"%@",logs);
     [[GroupSettingsManager sharedInstance] logEvent:@"TodayExtension_viewDidAppear" withUserInfo:nil];
 #endif

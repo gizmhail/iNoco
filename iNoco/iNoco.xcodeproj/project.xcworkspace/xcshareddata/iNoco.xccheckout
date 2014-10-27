@@ -14,7 +14,7 @@
 		<string>https://github.com/gizmhail/iNoco.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>iNoco/iNoco.xcodeproj/project.xcworkspace</string>
+	<string>iNoco/iNoco.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>90A1E2D7DDE67E46750CD52AACEE321CAC6391D2</key>

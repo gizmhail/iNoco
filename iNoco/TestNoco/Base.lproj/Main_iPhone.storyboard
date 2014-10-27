@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="8YX-ce-x5E">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="8YX-ce-x5E">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <scenes>
         <!--récents-->
@@ -537,13 +538,13 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="100" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="EL_S14s25_1085838.jpg" id="3TQ-T4-a7P">
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="100" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="EL_S14s25_1085838.jpg" id="3TQ-T4-a7P">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             </imageView>
                                             <button opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="VrH-FC-s8j">
                                                 <rect key="frame" x="131" y="36" width="57" height="108"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <accessibility key="accessibilityConfiguration" label="lire la vidéo"/>
                                                 <state key="normal" image="Octicons-playback-play.png"/>
                                                 <connections>
@@ -574,7 +575,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                             </view>
                                             <view tag="200" contentMode="scaleToFill" id="BRG-CZ-p6n">
                                                 <rect key="frame" x="159" y="110" width="128" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <subviews>
                                                     <view alpha="0.64999997615814209" tag="205" contentMode="scaleToFill" id="OCC-2B-g2T">
                                                         <rect key="frame" x="0.0" y="0.0" width="123" height="21"/>
@@ -593,7 +594,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                             </view>
                                             <view contentMode="scaleToFill" id="X2p-9G-K96">
                                                 <rect key="frame" x="4" y="156" width="148" height="18"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <subviews>
                                                     <view alpha="0.64999997615814209" tag="205" contentMode="scaleToFill" id="hyB-ih-LLg">
                                                         <rect key="frame" x="0.0" y="0.0" width="148" height="18"/>
@@ -634,7 +635,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                             </view>
                                             <view contentMode="scaleToFill" id="IwH-Zr-Ph9">
                                                 <rect key="frame" x="196" y="156" width="117" height="18"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                 <subviews>
                                                     <view alpha="0.64999997615814209" tag="205" contentMode="scaleToFill" id="L7t-67-GIf">
                                                         <rect key="frame" x="0.0" y="0.0" width="117" height="18"/>
@@ -825,6 +826,9 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                         <size key="value" width="320" height="550"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="delegate" destination="E8O-zX-w2W" id="fQI-PE-Rfk"/>
+                                </connections>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1092,6 +1096,9 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                         <size key="value" width="320" height="550"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="delegate" destination="5XC-dH-r0F" id="ZK2-lS-QWh"/>
+                                </connections>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -1611,8 +1618,8 @@ Les geeks ont une vie. Même s'ils ne bougent pas beaucoup.</string>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="sfA-Fu-WAQ"/>
-        <segue reference="uN7-L9-3aO"/>
         <segue reference="kd9-uj-CES"/>
+        <segue reference="sfA-Fu-WAQ"/>
+        <segue reference="SK6-5m-Pcy"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -272,7 +272,7 @@
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     
     [request setHTTPBody:[dataStr dataUsingEncoding:NSUTF8StringEncoding]];
-    [request setValue:[NSString stringWithFormat:@"%d", [[dataStr dataUsingEncoding:NSUTF8StringEncoding] length]] forHTTPHeaderField:@"Content-Length"];
+    [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[[dataStr dataUsingEncoding:NSUTF8StringEncoding] length]] forHTTPHeaderField:@"Content-Length"];
     
     
     NSURLConnection* connection = [NSURLConnection connectionWithRequest:request delegate:self];

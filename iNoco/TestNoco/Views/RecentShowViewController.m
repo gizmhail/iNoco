@@ -255,7 +255,7 @@
     return [[[self.resultByPage allKeys] valueForKeyPath:@"@max.intValue"] integerValue];
 }
 
-- (void)loadResultAtIndex:(int)resultIndex{
+- (void)loadResultAtIndex:(long)resultIndex{
     NSIndexPath* indexPath = [self pageAndIndexInPageFor:resultIndex];
     int page = (int) indexPath.section;
     __weak RecentShowViewController* weakSelf = self;
@@ -490,7 +490,7 @@
     if(self.filter){
         self.filteredResultByPage = [NSMutableDictionary dictionary];
         for (NSNumber* page in [self.resultByPage allKeys]) {
-            [self filterShowsAtPage:[page integerValue]];
+            [self filterShowsAtPage:[page longValue]];
             total += [[self.resultByPage objectForKey:page] count];
             filtered += [[self.filteredResultByPage objectForKey:page] count];
         }
@@ -498,7 +498,7 @@
     NSLog(@"Filter : %i / %i",filtered, total);
 }
 
-- (void)filterShowsAtPage:(int)page{
+- (void)filterShowsAtPage:(long)page{
     if(self.filter){
         NSArray* shows = [self.resultByPage objectForKey:[NSNumber numberWithInt:page]];
         if(shows){
@@ -519,7 +519,7 @@
                     }
                 }
             }
-            [self.filteredResultByPage setObject:filteredShows forKey:[NSNumber numberWithInt:page]];
+            [self.filteredResultByPage setObject:filteredShows forKey:[NSNumber numberWithLong:page]];
         }
     }
 }
@@ -603,12 +603,12 @@
         return 0;
     }
     if(self.filter){
-        int maxPage = [self greatestFetchedPage];
-        int page =  0 ;
+        long maxPage = [self greatestFetchedPage];
+        long page =  0 ;
         int total = 0;
         while(page <= maxPage){
-            NSArray* filteredShowsInPage = [self.filteredResultByPage objectForKey:[NSNumber numberWithInt:page]];
-            int pageCount = [[NLTAPI sharedInstance] resultsByPage];
+            NSArray* filteredShowsInPage = [self.filteredResultByPage objectForKey:[NSNumber numberWithLong:page]];
+            long pageCount = [[NLTAPI sharedInstance] resultsByPage];
             if(filteredShowsInPage){
                 pageCount = [filteredShowsInPage count];
             }

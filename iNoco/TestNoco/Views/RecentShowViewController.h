@@ -13,7 +13,7 @@
 #import "ShowCollectionViewCell.h"
 
 @interface RecentShowViewController : UIViewController <UICollectionViewDataSource,UICollectionViewDelegate,ConnectionViewControllerDelegate,UISearchBarDelegate,UIAlertViewDelegate>{
-    int maxShows;
+    long maxShows;
 }
 @property (assign,nonatomic) BOOL initialAuthentCheckDone;
 @property (retain, nonatomic) NSMutableDictionary* resultByPage;
@@ -35,7 +35,7 @@
 - (id)resultAtIndex:(long)index;
 - (NLTShow*)showAtIndex:(long)showIndex;
 - (NSIndexPath*)pageAndIndexInPageFor:(long)showIndex;
-- (void)loadResultAtIndex:(int)resultIndex;
+- (void)loadResultAtIndex:(long)resultIndex;
 - (void)resetResult;
 - (void)removeResultAtIndex:(long)index;
 - (void)loadShowCell:(ShowCollectionViewCell*)cell withShow:(NLTShow*)show;

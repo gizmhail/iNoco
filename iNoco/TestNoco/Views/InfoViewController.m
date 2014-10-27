@@ -18,6 +18,8 @@
 @property(retain, nonatomic) NSArray* subtitleSegmentedEntriesValues;
 @property(retain, nonatomic) NSArray* qualitySegmentedEntriesValues;
 @property(retain, nonatomic) NSDate* debugDate;
+@property (assign, nonatomic) float imageContainerSize;
+@property (assign, nonatomic) float imageContainerOrigin;
 
 @end
 
@@ -272,6 +274,26 @@
 
 -(void)dealloc{
     [[NLTAPI sharedInstance] cancelCallsWithKey:self];
+}
+
+#pragma mark UIScrollViewDelegate
+
+- (void) scrollViewDidScroll:(UIScrollView *)scrollView{
+    if (scrollView.contentOffset.y <=0){
+        UIView*container = self.headerImageView;
+        if(self.imageContainerSize == 0){
+            self.imageContainerSize = container.frame.size.height;
+            self.imageContainerOrigin = container.frame.origin.y;
+            container.backgroundColor = [UIColor redColor];
+        }
+        container.frame = CGRectMake(
+                                     container.frame.origin.x,
+                                     self.imageContainerOrigin + scrollView.contentOffset.y,
+                                     container.frame.size.width,
+                                     self.imageContainerSize - scrollView.contentOffset.y
+                                     );
+    }
+    
 }
 
 @end
