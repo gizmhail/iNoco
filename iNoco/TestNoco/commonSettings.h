@@ -36,7 +36,8 @@
 #pragma mark -
 #pragma mark Extensions
 
-#define INOCO_GROUPNAME @"group.name.poivre.iNoco"
+//@"group.name.poivre.iNoco"
+#define INOCO_GROUPNAME [[NSBundle mainBundle] objectForInfoDictionaryKey:@"GSMGroupId"]
 
 //Debugging group logs
 #ifdef DEBUG

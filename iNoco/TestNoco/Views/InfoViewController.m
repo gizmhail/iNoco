@@ -249,8 +249,6 @@
             }
             self.qualitySegmentedControl.selectedSegmentIndex = [self.qualitySegmentedEntriesValues indexOfObject:preferedQuality];
 
-            
-
             self.accountName.text = @"Chargement ...";
             [self.connectionButton setTitle:@"se déconnecter" forState:UIControlStateNormal];
             [[NLTAPI sharedInstance] userAccountInfoWithResultBlock:^(id result, NSError *error) {

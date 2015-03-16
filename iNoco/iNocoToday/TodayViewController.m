@@ -60,7 +60,6 @@
 #pragma mark Wake up
 
 - (void)wakeup{
-    [[GroupSettingsManager sharedInstance] setDefaultSuiteName:INOCO_GROUPNAME];
 #ifdef NLT_RECORD_LOGS
     [GroupSettingsManager sharedInstance].debugKeys = @[@"NLTOAuth_oauthAccessToken",
                                 @"NLTOAuth_oauthRefreshToken"];

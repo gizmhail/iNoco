@@ -23,6 +23,10 @@
 
 - (id)init{
     if(self = [super init]){
+        NSString* infoSuiteName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"GSMGroupId"];
+        if(infoSuiteName){
+            self.defaultSuiteName = infoSuiteName;
+        }
     }
     return self;
 }
@@ -150,16 +154,16 @@
             [debugInfo setObject:[defaults objectForKey:key] forKey:@"selected"];
         }
         if([localDefaults objectForKey:key]){
-            [debugInfo setObject:[defaults objectForKey:key] forKey:@"local"];
+            [debugInfo setObject:[localDefaults objectForKey:key] forKey:@"local"];
         }
         if([localDefaults objectForKey:updateKey]){
-            [debugInfo setObject:[defaults objectForKey:updateKey] forKey:@"localDate"];
+            [debugInfo setObject:[localDefaults objectForKey:updateKey] forKey:@"localDate"];
         }
         if([suiteDefaults objectForKey:key]){
-            [debugInfo setObject:[defaults objectForKey:key] forKey:@"group"];
+            [debugInfo setObject:[suiteDefaults objectForKey:key] forKey:@"group"];
         }
         if([suiteDefaults objectForKey:updateKey]){
-            [debugInfo setObject:[defaults objectForKey:updateKey] forKey:@"groupDate"];
+            [debugInfo setObject:[suiteDefaults objectForKey:updateKey] forKey:@"groupDate"];
         }
         
         if(useLocalSettings){

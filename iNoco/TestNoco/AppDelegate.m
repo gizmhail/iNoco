@@ -34,7 +34,6 @@ void uncaughtExceptionHandler(NSException *exception) {
     [Crashlytics startWithAPIKey:CRASHLITICS_KEY afterDelay:5];
 
     GroupSettingsManager* groupSettings = [GroupSettingsManager sharedInstance];
-    groupSettings.defaultSuiteName = INOCO_GROUPNAME;
 #ifdef NLT_RECORD_LOGS
     groupSettings.debugKeys = @[@"NLTOAuth_oauthAccessToken",
                                 @"NLTOAuth_oauthRefreshToken"];
@@ -172,7 +171,6 @@ void uncaughtExceptionHandler(NSException *exception) {
 - (void)applicationDidBecomeActive:(UIApplication *)application{
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     //We reload info coming from the settings, as the extension might have changed them
-    [[GroupSettingsManager sharedInstance] setDefaultSuiteName:INOCO_GROUPNAME];
     [[GroupSettingsManager sharedInstance] synchronize];
     [[NLTOAuth sharedInstance] loadOauthInfo];
     [[NLTAPI sharedInstance] loadCache];

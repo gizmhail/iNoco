@@ -14,6 +14,7 @@
 #endif
 @interface GroupSettingsManager : NSObject
 
+//defaultSuiteName can also be stored in a custom GSMGroupId info.list key
 @property(retain,nonatomic) NSString* defaultSuiteName;
 //Array of keys that need deep debugging with logs
 @property(retain,nonatomic) NSArray*debugKeys;
