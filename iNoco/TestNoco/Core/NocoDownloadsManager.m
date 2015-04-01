@@ -116,6 +116,9 @@
                 }
             }
         }
+        if([fileName compare:@"com.crashlytics"]==NSOrderedSame){
+            fileNeeded = TRUE;
+        }
         if(!fileNeeded){
             NSLog(@"Erase file not used anymore %@", downloadedFilePath);
             NSURL *fileURL = [NSURL fileURLWithPath:downloadedFilePath ];

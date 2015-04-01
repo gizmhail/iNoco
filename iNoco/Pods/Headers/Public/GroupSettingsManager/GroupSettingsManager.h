@@ -1,0 +1,1 @@
+../../../GroupSettingsManager/GroupSettingsManager/GroupSettingsManager.h

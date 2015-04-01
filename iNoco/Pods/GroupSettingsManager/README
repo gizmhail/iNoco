@@ -1,0 +1,12 @@
+GroupSettingsManager will easily save settings in both local settings and group settings, to simplify usage between an app and its extensions
+
+In each target Info.plist, fill a GSMGroupId key, containing your group name string ("group.<...>").
+Then, use [GroupSettingsManager sharedInstance] as you would use [NSUserDefaults standardUserDefaults], your keys will be saved in NSUserDefaults standardUserDefaults and in the NSUserDefaults with your group name as its suite name. 
+
+The lib includes some logging tools, to help debugging key lifecycle between an app and its extension.
+
+= Licence =
+
+MIT licence
+
+

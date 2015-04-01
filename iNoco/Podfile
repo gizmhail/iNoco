@@ -1,0 +1,18 @@
+# Uncomment this line to define a global platform for your project
+# platform :ios, '6.0'
+
+
+source 'https://github.com/CocoaPods/Specs.git'
+target 'iNoco' do
+	pod 'GroupSettingsManager'
+	pod 'google-cast-sdk'
+end
+
+target 'iNocoTests' do
+	pod 'GroupSettingsManager'
+end
+
+target 'iNocoToday' do
+	pod 'GroupSettingsManager'
+end
+

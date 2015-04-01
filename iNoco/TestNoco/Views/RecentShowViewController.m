@@ -42,6 +42,21 @@
     [super viewDidLoad];
     [self resetResult];
     [self refreshControlSetup];
+    self.watchSegmentedControl.selectedSegmentIndex = [self memorizedSegmentedControl];
+}
+
+- (void)toggleFilterView:(BOOL)enable{
+    if(enable){
+        self.filterView.hidden = FALSE;
+        if([self isMemberOfClass:[RecentShowViewController class]]){
+            //self.collectionView.contentInset = UIEdgeInsetsMake(self.filterView.frame.size.height, 0,0,0);
+        }
+    }else{
+        self.filterView.hidden = TRUE;
+        if([self isMemberOfClass:[RecentShowViewController class]]){
+            //self.collectionView.contentInset = UIEdgeInsetsMake(0, 0,0,0);
+        }
+    }
 }
 
 - (void)refreshControlSetup{
@@ -72,10 +87,14 @@
         self.searchBar.hidden = TRUE;
     }
     
-    if(self.family || (ALWAYS_DISPLAY_READFILTER_IN_RECENT_SHOWS && [self isMemberOfClass:[RecentShowViewController class]]) ){
+    BOOL displayFilter = self.family != nil;
+    displayFilter = displayFilter || (ALWAYS_DISPLAY_READFILTER_IN_RECENT_SHOWS && [self isMemberOfClass:[RecentShowViewController class]]);
+    displayFilter = displayFilter || ([self memorizedSegmentedControl] != 0 && [self isMemberOfClass:[RecentShowViewController class]]);
+    
+    if(displayFilter ){
         //We force display of filter viewx in family mode
         if(self.filterView.hidden){
-            self.filterView.hidden = FALSE;
+            [self toggleFilterView:TRUE];
         }
     }
     
@@ -163,8 +182,20 @@
         //Filter is not displayed
         [self.collectionView reloadData];
     }else{
+        if([self isMemberOfClass:[RecentShowViewController class]]){
+            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithLong:self.watchSegmentedControl.selectedSegmentIndex] forKey:@"RecentShowFilter"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
         [self searchBarSearchButtonClicked:self.searchBar];
     }
+}
+
+- (long)memorizedSegmentedControl{
+    long segment = 0;
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"RecentShowFilter"]){
+        segment = [[NSUserDefaults standardUserDefaults] integerForKey:@"RecentShowFilter"];
+    }
+    return segment;
 }
 
 #pragma mark Activity
@@ -560,7 +591,9 @@
     self.filteredResultByPage = nil;
     [self.collectionView reloadData];
     UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, @"Filtrage");
-    self.filterView.hidden = TRUE;
+    if([self memorizedSegmentedControl] == 0){
+        [self toggleFilterView:FALSE];
+    }
 }
 
 
@@ -575,13 +608,20 @@
     UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, @"Annulation du filtre");
     [searchBar resignFirstResponder];
     [[UISegmentedControl appearanceWhenContainedIn:[UISearchBar class], nil] setTintColor:searchBar.tintColor];
-    if( ! ALWAYS_DISPLAY_READFILTER_IN_RECENT_SHOWS || ! [self isMemberOfClass:[RecentShowViewController class]] ){
-        self.filterView.hidden = TRUE;
+    
+    
+    BOOL displayFilter = self.family != nil;
+    displayFilter = displayFilter || (ALWAYS_DISPLAY_READFILTER_IN_RECENT_SHOWS && [self isMemberOfClass:[RecentShowViewController class]]);
+    displayFilter = displayFilter || ([self memorizedSegmentedControl] != 0 && [self isMemberOfClass:[RecentShowViewController class]]);
+    
+    if( ! displayFilter ){
+        [self toggleFilterView:FALSE];
     }
 }
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
-    self.filterView.hidden = FALSE;
+    [self toggleFilterView:TRUE];
+    [self.collectionView.collectionViewLayout invalidateLayout];
     return YES;
 }
 
@@ -700,8 +740,12 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
     UIEdgeInsets edgeInset = UIEdgeInsetsMake(0,0,0,0);
-    if(self.family|| (ALWAYS_DISPLAY_READFILTER_IN_RECENT_SHOWS && [self isMemberOfClass:[RecentShowViewController class]]) ){
-        edgeInset = UIEdgeInsetsMake(40,0,0,0);
+    BOOL displayFilter = self.family != nil;
+    displayFilter = displayFilter || (ALWAYS_DISPLAY_READFILTER_IN_RECENT_SHOWS && [self isMemberOfClass:[RecentShowViewController class]]);
+    //displayFilter = displayFilter || ([self memorizedSegmentedControl] != 0 && [self isMemberOfClass:[RecentShowViewController class]]);
+    displayFilter = displayFilter || (self.filterView.hidden == FALSE && [self isMemberOfClass:[RecentShowViewController class]]);
+    if(displayFilter ){
+        edgeInset = UIEdgeInsetsMake(self.filterView.frame.size.height,0,0,0);
     }
     return edgeInset;
 }
