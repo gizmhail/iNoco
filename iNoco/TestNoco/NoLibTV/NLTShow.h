@@ -92,6 +92,18 @@
 @property (retain, nonatomic) NSArray* full_audio_languages; // type unsure (no value seen)
 @property (retain, nonatomic) NSArray* full_video_languages; // type unsure (no value seen)
 @property (retain, nonatomic) NSString* access_error;
+@property (retain, nonatomic) NSNumber* rated_this_week;
+@property (retain, nonatomic) NSNumber* rated_all_time;
+@property (retain, nonatomic) NSNumber* partner_actif;
+@property (retain, nonatomic) NSNumber* nb_shows;
+@property (retain, nonatomic) NSNumber* in_queue_list;
+@property (retain, nonatomic) NSDate* last_sorting_date_utc;
+@property (retain, nonatomic) NSString* link_comment;
+@property (retain, nonatomic) NSString* calc_rating;
+@property (retain, nonatomic) NSNumber* rated_this_month;
+@property (retain, nonatomic) NSNumber* show_paid;
+@property (retain, nonatomic) NSString* rating_user;
+@property (retain, nonatomic) NSNumber* family_active;
 
 @property (retain, nonatomic) NSDate* cachingDate;
 

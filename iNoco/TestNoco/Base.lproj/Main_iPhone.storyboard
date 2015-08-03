@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="8YX-ce-x5E">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="8YX-ce-x5E">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
         <!--récents-->
@@ -210,7 +210,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="PXd-Wa-uD7"/>
                     <nil key="simulatedTopBarMetrics"/>
@@ -1196,7 +1196,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="EPGCell" rowHeight="80" id="fgZ-FH-ibJ" customClass="EPGTableViewCell">
-                                <rect key="frame" x="0.0" y="86" width="320" height="80"/>
+                                <rect key="frame" x="0.0" y="22" width="320" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fgZ-FH-ibJ" id="zv1-A2-HUg">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
@@ -1274,7 +1274,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7vR-BI-p1d" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1233" y="1288"/>
+            <point key="canvasLocation" x="1275" y="1355"/>
         </scene>
         <!--Planning-->
         <scene sceneID="NKr-B6-1IN">
@@ -1618,8 +1618,8 @@ Les geeks ont une vie. Même s'ils ne bougent pas beaucoup.</string>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="uN7-L9-3aO"/>
+        <segue reference="SK6-5m-Pcy"/>
         <segue reference="a1v-Eq-xu4"/>
-        <segue reference="kd9-uj-CES"/>
+        <segue reference="THr-Fv-0EJ"/>
     </inferredMetricsTieBreakers>
 </document>

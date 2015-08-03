@@ -755,6 +755,7 @@
 }
 
 - (void)fixNavigationBarRelativePosition{
+    /*
     if(self.navigationController.navigationBarHidden == FALSE){
         float deltaY = 20 + self.navigationController.navigationBar.frame.size.height - self.collectionView.frame.origin.y ;
         self.collectionView.frame = CGRectMake(self.collectionView.frame.origin.x,
@@ -766,7 +767,13 @@
                                            self.filterView.frame.size.width,
                                            self.filterView.frame.size.height);
     }
+     */
 }
+
+- (BOOL)prefersStatusBarHidden {
+    return NO;
+}
+
 -(void)dealloc{
     [[NLTAPI sharedInstance] cancelCallsWithKey:self];
 }

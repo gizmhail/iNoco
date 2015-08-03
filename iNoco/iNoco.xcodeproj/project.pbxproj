@@ -97,6 +97,8 @@
 		4F92785E19807EC800DB138B /* Default1024x768.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F92785A19807EC800DB138B /* Default1024x768.png */; };
 		4F92785F19807EC800DB138B /* Default1024x768@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F92785B19807EC800DB138B /* Default1024x768@2x.png */; };
 		4F927863198085F000DB138B /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F927862198085F000DB138B /* Main_iPad.storyboard */; };
+		4F92E95C1AD45477006F5A52 /* ChromecastManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F92E95B1AD45477006F5A52 /* ChromecastManager.m */; };
+		4F92E95F1AD477E8006F5A52 /* CastIconButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F92E95E1AD477E8006F5A52 /* CastIconButton.m */; };
 		4FA802FC1962017900E820B9 /* WatchListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA802FB1962017900E820B9 /* WatchListViewController.m */; };
 		4FA802FE19621E7000E820B9 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FA802FD19621E7000E820B9 /* AVFoundation.framework */; };
 		4FA8125A19ED39D600548794 /* noco.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F636A881957878E004C0A18 /* noco.png */; };
@@ -142,14 +144,8 @@
 		4FEECD6E1949D683002514CE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEECD6D1949D683002514CE /* AppDelegate.m */; };
 		4FEECD711949D683002514CE /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FEECD6F1949D683002514CE /* Main_iPhone.storyboard */; };
 		4FEECD7C1949D683002514CE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FEECD7B1949D683002514CE /* Images.xcassets */; };
-		4FEECD831949D683002514CE /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FEECD821949D683002514CE /* XCTest.framework */; };
-		4FEECD841949D683002514CE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FEECD5D1949D683002514CE /* Foundation.framework */; };
-		4FEECD851949D683002514CE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FEECD611949D683002514CE /* UIKit.framework */; };
-		4FEECD8D1949D683002514CE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FEECD8B1949D683002514CE /* InfoPlist.strings */; };
-		4FEECD8F1949D683002514CE /* TestNocoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEECD8E1949D683002514CE /* TestNocoTests.m */; };
 		4FEF289419ABC20E005D4C33 /* FamilyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEF289319ABC20E005D4C33 /* FamilyTableViewCell.m */; };
 		52A0210735979BBCEB807A8C /* libPods-iNocoToday.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7CF8EAC4B67750EA22A9762 /* libPods-iNocoToday.a */; };
-		8D6E2810DF025677D1B16433 /* libPods-iNocoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2659FA1EF22FDC8A1F10134D /* libPods-iNocoTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -166,13 +162,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 4FC35B7819E477090069C0DD;
 			remoteInfo = iNocoToday;
-		};
-		4FEECD861949D683002514CE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4FEECD521949D683002514CE /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4FEECD591949D683002514CE;
-			remoteInfo = TestNoco;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -321,6 +310,10 @@
 		4F92785A19807EC800DB138B /* Default1024x768.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default1024x768.png; sourceTree = "<group>"; };
 		4F92785B19807EC800DB138B /* Default1024x768@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default1024x768@2x.png"; sourceTree = "<group>"; };
 		4F927862198085F000DB138B /* Main_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main_iPad.storyboard; sourceTree = "<group>"; };
+		4F92E95A1AD45477006F5A52 /* ChromecastManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChromecastManager.h; sourceTree = "<group>"; };
+		4F92E95B1AD45477006F5A52 /* ChromecastManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChromecastManager.m; sourceTree = "<group>"; };
+		4F92E95D1AD477E8006F5A52 /* CastIconButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CastIconButton.h; sourceTree = "<group>"; };
+		4F92E95E1AD477E8006F5A52 /* CastIconButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CastIconButton.m; sourceTree = "<group>"; };
 		4FA802FA1962017900E820B9 /* WatchListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WatchListViewController.h; sourceTree = "<group>"; };
 		4FA802FB1962017900E820B9 /* WatchListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WatchListViewController.m; sourceTree = "<group>"; };
 		4FA802FD19621E7000E820B9 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -356,7 +349,6 @@
 		4FEECD6D1949D683002514CE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		4FEECD701949D683002514CE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		4FEECD7B1949D683002514CE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		4FEECD811949D683002514CE /* iNocoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iNocoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FEECD821949D683002514CE /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4FEECD8A1949D683002514CE /* iNocoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iNocoTests-Info.plist"; sourceTree = "<group>"; };
 		4FEECD8C1949D683002514CE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -392,17 +384,6 @@
 				4F927854197F032400DB138B /* Crashlytics.framework in Frameworks */,
 				4FEECD5E1949D683002514CE /* Foundation.framework in Frameworks */,
 				3F6E6F1E9BFA50DA5D2F5319 /* libPods-iNoco.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4FEECD7E1949D683002514CE /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4FEECD831949D683002514CE /* XCTest.framework in Frameworks */,
-				4FEECD851949D683002514CE /* UIKit.framework in Frameworks */,
-				4FEECD841949D683002514CE /* Foundation.framework in Frameworks */,
-				8D6E2810DF025677D1B16433 /* libPods-iNocoTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -573,6 +554,7 @@
 		4F636A56195776FE004C0A18 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				4F92E9591AD45446006F5A52 /* Cast */,
 				4F37F3701969EF3700D0AACC /* NLEPG */,
 				4F636AAF195CCABB004C0A18 /* Toast */,
 				4F636A5719577726004C0A18 /* SDWebImage */,
@@ -634,6 +616,17 @@
 			name = iPad;
 			sourceTree = "<group>";
 		};
+		4F92E9591AD45446006F5A52 /* Cast */ = {
+			isa = PBXGroup;
+			children = (
+				4F92E95A1AD45477006F5A52 /* ChromecastManager.h */,
+				4F92E95B1AD45477006F5A52 /* ChromecastManager.m */,
+				4F92E95D1AD477E8006F5A52 /* CastIconButton.h */,
+				4F92E95E1AD477E8006F5A52 /* CastIconButton.m */,
+			);
+			path = Cast;
+			sourceTree = "<group>";
+		};
 		4FC35B7C19E477090069C0DD /* iNocoToday */ = {
 			isa = PBXGroup;
 			children = (
@@ -672,7 +665,6 @@
 			isa = PBXGroup;
 			children = (
 				4FEECD5A1949D683002514CE /* iNoco.app */,
-				4FEECD811949D683002514CE /* iNocoTests.xctest */,
 				4FC35B7919E477090069C0DD /* iNocoToday.appex */,
 			);
 			name = Products;
@@ -806,26 +798,6 @@
 			productReference = 4FEECD5A1949D683002514CE /* iNoco.app */;
 			productType = "com.apple.product-type.application";
 		};
-		4FEECD801949D683002514CE /* iNocoTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4FEECD951949D683002514CE /* Build configuration list for PBXNativeTarget "iNocoTests" */;
-			buildPhases = (
-				17F5A4F643B99C9DEE31D350 /* Check Pods Manifest.lock */,
-				4FEECD7D1949D683002514CE /* Sources */,
-				4FEECD7E1949D683002514CE /* Frameworks */,
-				4FEECD7F1949D683002514CE /* Resources */,
-				F8189F6A7FC3FC10630E7AD3 /* Copy Pods Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4FEECD871949D683002514CE /* PBXTargetDependency */,
-			);
-			name = iNocoTests;
-			productName = TestNocoTests;
-			productReference = 4FEECD811949D683002514CE /* iNocoTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -855,9 +827,6 @@
 							};
 						};
 					};
-					4FEECD801949D683002514CE = {
-						TestTargetID = 4FEECD591949D683002514CE;
-					};
 				};
 			};
 			buildConfigurationList = 4FEECD551949D683002514CE /* Build configuration list for PBXProject "iNoco" */;
@@ -874,7 +843,6 @@
 			projectRoot = "";
 			targets = (
 				4FEECD591949D683002514CE /* iNoco */,
-				4FEECD801949D683002514CE /* iNocoTests */,
 				4FC35B7819E477090069C0DD /* iNocoToday */,
 			);
 		};
@@ -959,32 +927,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4FEECD7F1949D683002514CE /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4FEECD8D1949D683002514CE /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		17F5A4F643B99C9DEE31D350 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
 		4F927852197F019E00DB138B /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -996,7 +941,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = /Users/gizmhail/Documents/Perso/iOS/Noco/git/iNoco/iNoco/TestNoco/crashlytics.sh;
+			shellScript = "#/Users/gizmhail/Documents/Perso/iOS/Noco/git/iNoco/iNoco/TestNoco/crashlytics.sh";
 		};
 		57F05774350B303E4DA0C9E0 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1058,21 +1003,6 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iNoco/Pods-iNoco-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F8189F6A7FC3FC10630E7AD3 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iNocoTests/Pods-iNocoTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1122,6 +1052,7 @@
 				4F636A471952F0DA004C0A18 /* NLTAPI.m in Sources */,
 				4F1254B91951E60C003FEEA5 /* NLTOAuthController.m in Sources */,
 				4F636A8519577726004C0A18 /* UIImageView+WebCache.m in Sources */,
+				4F92E95F1AD477E8006F5A52 /* CastIconButton.m in Sources */,
 				4FEF289419ABC20E005D4C33 /* FamilyTableViewCell.m in Sources */,
 				4F636A7A19577726004C0A18 /* SDWebImageCompat.m in Sources */,
 				4F636A7B19577726004C0A18 /* SDWebImageDecoder.m in Sources */,
@@ -1149,15 +1080,8 @@
 				4F636A8019577726004C0A18 /* UIButton+WebCache.m in Sources */,
 				4FA802FC1962017900E820B9 /* WatchListViewController.m in Sources */,
 				4F636A7819577726004C0A18 /* NSData+ImageContentType.m in Sources */,
+				4F92E95C1AD45477006F5A52 /* ChromecastManager.m in Sources */,
 				4F1254B61951D457003FEEA5 /* NLTOAuth.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4FEECD7D1949D683002514CE /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4FEECD8F1949D683002514CE /* TestNocoTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1173,11 +1097,6 @@
 			isa = PBXTargetDependency;
 			target = 4FC35B7819E477090069C0DD /* iNocoToday */;
 			targetProxy = 4FC35B8719E477090069C0DD /* PBXContainerItemProxy */;
-		};
-		4FEECD871949D683002514CE /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4FEECD591949D683002514CE /* iNoco */;
-			targetProxy = 4FEECD861949D683002514CE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1376,48 +1295,6 @@
 			};
 			name = Release;
 		};
-		4FEECD961949D683002514CE /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0D6059D513A02AEB3B9C1952 /* Pods-iNocoTests.debug.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/TestNoco.app/TestNoco";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "TestNoco/TestNoco-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "TestNocoTests/iNocoTests-Info.plist";
-				PRODUCT_NAME = iNocoTests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		4FEECD971949D683002514CE /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = F820FB7B9226A057E2C19905 /* Pods-iNocoTests.release.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/TestNoco.app/TestNoco";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "TestNoco/TestNoco-Prefix.pch";
-				INFOPLIST_FILE = "TestNocoTests/iNocoTests-Info.plist";
-				PRODUCT_NAME = iNocoTests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1444,15 +1321,6 @@
 			buildConfigurations = (
 				4FEECD931949D683002514CE /* Debug */,
 				4FEECD941949D683002514CE /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		4FEECD951949D683002514CE /* Build configuration list for PBXNativeTarget "iNocoTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4FEECD961949D683002514CE /* Debug */,
-				4FEECD971949D683002514CE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

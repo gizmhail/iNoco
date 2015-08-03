@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 #import "ShowPlayerManager.h"
+#import "CastIconButton.h"
 
 @interface ShowViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UIActionSheetDelegate,RemoteControlEventHandlerProtocol,UIAlertViewDelegate,ShowPlayerManagerDelegate,UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *famillyLabel;
@@ -41,7 +42,9 @@
 @property (retain, nonatomic) NSMutableArray* contextPlaylist;
 @property (retain, nonatomic) id contextPlaylistCurrentItem;
 @property (retain, nonatomic) NSString* playlistType;
+@property (retain, nonatomic) IBOutlet CastIconButton *castButton;
 
+- (IBAction)castClick:(id)sender;
 - (IBAction)play:(id)sender;
 - (IBAction)favoriteFamillyClick:(id)sender;
 - (IBAction)toggleRead:(id)sender;

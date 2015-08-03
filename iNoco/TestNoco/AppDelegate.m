@@ -116,7 +116,25 @@ void uncaughtExceptionHandler(NSException *exception) {
     //Lock screen audio events
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     
+    //Chromecast
+    self.chromecastManager = [[ChromecastManager alloc] init];
+    [self.chromecastManager deviceScan];
+    
+    //Current cast view
+    UITabBarController* tabBarController = (UITabBarController*)self.window.rootViewController;
+    UIView* view = [[UIView alloc] initWithFrame:CGRectMake(0, tabBarController.view.frame.size.height - tabBarController.tabBar.frame.size.height - 100, [[UIScreen mainScreen] bounds].size.width, 100)];
+    view.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.5];
+    view.userInteractionEnabled = TRUE;
+    view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
+    UITapGestureRecognizer* tapR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(testTap)];
+    [view addGestureRecognizer:tapR];
+    [tabBarController.view addSubview:view];
+    view.hidden = TRUE;
     return YES;
+}
+
+- (void)testTap{
+    NSLog(@"111");
 }
 
 - (void)handleInterruptedShow{

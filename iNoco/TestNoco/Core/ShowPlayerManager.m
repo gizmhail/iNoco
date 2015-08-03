@@ -7,6 +7,8 @@
 //
 
 #import "ShowPlayerManager.h"
+#import "ChromecastManager.h"
+#import "AppDelegate.h"
 
 @interface ShowPlayerManager (){
     bool userEndedPlay;
@@ -262,6 +264,8 @@
 }
 
 - (IBAction)play:(NLTShow*)show withProgress:(float)progress withImage:(UIImage*)image withPlaylist:(NSMutableArray*)playlist withCurrentPlaylistItem:(id)currentItem{
+
+    
     self.showList = [NSMutableArray arrayWithArray:playlist];
     if(!self.currentPlaylistItem){
         self.currentPlaylistItem = currentItem;
