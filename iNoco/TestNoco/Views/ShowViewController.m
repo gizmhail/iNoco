@@ -27,7 +27,7 @@
     float progress;
 }
 @property (retain, nonatomic) NSMutableArray* chapters;
-@property (retain, nonatomic) UIView* castPlayerView;
+@property (retain, nonatomic) UIView* tooltipView;
 @property (retain, nonatomic) UIAlertView* downloadAlert;
 @property (retain, nonatomic) UIAlertView* readAlert;
 @property (retain, nonatomic) UIAlertView* statusAlert;
@@ -169,6 +169,7 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         [self.downloadView addSubview:self.downloadProgress];
     }
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.actionsView];
+    [self updateCastContainer];
 
     self.durationLabel.text = [self.show durationString];
     
@@ -270,27 +271,29 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
             tooltipY = 103;
         }
         
-        UIView* tooltipView = [[UIView alloc] initWithFrame:CGRectMake(tooltipX, tooltipY, tooltipWidth, tooltipHeight)];
+        self.tooltipView = [[UIView alloc] initWithFrame:CGRectMake(tooltipX, tooltipY, tooltipWidth, tooltipHeight)];
         UITextView* tooltipText = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, tooltipWidth, tooltipHeight)];
         tooltipText.text = [NSString stringWithFormat:@"Restez appuyé sur le bouton lecture pour lire les autre %@ après celle-ci",type];
         tooltipText.backgroundColor = [UIColor clearColor];
         tooltipText.textColor = [UIColor whiteColor];
-        tooltipView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.75];
-        tooltipView.alpha = 0;
+        self.tooltipView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.75];
+        self.tooltipView.alpha = 0;
         tooltipText.textAlignment = NSTextAlignmentCenter;
-        [tooltipView.layer setCornerRadius:5.0f];
-        [tooltipView addSubview:tooltipText];
-        [self.imageView.superview addSubview:tooltipView];
+        [self.tooltipView.layer setCornerRadius:5.0f];
+        [self.tooltipView addSubview:tooltipText];
+        [self.imageView.superview addSubview:self.tooltipView];
+
+        __weak ShowViewController* weakSelf = self;
         
         [UIView animateWithDuration:0.5 animations:^{
-            tooltipView.alpha = 1;
+            weakSelf.tooltipView.alpha = 1;
         } completion:^(BOOL finished) {
             [UIView animateWithDuration:5 animations:^{
-                tooltipView.frame = CGRectOffset(tooltipView.frame, 0, 6);
-                tooltipView.alpha = 0.8;
+                weakSelf.tooltipView.frame = CGRectOffset(weakSelf.tooltipView.frame, 0, 6);
+                weakSelf.tooltipView.alpha = 0.8;
             } completion:^(BOOL finished) {
                 [UIView animateWithDuration:0.5 animations:^{
-                    tooltipView.alpha = 0;
+                    weakSelf.tooltipView.alpha = 0;
                 } completion:^(BOOL finished) {
                     
                 }];
@@ -298,6 +301,8 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
             }];
         }];
     }
+    
+    //Chromecast
     ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
 
     if([chromecastManager.deviceScanner.devices count]>0){
@@ -305,6 +310,8 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         [self.castButton setStatus:CIBCastAvailable];
         [self updateCastContainer];
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCastPlayerView) name:@"ChromecastPlayerProgress" object:nil];
+
 }
 
 - (void)notificationNocoDownloadsNotificationFinishDownloading:(NSNotification*)notification{
@@ -361,18 +368,26 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         self.actionsView.frame = CGRectMake(0, 0, targetWidth, 40);
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.actionsView];
     }
+    [self updateCastPlayerView];
 }
 
 - (IBAction)castClick:(id)sender {
+    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
     NSString* currentDevice = @"iPhone";
     if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ){
         currentDevice = @"iPad";
     }
+    if(!chromecastManager.deviceManager.device){
+        currentDevice = [@"√ " stringByAppendingString:currentDevice];
+    }
     self.castSheet = [[UIActionSheet alloc] initWithTitle:@"Ecran de lecture" delegate:self cancelButtonTitle:@"annuler" destructiveButtonTitle:nil otherButtonTitles:currentDevice, nil];
-    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
     
     for (GCKDevice* device in chromecastManager.deviceScanner.devices) {
-        [self.castSheet addButtonWithTitle:device.friendlyName];
+        NSString* name = device.friendlyName;
+        if(chromecastManager.deviceManager.device && [chromecastManager.deviceManager.device.friendlyName compare:device.friendlyName]==NSOrderedSame){
+            name = [@"√ " stringByAppendingString:name];
+        }
+        [self.castSheet addButtonWithTitle:name];
     }
     [self.castSheet showFromTabBar:self.navigationController.tabBarController.tabBar];
     [self.castButton setStatus:CIBCastConnecting];
@@ -380,6 +395,7 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
 }
 
 - (void)castDeviceSelected:(NSString*)deviceName{
+    deviceName = [deviceName stringByReplacingOccurrencesOfString:@"√ " withString:@""];
     ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
 
     BOOL deviceFound = FALSE;
@@ -395,76 +411,67 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         chromecastManager.deviceManager = nil;
         [self.castButton setStatus:CIBCastAvailable];
         [self updateCastContainer];
-        self.castPlayerView.hidden = TRUE;
     }else{
         [self.castButton setStatus:CIBCastConnected];
         [self.castButton setTintColor:self.view.window.tintColor];
         [self updateCastContainer];
-        [self tmpCastPlayerView];
     }
-    /*
-    if(chromecastManager.deviceManager.device){
-        [chromecastManager playShow:show withProgress:progress]
-    }
-     */
 }
 
-- (void) tmpCastPlayerView{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        self.castPlayerView = [[UIView alloc] initWithFrame:CGRectMake((self.view.frame.size.width-320)/2, 102, 320, 120)];
-        [self.view addSubview:self.castPlayerView];
-        UIButton* backwardButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        backwardButton.frame = CGRectMake(0, 30, 40, 60);
-        [backwardButton setTitle:@"-30" forState:UIControlStateNormal];
-        [backwardButton addTarget:self action:@selector(tmpCastBackward) forControlEvents:UIControlEventTouchUpInside];
-        [self.castPlayerView addSubview:backwardButton];
-        UIButton* forwardButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        forwardButton.frame = CGRectMake(280, 30, 40, 60);
-        [forwardButton setTitle:@"+30" forState:UIControlStateNormal];
-        [forwardButton addTarget:self action:@selector(tmpCastForward) forControlEvents:UIControlEventTouchUpInside];
-        [self.castPlayerView addSubview:forwardButton];
-        UIButton* pauseButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        pauseButton.frame = CGRectMake(120, 50, 80, 20);
-        [pauseButton setTitle:@"play/pause" forState:UIControlStateNormal];
-        [pauseButton addTarget:self action:@selector(tmpCastPause) forControlEvents:UIControlEventTouchUpInside];
-        [self.castPlayerView addSubview:pauseButton];
-        UIButton* stopButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        stopButton.frame = CGRectMake(120, 70, 80, 20);
-        [stopButton setTitle:@"stop" forState:UIControlStateNormal];
-        [stopButton addTarget:self action:@selector(tmpCastStop) forControlEvents:UIControlEventTouchUpInside];
-        [self.castPlayerView addSubview:stopButton];
-        self.castPlayerView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
-        self.castPlayerView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
+- (void) updateCastPlayerView{
+    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+    self.castPlayerView.hidden = chromecastManager.deviceManager.device == nil;
+    self.tooltipView.hidden = !self.castPlayerView.hidden || self.tooltipView.alpha == 0;
+    GCKMediaPlayerState playerState = chromecastManager.mediaControlChannel.mediaStatus.playerState;
+    if(playerState == GCKMediaPlayerStatePlaying){
+        self.castPlayerPauseButton.selected = TRUE;
+    }else{
+        self.castPlayerPauseButton.selected = FALSE;
+    }
+    self.castTotalLabel.text = [self.show durationString];
+    NSTimeInterval position = chromecastManager.mediaControlChannel.mediaStatus.streamPosition;
+    self.castProgressLabel.text = [NLTShow durationString:(int)(position*1000)];
+    self.castProgressView.progress = position*1000./(float)self.show.duration_ms;
+}
+
+- (IBAction)castBackward{
+    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+    [chromecastManager seekToTimeInterval:chromecastManager.mediaControlChannel.mediaStatus.streamPosition - 30.];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self updateCastContainer];
     });
-    self.castPlayerView.hidden = FALSE;
 }
 
-- (void)tmpCastBackward{
+- (IBAction)castForward{
     ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
-    [chromecastManager.mediaControlChannel seekToTimeInterval:chromecastManager.mediaControlChannel.mediaStatus.streamPosition - 30.];
-}
-- (void)tmpCastForward{
-    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
-    [chromecastManager.mediaControlChannel seekToTimeInterval:chromecastManager.mediaControlChannel.mediaStatus.streamPosition + 30.];
+    [chromecastManager seekToTimeInterval:chromecastManager.mediaControlChannel.mediaStatus.streamPosition + 30.];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self updateCastContainer];
+    });
 }
 
-- (void)tmpCastPause{
+- (IBAction)castPause{
     ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
     GCKMediaPlayerState playerState = chromecastManager.mediaControlChannel.mediaStatus.playerState;
     if(playerState == GCKMediaPlayerStatePaused){
-        [chromecastManager.mediaControlChannel play];
+        [chromecastManager resume];
     }else if(playerState == GCKMediaPlayerStatePlaying){
-        [chromecastManager.mediaControlChannel pause];
+        [chromecastManager pause];
     }else if(!chromecastManager.mediaControlChannel.mediaStatus || playerState == GCKMediaPlayerStateIdle || playerState == GCKMediaPlayerStateUnknown){
         [chromecastManager playShow:self.show withProgress:progress];
     }
 #warning Add progress save (regularly ?)
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self updateCastContainer];
+    });
 }
 
-- (void)tmpCastStop{
+- (IBAction)castStop{
     ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
-    [chromecastManager.mediaControlChannel stop];
+    [chromecastManager stop];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self updateCastContainer];
+    });
 }
 
 #pragma mark Playlist

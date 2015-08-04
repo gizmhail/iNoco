@@ -43,10 +43,21 @@
 @property (retain, nonatomic) id contextPlaylistCurrentItem;
 @property (retain, nonatomic) NSString* playlistType;
 @property (retain, nonatomic) IBOutlet CastIconButton *castButton;
+@property (weak, nonatomic) IBOutlet UIView* castPlayerView;
+@property (weak, nonatomic) IBOutlet UIButton *castPlayerPauseButton;
+@property (weak, nonatomic) IBOutlet UIProgressView *castProgressView;
+@property (weak, nonatomic) IBOutlet UILabel *castProgressLabel;
+@property (weak, nonatomic) IBOutlet UILabel *castTotalLabel;
 
 - (IBAction)castClick:(id)sender;
 - (IBAction)play:(id)sender;
 - (IBAction)favoriteFamillyClick:(id)sender;
 - (IBAction)toggleRead:(id)sender;
 - (IBAction)watchListClick:(id)sender;
+
+- (IBAction)castBackward;
+- (IBAction)castPause;
+- (IBAction)castForward;
+- (IBAction)castStop;
+
 @end

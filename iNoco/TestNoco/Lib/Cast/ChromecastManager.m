@@ -9,6 +9,13 @@
 #import "ChromecastManager.h"
 #import "GoogleCast.h"
 
+@interface ChromecastManager (){
+}
+@property (assign,nonatomic)float progress;
+@property (retain,nonatomic)NSTimer* progressTimer;
+@property (retain,nonatomic)NLTShow* currentShow;
+@end
+
 @implementation ChromecastManager
 
 - (void)deviceScan{
@@ -55,6 +62,9 @@
                                     streamDuration:duration
                                         customData:nil];
     
+    self.progress = startTime;
+    [self.progressTimer invalidate];
+    self.progressTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(progressCheck) userInfo:nil repeats:YES];
     [self.mediaControlChannel loadMedia:mediaInformation autoplay:autoPlay playPosition:startTime];
 }
 
@@ -88,6 +98,7 @@
             if(show.screenshot_512x288){
                 thumbnailURL = [NSURL URLWithString:show.screenshot_512x288];
             }
+            self.currentShow = show;
             [self playContent:url withTitle:title withSubtitle:subtitle withThumbnail:thumbnailURL withContentType:@"video/mp4" withDuration:duration withStartime:progress];
             
         }else{
@@ -107,6 +118,7 @@
 
 - (void)deviceDidGoOffline:(GCKDevice *)device {
     NSLog(@"device disappeared!!!");
+    [self.progressTimer invalidate];
 }
 
 #pragma mark - GCKDeviceManagerDelegate
@@ -114,6 +126,7 @@
     NSLog(@"connected!!");
     
     [self.deviceManager launchApplication:kGCKMediaDefaultReceiverApplicationID];
+    self.progressTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(progressCheck) userInfo:nil repeats:YES];
 }
 
 - (void)deviceManager:(GCKDeviceManager *)deviceManager
@@ -126,10 +139,52 @@ didConnectToCastApplication:(GCKApplicationMetadata *)applicationMetadata
     [self.deviceManager addChannel:self.mediaControlChannel];
 }
 
+#pragma mark - Controls
+
+- (void)resume{
+    [self.progressTimer invalidate];
+    self.progressTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(progressCheck) userInfo:nil repeats:YES];
+    [self.mediaControlChannel play];
+}
+
+- (void)pause{
+    [self.progressTimer invalidate];
+    [self.mediaControlChannel pause];
+}
+
+- (void)stop{
+    [self.progressTimer invalidate];
+    [self.mediaControlChannel stop];
+}
+
+- (void)seekToTimeInterval:(NSTimeInterval)timeInterval{
+    [self.mediaControlChannel seekToTimeInterval:timeInterval];
+}
+
+
+#pragma mark - Progress
+- (void)progressCheck{
+    if(self.mediaControlChannel.mediaStatus.streamPosition != self.progress){
+        self.progress = self.mediaControlChannel.mediaStatus.streamPosition;
+        [self notifyProgress];
+    }
+}
+
+- (void)notifyProgress{
+#ifdef DEBUG
+    NSLog(@"%@ %f",self.mediaControlChannel.mediaStatus.mediaInformation,self.mediaControlChannel.mediaStatus.streamPosition);
+#endif
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"ChromecastPlayerProgress" object:nil];
+}
+
 #pragma mark - GCKMediaControlChannelDelegate
 
 - (void)mediaControlChannelDidUpdateStatus:(GCKMediaControlChannel *)mediaControlChannel{
-    NSLog(@"%@ %f",mediaControlChannel.mediaStatus,mediaControlChannel.mediaStatus.streamPosition);
+#ifdef DEBUG
+    NSLog(@"mediaControlChannelDidUpdateStatus: %@ %f",mediaControlChannel.mediaStatus,mediaControlChannel.mediaStatus.streamPosition);
+#endif
+    [self progressCheck];
 }
+
 
 @end

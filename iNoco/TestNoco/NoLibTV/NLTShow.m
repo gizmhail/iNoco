@@ -14,9 +14,13 @@
 #pragma mark - Formating
 
 - (NSString*)durationString{
-    NSString* durationStr = nil;
-    if(self.duration_ms){
-        int seconds = self.duration_ms / 1000;
+    return [NLTShow durationString:self.duration_ms];
+}
+
++ (NSString*)durationString:(int)durationMS{
+    NSString* durationStr = @"0sec";
+    if(durationMS){
+        int seconds = durationMS / 1000;
         int hours = seconds/3600;
         seconds -= hours*3600;
         int min = seconds/60;
@@ -33,6 +37,7 @@
     }
     return durationStr;
 }
+
 #pragma - KVO methods
 - (NLTShow*)initWithDictionnary:(NSDictionary*)dictionary{
     if(![dictionary isKindOfClass:[NSDictionary class]]){

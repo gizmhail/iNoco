@@ -680,6 +680,112 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                                 <rect key="frame" x="2" y="5" width="64" height="31"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </imageView>
+                                            <view contentMode="scaleToFill" id="rD2-tX-R7f">
+                                                <rect key="frame" x="0.0" y="36" width="320" height="121"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <subviews>
+                                                    <view alpha="0.89999999999999991" contentMode="scaleToFill" id="0Cq-LQ-scy">
+                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="121"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="rbU-ZJ-W9p">
+                                                                <rect key="frame" x="21" y="12" width="42" height="42"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                <accessibility key="accessibilityConfiguration" label="reculer de 30 secondes"/>
+                                                                <state key="normal" image="Octicons-playback-rewind.svg.png">
+                                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                                </state>
+                                                                <connections>
+                                                                    <action selector="castBackward" destination="E8O-zX-w2W" eventType="touchUpInside" id="fi4-Rm-yM6"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="050-Ml-WAb">
+                                                                <rect key="frame" x="104" y="12" width="42" height="42"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                <accessibility key="accessibilityConfiguration" label="lecture ou pause"/>
+                                                                <state key="normal" image="Octicons-playback-play_cropped.png">
+                                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                                </state>
+                                                                <state key="selected" image="Octicons-playback-pause.svg.png"/>
+                                                                <connections>
+                                                                    <action selector="castPause" destination="E8O-zX-w2W" eventType="touchUpInside" id="F4z-d5-9Xb"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="lGh-VP-GIu">
+                                                                <rect key="frame" x="260" y="12" width="42" height="42"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                <accessibility key="accessibilityConfiguration" label="avancer de 30 secondes"/>
+                                                                <state key="normal" image="Octicons-playback-fast-forward.svg.png">
+                                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                                </state>
+                                                                <connections>
+                                                                    <action selector="castForward" destination="E8O-zX-w2W" eventType="touchUpInside" id="mMR-jd-8Lm"/>
+                                                                </connections>
+                                                            </button>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="- 30 sec." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4SH-Zk-ncg">
+                                                                <rect key="frame" x="11" y="53" width="62" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                <accessibility key="accessibilityConfiguration">
+                                                                    <bool key="isElement" value="NO"/>
+                                                                </accessibility>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Y5P-C0-Ob6">
+                                                                <rect key="frame" x="17" y="83" width="62" height="21.5"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                <accessibility key="accessibilityConfiguration">
+                                                                    <bool key="isElement" value="NO"/>
+                                                                </accessibility>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LZc-fv-iq5">
+                                                                <rect key="frame" x="242" y="83" width="62" height="21.5"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                <accessibility key="accessibilityConfiguration">
+                                                                    <bool key="isElement" value="NO"/>
+                                                                </accessibility>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+ 30 sec." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xLP-kI-ugx">
+                                                                <rect key="frame" x="250" y="53" width="62" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                <accessibility key="accessibilityConfiguration">
+                                                                    <bool key="isElement" value="NO"/>
+                                                                </accessibility>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vXi-kI-56V">
+                                                                <rect key="frame" x="175" y="12" width="42" height="42"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                <accessibility key="accessibilityConfiguration" label="stop"/>
+                                                                <state key="normal" image="Octicons-primitive-square.svg.png">
+                                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                                </state>
+                                                                <connections>
+                                                                    <action selector="castStop" destination="E8O-zX-w2W" eventType="touchUpInside" id="tpG-Jt-7Kf"/>
+                                                                </connections>
+                                                            </button>
+                                                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" id="oBT-o4-N9c">
+                                                                <rect key="frame" x="17" y="104" width="287" height="2"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                <accessibility key="accessibilityConfiguration">
+                                                                    <bool key="isElement" value="NO"/>
+                                                                </accessibility>
+                                                            </progressView>
+                                                        </subviews>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </view>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                     </view>
@@ -836,6 +942,11 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                     <navigationItem key="navigationItem" id="02H-3F-eSY"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="castPlayerPauseButton" destination="050-Ml-WAb" id="OyP-QP-172"/>
+                        <outlet property="castPlayerView" destination="rD2-tX-R7f" id="Acs-Py-fQG"/>
+                        <outlet property="castProgressLabel" destination="Y5P-C0-Ob6" id="vhn-ga-ga8"/>
+                        <outlet property="castProgressView" destination="oBT-o4-N9c" id="y24-Kn-eVD"/>
+                        <outlet property="castTotalLabel" destination="LZc-fv-iq5" id="57A-xl-Qa2"/>
                         <outlet property="chapterActivity" destination="Ggp-bf-uze" id="U9a-M3-3t2"/>
                         <outlet property="chapterLabel" destination="xdM-Ud-g9e" id="Azc-ke-bev"/>
                         <outlet property="collectionView" destination="bFa-3M-ivt" id="bU1-ue-HMf"/>
@@ -1599,7 +1710,12 @@ Les geeks ont une vie. Même s'ils ne bougent pas beaucoup.</string>
         <image name="Octicons-calendar.png" width="30" height="30"/>
         <image name="Octicons-clock.png" width="26" height="30"/>
         <image name="Octicons-info.png" width="26" height="30"/>
+        <image name="Octicons-playback-fast-forward.svg.png" width="100" height="71"/>
+        <image name="Octicons-playback-pause.svg.png" width="100" height="126"/>
         <image name="Octicons-playback-play.png" width="200" height="400"/>
+        <image name="Octicons-playback-play_cropped.png" width="200" height="250"/>
+        <image name="Octicons-playback-rewind.svg.png" width="100" height="71"/>
+        <image name="Octicons-primitive-square.svg.png" width="199" height="199"/>
         <image name="Octicons-search.png" width="29" height="30"/>
         <image name="avatar-round.png" width="240" height="240"/>
         <image name="csa_18_black.png" width="25" height="25"/>

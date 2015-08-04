@@ -21,4 +21,9 @@
 - (void)playContent:(NSURL*)url withTitle:(NSString*)title withSubtitle:(NSString*)subtitle withThumbnail:(NSURL*)thumbnailURL withContentType:(NSString*)mimeType withDuration:(long)duration withStartime:(long)startTime;
 - (void)playShow:(NLTShow*)show withProgress:(float)progress;
 
+- (void)resume;
+- (void)pause;
+- (void)stop;
+- (void)seekToTimeInterval:(NSTimeInterval)timeInterval;
+
 @end
