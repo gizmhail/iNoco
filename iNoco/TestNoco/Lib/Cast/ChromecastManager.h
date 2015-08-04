@@ -14,9 +14,10 @@
 @property (retain,nonatomic)GCKDeviceScanner*deviceScanner;
 @property (retain,nonatomic)GCKDeviceManager* deviceManager;
 @property (retain,nonatomic)GCKMediaControlChannel* mediaControlChannel;
+@property (assign,nonatomic)float progress;//Last known progress
+@property (retain,nonatomic)NLTShow* currentShow;
 
 - (void)deviceScan;
-- (void) selectDefaultDevice;
 - (void)selectDevice:(GCKDevice*)selectedDevice;
 - (void)playContent:(NSURL*)url withTitle:(NSString*)title withSubtitle:(NSString*)subtitle withThumbnail:(NSURL*)thumbnailURL withContentType:(NSString*)mimeType withDuration:(long)duration withStartime:(long)startTime;
 - (void)playShow:(NLTShow*)show withProgress:(float)progress;

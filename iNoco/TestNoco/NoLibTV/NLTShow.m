@@ -38,6 +38,23 @@
     return durationStr;
 }
 
++ (NSString*)detailedDurationString:(int)durationMS{
+    NSString* durationStr = @"00:00";
+    if(durationMS){
+        int seconds = durationMS / 1000;
+        int hours = seconds/3600;
+        seconds -= hours*3600;
+        int min = seconds/60;
+        seconds -= min*60;
+        if(hours>0){
+            durationStr = [NSString stringWithFormat:@"%02i:%02i:%02i",hours,min,seconds];
+        }else{
+            durationStr = [NSString stringWithFormat:@"%02i:%02i",min,seconds];
+        }
+    }
+    return durationStr;
+}
+
 #pragma - KVO methods
 - (NLTShow*)initWithDictionnary:(NSDictionary*)dictionary{
     if(![dictionary isKindOfClass:[NSDictionary class]]){

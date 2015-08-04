@@ -24,7 +24,7 @@
 
 @interface ShowViewController (){
     int unreadCalls;
-    float progress;
+    float progress;//In seconds
 }
 @property (retain, nonatomic) NSMutableArray* chapters;
 @property (retain, nonatomic) UIView* tooltipView;
@@ -221,6 +221,7 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     [[NLTAPI sharedInstance] getResumePlayForShow:self.show withResultBlock:^(NSNumber* progressNumber, NSError *error) {
         if(progressNumber){
             progress = ((float)[progressNumber integerValue])/1000.0;
+            [self updateCastPlayerView];//For default position for progress
         }
     } withKey:self];
 
@@ -310,7 +311,9 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         [self.castButton setStatus:CIBCastAvailable];
         [self updateCastContainer];
     }
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCastPlayerView) name:@"ChromecastPlayerProgress" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFromCastProgress) name:@"ChromecastPlayerProgress" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFromCastFinished) name:@"ChromecastPlayerFinished" object:nil];
+    [self updateCastContainer];
 
 }
 
@@ -418,6 +421,22 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     }
 }
 
+- (void)updateFromCastProgress{
+    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+    float lastKnownProgress = chromecastManager.progress;
+    if (ABS(1000*lastKnownProgress-self.show.duration_ms)<10000) {
+        progress = 0;
+    }else if(chromecastManager.mediaControlChannel.mediaStatus.playerState == GCKMediaPlayerStatePlaying){
+        progress = lastKnownProgress;
+    }
+    [self updateCastPlayerView];
+}
+
+- (void)updateFromCastFinished{
+    [self updateFromCastProgress];
+    [self syncVideoReadStatus];
+}
+
 - (void) updateCastPlayerView{
     ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
     self.castPlayerView.hidden = chromecastManager.deviceManager.device == nil;
@@ -425,12 +444,16 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     GCKMediaPlayerState playerState = chromecastManager.mediaControlChannel.mediaStatus.playerState;
     if(playerState == GCKMediaPlayerStatePlaying){
         self.castPlayerPauseButton.selected = TRUE;
+        [self.castActivity stopAnimating];
     }else{
         self.castPlayerPauseButton.selected = FALSE;
     }
-    self.castTotalLabel.text = [self.show durationString];
+    self.castTotalLabel.text = [NLTShow detailedDurationString:self.show.duration_ms];
     NSTimeInterval position = chromecastManager.mediaControlChannel.mediaStatus.streamPosition;
-    self.castProgressLabel.text = [NLTShow durationString:(int)(position*1000)];
+    if(!chromecastManager.mediaControlChannel.mediaStatus||chromecastManager.mediaControlChannel.mediaStatus.playerState == GCKMediaPlayerStateIdle){
+        position = progress;
+    }
+    self.castProgressLabel.text = [NLTShow detailedDurationString:(int)(position*1000)];
     self.castProgressView.progress = position*1000./(float)self.show.duration_ms;
 }
 
@@ -450,6 +473,12 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     });
 }
 
+- (IBAction)castStartPlaying{
+    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+    [self.castActivity startAnimating];
+    [chromecastManager playShow:self.show withProgress:progress];
+}
+
 - (IBAction)castPause{
     ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
     GCKMediaPlayerState playerState = chromecastManager.mediaControlChannel.mediaStatus.playerState;
@@ -458,7 +487,7 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     }else if(playerState == GCKMediaPlayerStatePlaying){
         [chromecastManager pause];
     }else if(!chromecastManager.mediaControlChannel.mediaStatus || playerState == GCKMediaPlayerStateIdle || playerState == GCKMediaPlayerStateUnknown){
-        [chromecastManager playShow:self.show withProgress:progress];
+        [self castStartPlaying];
     }
 #warning Add progress save (regularly ?)
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -467,6 +496,7 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
 }
 
 - (IBAction)castStop{
+    [self.castActivity stopAnimating];
     ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
     [chromecastManager stop];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -502,14 +532,10 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
 }
 
 
-#pragma mark - Player
+#pragma mark - Video status
 
-#pragma mark ShowPlayerManagerDelegate
-- (void)progressChanged:(float)p{
-    progress = p;
-}
-
-- (void)moviePlayerDidExitFullscreen{
+- (void)syncVideoReadStatus{
+    [self.readAlert dismissWithClickedButtonIndex:0 animated:NO];
     self.readAlert = [[UIAlertView alloc] initWithTitle:@"Connection en cours ..." message:@"Récupération de l'état lu/non lu..." delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
     [self.readAlert show];
     __weak ShowViewController* weakSelf = self;
@@ -543,6 +569,17 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
             }
         }
     } withKey:self noCache:YES];
+}
+
+#pragma mark - Player
+
+#pragma mark ShowPlayerManagerDelegate
+- (void)progressChanged:(float)p{
+    progress = p;
+}
+
+- (void)moviePlayerDidExitFullscreen{
+    [self syncVideoReadStatus];
 }
 
 - (void)startedLookingForMovieUrl{
@@ -585,10 +622,6 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
 - (IBAction)play:(id)sender {
     [self.playStartTimer invalidate];
     if(self.playStart && [[NSDate date] timeIntervalSinceDate:self.playStart] > 1 && self.contextPlaylist){
-#warning Handle playlist with chromecast
-#warning Handle playlist with chromecast
-#warning Handle playlist with chromecast
-#warning Handle playlist with chromecast
 #warning Fix playlist with both orders
         [self longPlay];
         return;
@@ -597,7 +630,7 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     
     ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
     if(chromecastManager.deviceManager.device){
-        [chromecastManager playShow:self.show withProgress:progress];
+        [self castStartPlaying];
         return;
     }
     

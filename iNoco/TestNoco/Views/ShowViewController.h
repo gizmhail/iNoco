@@ -48,6 +48,7 @@
 @property (weak, nonatomic) IBOutlet UIProgressView *castProgressView;
 @property (weak, nonatomic) IBOutlet UILabel *castProgressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *castTotalLabel;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *castActivity;
 
 - (IBAction)castClick:(id)sender;
 - (IBAction)play:(id)sender;

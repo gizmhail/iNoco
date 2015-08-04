@@ -22,14 +22,19 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1.3.4</string>
-    <key>GSMGroupId</key>
-    <string>group.name.poivre.iNoco</string>
+	<key>GSMGroupId</key>
+	<string>group.name.poivre.iNoco</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionMainStoryboard</key>
 		<string>MainInterface</string>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.widget-extension</string>
+	</dict>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
 	</dict>
 </dict>
 </plist>

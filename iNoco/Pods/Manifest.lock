@@ -1,0 +1,18 @@
+PODS:
+  - google-cast-sdk (2.7.1):
+    - google-cast-sdk/Assets (= 2.7.1)
+    - google-cast-sdk/Core (= 2.7.1)
+  - google-cast-sdk/Assets (2.7.1):
+    - google-cast-sdk/Core
+  - google-cast-sdk/Core (2.7.1)
+  - GroupSettingsManager (0.1.0)
+
+DEPENDENCIES:
+  - google-cast-sdk
+  - GroupSettingsManager
+
+SPEC CHECKSUMS:
+  google-cast-sdk: 9c98a8fbe8277277ab01a3318ee965c9aef3d4c9
+  GroupSettingsManager: 9307b3ebaf5212246077219964c381ecf0e94be4
+
+COCOAPODS: 0.38.2

@@ -9,34 +9,23 @@
 #import "ChromecastManager.h"
 
 @interface ChromecastManager (){
+    BOOL finishProgressionSynched;
 }
-@property (assign,nonatomic)float progress;
 @property (retain,nonatomic)NSTimer* progressTimer;
-@property (retain,nonatomic)NLTShow* currentShow;
+@property (retain, nonatomic) UIAlertView* progressAlert;
 @end
 
 @implementation ChromecastManager
 
 - (void)deviceScan{
-    self.deviceScanner = [[GCKDeviceScanner alloc] init];
     
     GCKFilterCriteria *filterCriteria = [[GCKFilterCriteria alloc] init];
     filterCriteria = [GCKFilterCriteria criteriaForAvailableApplicationWithID:kGCKMediaDefaultReceiverApplicationID];
     
-    self.deviceScanner.filterCriteria = filterCriteria;
+    self.deviceScanner = [[GCKDeviceScanner alloc] initWithFilterCriteria:filterCriteria];
     
     [self.deviceScanner addListener:self];
     [self.deviceScanner startScan];
-}
-
-
-#warning TODO Allow handling of several devices
-
-- (void) selectDefaultDevice{
-    for ( GCKDevice* selectedDevice in self.deviceScanner.devices ){
-        [self selectDevice:selectedDevice];
-        break;
-    }
 }
 
 - (void)selectDevice:(GCKDevice*)selectedDevice{
@@ -64,6 +53,7 @@
     self.progress = startTime;
     [self.progressTimer invalidate];
     self.progressTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(progressCheck) userInfo:nil repeats:YES];
+    finishProgressionSynched = FALSE;
     [self.mediaControlChannel loadMedia:mediaInformation autoplay:autoPlay playPosition:startTime];
 }
 
@@ -118,6 +108,7 @@
 - (void)deviceDidGoOffline:(GCKDevice *)device {
     NSLog(@"device disappeared!!!");
     [self.progressTimer invalidate];
+    self.progressTimer = nil;
 }
 
 #pragma mark - GCKDeviceManagerDelegate
@@ -125,7 +116,8 @@
     NSLog(@"connected!!");
     
     [self.deviceManager launchApplication:kGCKMediaDefaultReceiverApplicationID];
-    self.progressTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(progressCheck) userInfo:nil repeats:YES];
+    //self.progressTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(progressCheck) userInfo:nil repeats:YES];
+    [self.mediaControlChannel requestStatus];
 }
 
 - (void)deviceManager:(GCKDeviceManager *)deviceManager
@@ -138,6 +130,24 @@ didConnectToCastApplication:(GCKApplicationMetadata *)applicationMetadata
     [self.deviceManager addChannel:self.mediaControlChannel];
 }
 
+#pragma mark Progression
+
+- (void)syncProgression{
+    if (ABS(1000*self.progress-self.currentShow.duration_ms)<10000) {
+        //Was probably finished (less than 10s remaining)
+        self.progress = 0;
+    }
+    if(self.currentShow){
+#ifdef DEBUG
+        NSLog(@" >> sync progress from cast: %f",self.progress);
+#endif
+        self.progressAlert = [[UIAlertView alloc] initWithTitle:@"Connection en cours ..." message:@"Mise à jour de la progression de la lecture..." delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+        [self.progressAlert show];
+        [[NLTAPI sharedInstance] setResumePlay:self.progress*1000 forShow:self.currentShow withResultBlock:^(id result, NSError *error) {
+            [self.progressAlert dismissWithClickedButtonIndex:0 animated:YES];
+        } withKey:self];
+    }
+}
 #pragma mark - Controls
 
 - (void)resume{
@@ -148,11 +158,13 @@ didConnectToCastApplication:(GCKApplicationMetadata *)applicationMetadata
 
 - (void)pause{
     [self.progressTimer invalidate];
+    self.progressTimer = nil;
     [self.mediaControlChannel pause];
 }
 
 - (void)stop{
-    [self.progressTimer invalidate];
+    self.progress = self.mediaControlChannel.mediaStatus.streamPosition;
+    [self notifyFinish];
     [self.mediaControlChannel stop];
 }
 
@@ -162,28 +174,53 @@ didConnectToCastApplication:(GCKApplicationMetadata *)applicationMetadata
 
 
 #pragma mark - Progress
+
+
 - (void)progressCheck{
     [self.mediaControlChannel requestStatus];
     [self notifyProgress];
 }
 
+- (void)notifyFinish{
+    finishProgressionSynched = TRUE;
+    [self syncProgression];
+    [self.progressTimer invalidate];
+    self.progressTimer = nil;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ChromecastPlayerFinished" object:nil];
+}
+
 - (void)notifyProgress{
 #ifdef DEBUG
-    NSLog(@"%@ %f",self.mediaControlChannel.mediaStatus.mediaInformation,self.mediaControlChannel.mediaStatus.streamPosition);
+    //NSLog(@"%li %f",(long)self.mediaControlChannel.mediaStatus.playerState,self.mediaControlChannel.mediaStatus.streamPosition);
 #endif
-    if(self.mediaControlChannel.mediaStatus.streamPosition != self.progress){
+    if(self.mediaControlChannel.mediaStatus.streamPosition != self.progress && self.mediaControlChannel.mediaStatus.playerState == GCKMediaPlayerStatePlaying){
         self.progress = self.mediaControlChannel.mediaStatus.streamPosition;
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"ChromecastPlayerProgress" object:nil];
     }
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"ChromecastPlayerProgress" object:nil];
 }
 
 #pragma mark - GCKMediaControlChannelDelegate
 
 - (void)mediaControlChannelDidUpdateStatus:(GCKMediaControlChannel *)mediaControlChannel{
 #ifdef DEBUG
-    NSLog(@"mediaControlChannelDidUpdateStatus: %@ %f",mediaControlChannel.mediaStatus,mediaControlChannel.mediaStatus.streamPosition);
+    /*
+    NSLog(@"mediaControlChannelDidUpdateStatus: %@ %li %li %f",
+          mediaControlChannel.mediaStatus,
+          mediaControlChannel.mediaStatus.playerState,
+          mediaControlChannel.mediaStatus.idleReason,
+          mediaControlChannel.mediaStatus.streamPosition);
+     */
 #endif
+    if(!finishProgressionSynched&&mediaControlChannel.mediaStatus.playerState == GCKMediaPlayerStateIdle&&mediaControlChannel.mediaStatus.idleReason == GCKMediaPlayerIdleReasonFinished){
+        //Reading is finished
+        self.progress = 0;
+        [self notifyFinish];
+    }
     [self notifyProgress];
+    if(!self.progressTimer && mediaControlChannel.mediaStatus.playerState == GCKMediaPlayerStatePlaying){
+        //Playing from another session: we start observing status
+        self.progressTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(progressCheck) userInfo:nil repeats:YES];
+    }
 }
 
 
