@@ -6,16 +6,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "TestNoco/Views/ShowViewController.m"
-            timestampString = "460371419.357134"
+            filePath = "TestNoco/Lib/Cast/ChromecastManager.m"
+            timestampString = "460375520.88897"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "590"
-            endingLineNumber = "590"
-            landmarkName = "-play:"
+            startingLineNumber = "166"
+            endingLineNumber = "166"
+            landmarkName = "-progressCheck"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

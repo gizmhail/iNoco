@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "GoogleCast.h"
+#import <GoogleCast/GoogleCast.h>
 #import "NLTAPI.h"
 
 @interface ChromecastManager : NSObject<GCKDeviceScannerListener,GCKDeviceManagerDelegate,GCKMediaControlChannelDelegate>

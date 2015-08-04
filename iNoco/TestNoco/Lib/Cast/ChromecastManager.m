@@ -7,7 +7,6 @@
 //
 
 #import "ChromecastManager.h"
-#import "GoogleCast.h"
 
 @interface ChromecastManager (){
 }
@@ -164,17 +163,18 @@ didConnectToCastApplication:(GCKApplicationMetadata *)applicationMetadata
 
 #pragma mark - Progress
 - (void)progressCheck{
-    if(self.mediaControlChannel.mediaStatus.streamPosition != self.progress){
-        self.progress = self.mediaControlChannel.mediaStatus.streamPosition;
-        [self notifyProgress];
-    }
+    [self.mediaControlChannel requestStatus];
+    [self notifyProgress];
 }
 
 - (void)notifyProgress{
 #ifdef DEBUG
     NSLog(@"%@ %f",self.mediaControlChannel.mediaStatus.mediaInformation,self.mediaControlChannel.mediaStatus.streamPosition);
 #endif
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"ChromecastPlayerProgress" object:nil];
+    if(self.mediaControlChannel.mediaStatus.streamPosition != self.progress){
+        self.progress = self.mediaControlChannel.mediaStatus.streamPosition;
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"ChromecastPlayerProgress" object:nil];
+    }
 }
 
 #pragma mark - GCKMediaControlChannelDelegate
@@ -183,7 +183,7 @@ didConnectToCastApplication:(GCKApplicationMetadata *)applicationMetadata
 #ifdef DEBUG
     NSLog(@"mediaControlChannelDidUpdateStatus: %@ %f",mediaControlChannel.mediaStatus,mediaControlChannel.mediaStatus.streamPosition);
 #endif
-    [self progressCheck];
+    [self notifyProgress];
 }
 
 

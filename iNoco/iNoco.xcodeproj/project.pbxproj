@@ -146,6 +146,7 @@
 		4FEECD7C1949D683002514CE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FEECD7B1949D683002514CE /* Images.xcassets */; };
 		4FEF289419ABC20E005D4C33 /* FamilyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEF289319ABC20E005D4C33 /* FamilyTableViewCell.m */; };
 		52A0210735979BBCEB807A8C /* libPods-iNocoToday.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7CF8EAC4B67750EA22A9762 /* libPods-iNocoToday.a */; };
+		BD4DFD651B70C435008C3EF5 /* ChromeCastImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BD4DFD641B70C435008C3EF5 /* ChromeCastImages.xcassets */; };
 		BD6670DF1B70A2D700487369 /* Octicons-playback-fast-forward.svg.png in Resources */ = {isa = PBXBuildFile; fileRef = BD6670DB1B70A2D700487369 /* Octicons-playback-fast-forward.svg.png */; };
 		BD6670E01B70A2D700487369 /* Octicons-playback-rewind.svg.png in Resources */ = {isa = PBXBuildFile; fileRef = BD6670DC1B70A2D700487369 /* Octicons-playback-rewind.svg.png */; };
 		BD6670E11B70A2D700487369 /* Octicons-playback-pause.svg.png in Resources */ = {isa = PBXBuildFile; fileRef = BD6670DD1B70A2D700487369 /* Octicons-playback-pause.svg.png */; };
@@ -185,7 +186,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0D6059D513A02AEB3B9C1952 /* Pods-iNocoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iNocoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iNocoTests/Pods-iNocoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2659FA1EF22FDC8A1F10134D /* libPods-iNocoTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iNocoTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CD5E2B3B9466FF2A4D89430 /* Pods-iNocoToday.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iNocoToday.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iNocoToday/Pods-iNocoToday.debug.xcconfig"; sourceTree = "<group>"; };
 		4F11173819823A7A00242C22 /* EPGTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EPGTableViewCell.h; sourceTree = "<group>"; };
@@ -363,6 +363,7 @@
 		8A371B9EDB2C8515E4F5ADFC /* libPods-iNoco.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iNoco.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9414F5B298449A2ADB5F19E8 /* Pods-iNoco.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iNoco.release.xcconfig"; path = "Pods/Target Support Files/Pods-iNoco/Pods-iNoco.release.xcconfig"; sourceTree = "<group>"; };
 		A40A6AAA3125511B37DD89C3 /* Pods-iNoco.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iNoco.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iNoco/Pods-iNoco.debug.xcconfig"; sourceTree = "<group>"; };
+		BD4DFD641B70C435008C3EF5 /* ChromeCastImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ChromeCastImages.xcassets; sourceTree = "<group>"; };
 		BD6670DB1B70A2D700487369 /* Octicons-playback-fast-forward.svg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-playback-fast-forward.svg.png"; sourceTree = "<group>"; };
 		BD6670DC1B70A2D700487369 /* Octicons-playback-rewind.svg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-playback-rewind.svg.png"; sourceTree = "<group>"; };
 		BD6670DD1B70A2D700487369 /* Octicons-playback-pause.svg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-playback-pause.svg.png"; sourceTree = "<group>"; };
@@ -370,7 +371,6 @@
 		BD6670E31B70A6F100487369 /* Octicons-playback-play_cropped.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-playback-play_cropped.png"; sourceTree = "<group>"; };
 		DBA21A3ADAAA232764EA38C3 /* Pods-iNocoToday.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iNocoToday.release.xcconfig"; path = "Pods/Target Support Files/Pods-iNocoToday/Pods-iNocoToday.release.xcconfig"; sourceTree = "<group>"; };
 		E7CF8EAC4B67750EA22A9762 /* libPods-iNocoToday.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iNocoToday.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		F820FB7B9226A057E2C19905 /* Pods-iNocoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iNocoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-iNocoTests/Pods-iNocoTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -638,6 +638,7 @@
 				4F92E95B1AD45477006F5A52 /* ChromecastManager.m */,
 				4F92E95D1AD477E8006F5A52 /* CastIconButton.h */,
 				4F92E95E1AD477E8006F5A52 /* CastIconButton.m */,
+				BD4DFD641B70C435008C3EF5 /* ChromeCastImages.xcassets */,
 			);
 			path = Cast;
 			sourceTree = "<group>";
@@ -760,8 +761,6 @@
 			children = (
 				A40A6AAA3125511B37DD89C3 /* Pods-iNoco.debug.xcconfig */,
 				9414F5B298449A2ADB5F19E8 /* Pods-iNoco.release.xcconfig */,
-				0D6059D513A02AEB3B9C1952 /* Pods-iNocoTests.debug.xcconfig */,
-				F820FB7B9226A057E2C19905 /* Pods-iNocoTests.release.xcconfig */,
 				3CD5E2B3B9466FF2A4D89430 /* Pods-iNocoToday.debug.xcconfig */,
 				DBA21A3ADAAA232764EA38C3 /* Pods-iNocoToday.release.xcconfig */,
 			);
@@ -885,6 +884,7 @@
 				4F459501196324BA0061381E /* Icon-Small@2x.png in Resources */,
 				4F2175C9196CAFD60005EB14 /* fond02.png in Resources */,
 				4F45950F196328C60061381E /* Octicons-search.png in Resources */,
+				BD4DFD651B70C435008C3EF5 /* ChromeCastImages.xcassets in Resources */,
 				4F4594FB196324BA0061381E /* Icon-72@2x.png in Resources */,
 				4F2175CC196D3D890005EB14 /* oss.html in Resources */,
 				BD6670E21B70A2D700487369 /* Octicons-primitive-square.svg.png in Resources */,
@@ -1286,6 +1286,7 @@
 				GCC_PREFIX_HEADER = "TestNoco/iNoco-Prefix.pch";
 				INFOPLIST_FILE = "TestNoco/iNoco-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_NAME = iNoco;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1308,6 +1309,7 @@
 				GCC_PREFIX_HEADER = "TestNoco/iNoco-Prefix.pch";
 				INFOPLIST_FILE = "TestNoco/iNoco-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_NAME = iNoco;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
