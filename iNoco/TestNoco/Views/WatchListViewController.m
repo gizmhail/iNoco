@@ -64,6 +64,8 @@
         }else{
             weakSelf.watchlistIds = [NSMutableArray arrayWithArray:result];
             [weakSelf.collectionView reloadData];
+            //We fill resultByPage, as it is used to forward playlists
+            [self.resultByPage setObject:weakSelf.watchlistIds forKey:[NSNumber numberWithInt:0]];
         }
     } withKey:self];
     [self refreshResumePlay];

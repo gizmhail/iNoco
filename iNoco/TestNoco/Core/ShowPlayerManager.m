@@ -55,10 +55,22 @@
     NLTShow* nextShow = nil;
     if(self.currentPlaylistItem && self.showList){
         NSUInteger index = [self.showList indexOfObject:self.currentPlaylistItem];
+        if(index==NSNotFound&&[self.currentPlaylistItem isKindOfClass:[NLTShow class]]){
+            //The playlsit is maybe in showId format
+            index = [self.showList indexOfObject:[NSNumber numberWithInt:[(NLTShow*)self.currentPlaylistItem id_show]]];
+        }
         index++;
         if(index < [self.showList count]){
             nextShow = [self.showList objectAtIndex:index];
+        }else{
+#ifdef DEBUG
+            NSLog(@"No more shows %li %@ %@", index, self.showList,self.currentShow);
+#endif
         }
+    }else{
+#ifdef DEBUG
+        NSLog(@"No playlist: nothing more to play");
+#endif
     }
     return nextShow;
 }
@@ -70,7 +82,15 @@
         index--;
         if(index > 0 && index < [self.showList count]){
             previousShow = [self.showList objectAtIndex:index];
+        }else{
+#ifdef DEBUG
+            NSLog(@"No more shows %li %@", index, self.showList);
+#endif
         }
+    }else{
+#ifdef DEBUG
+        NSLog(@"No playlist: nothing more to play");
+#endif
     }
     return previousShow;
 }
@@ -80,6 +100,9 @@
 }
 
 - (void)switchToSiblingFollowing:(BOOL)isNext{
+#ifdef DEBUG
+    NSLog(@"-- switchToSiblingFollowing %i --",isNext);
+#endif
 #warning See if we should keep it in the superview
     [self removeCustomUI];
     [self.moviePlayer.view removeFromSuperview];
@@ -89,6 +112,9 @@
     }
     if(siblingShow == nil){
         //Playlist is finished
+#ifdef DEBUG
+        NSLog(@"Playlist is finished");
+#endif
         self.showList = nil;
         self.currentShow = nil;
         self.currentPlaylistItem = nil;
@@ -120,6 +146,19 @@
 #endif
                 [self switchToSiblingFollowing:isNext];
             }
+        }else if([siblingShow isKindOfClass:[NSNumber class]]){
+            //Show was a number, a show id (probably from atchlist context)
+            [[NLTAPI sharedInstance] showWithId:[(NSNumber*)siblingShow longValue] withResultBlock:^(id result, NSError *error) {
+                if(result){
+                    [self play:result withProgress:0 withImage:[UIImage imageNamed:@"noco.png"]];
+                }else if (error){
+                    //Skipping unusable show
+#ifdef DEBUG
+                    NSLog(@"Skipping next show (not known on backend)");
+#endif
+                    [self switchToSiblingFollowing:isNext];
+                }
+            } withKey:self];
         }else{
             //Skipping unusable show
 #ifdef DEBUG
@@ -215,7 +254,7 @@
     
     
     if(playbackCameToCompletion){
-        self.currentShow = nil;
+        //self.currentShow = nil;
 #ifdef DEBUG
         NSLog(@"Skipping next show (playback came to completion)");
 #endif
@@ -264,12 +303,12 @@
 }
 
 - (IBAction)play:(NLTShow*)show withProgress:(float)progress withImage:(UIImage*)image withPlaylist:(NSMutableArray*)playlist withCurrentPlaylistItem:(id)currentItem{
-
+#ifdef DEBUG
+    NSLog(@"Reading show: %@",show);
+#endif
     
     self.showList = [NSMutableArray arrayWithArray:playlist];
-    if(!self.currentPlaylistItem){
-        self.currentPlaylistItem = currentItem;
-    }
+    self.currentPlaylistItem = currentItem;
     if(!self.currentPlaylistItem){
         self.currentPlaylistItem = show;
     }
@@ -287,6 +326,9 @@
                     for (NSDictionary*partner in result) {
                         if([(NSString*)[partner objectForKey:@"partner_key"] compare:self.currentShow.partner_key]==NSOrderedSame){
                             if([self displayAlerts]){
+#ifdef DEBUG
+                                NSLog(@"Unable to read: not subscribed");
+#endif
                                 [[[UIAlertView alloc] initWithTitle:@"Lecture impossible" message:[NSString stringWithFormat:@"Vous n'êtes pas abonné(e) à %@", [partner objectForKey:@"partner_name"]] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
                                 partnerFound = TRUE;
                             }
@@ -296,6 +338,10 @@
                 }
                 if(!partnerFound){
                     if([self displayAlerts]){
+#ifdef DEBUG
+                        NSLog(@"Unable to read: partner not found");
+#endif
+
                         [[[UIAlertView alloc] initWithTitle:@"Lecture impossible" message:@"Impossible de lire cette émission" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
                     }
                 }
@@ -307,6 +353,9 @@
             } withKey:self withCacheDuration:60*10];
         }else{
             if([self displayAlerts]){
+#ifdef DEBUG
+                NSLog(@"Unable to read");
+#endif
                 [[[UIAlertView alloc] initWithTitle:@"Lecture impossible" message:@"Impossible de lire cette émission" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
             }
 #ifdef DEBUG

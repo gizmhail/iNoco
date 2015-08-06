@@ -90,7 +90,6 @@
 		4F636AB4195E9F3A004C0A18 /* eye_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F636AB3195E9F3A004C0A18 /* eye_btn.png */; };
 		4F636AB6195EA39E004C0A18 /* mark-read.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F636AB5195EA39E004C0A18 /* mark-read.png */; };
 		4F927851197E56AD00DB138B /* ShowCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F927850197E56AD00DB138B /* ShowCollectionViewCell.m */; };
-		4F927854197F032400DB138B /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F927853197F032400DB138B /* Crashlytics.framework */; };
 		4F927856197F0DFD00DB138B /* crashlytics.sh in Resources */ = {isa = PBXBuildFile; fileRef = 4F927855197F0DFD00DB138B /* crashlytics.sh */; };
 		4F92785C19807EC800DB138B /* Default768x1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F92785819807EC800DB138B /* Default768x1024.png */; };
 		4F92785D19807EC800DB138B /* Default768x1024@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F92785919807EC800DB138B /* Default768x1024@2x.png */; };
@@ -146,6 +145,8 @@
 		4FEECD7C1949D683002514CE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FEECD7B1949D683002514CE /* Images.xcassets */; };
 		4FEF289419ABC20E005D4C33 /* FamilyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEF289319ABC20E005D4C33 /* FamilyTableViewCell.m */; };
 		52A0210735979BBCEB807A8C /* libPods-iNocoToday.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7CF8EAC4B67750EA22A9762 /* libPods-iNocoToday.a */; };
+		BD15CE0E1B738D930023309A /* Octicons-jump-left.svg.png in Resources */ = {isa = PBXBuildFile; fileRef = BD15CE0C1B738D930023309A /* Octicons-jump-left.svg.png */; };
+		BD15CE0F1B738D930023309A /* Octicons-jump-right.svg.png in Resources */ = {isa = PBXBuildFile; fileRef = BD15CE0D1B738D930023309A /* Octicons-jump-right.svg.png */; };
 		BD4DFD651B70C435008C3EF5 /* ChromeCastImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BD4DFD641B70C435008C3EF5 /* ChromeCastImages.xcassets */; };
 		BD6670DF1B70A2D700487369 /* Octicons-playback-fast-forward.svg.png in Resources */ = {isa = PBXBuildFile; fileRef = BD6670DB1B70A2D700487369 /* Octicons-playback-fast-forward.svg.png */; };
 		BD6670E01B70A2D700487369 /* Octicons-playback-rewind.svg.png in Resources */ = {isa = PBXBuildFile; fileRef = BD6670DC1B70A2D700487369 /* Octicons-playback-rewind.svg.png */; };
@@ -308,7 +309,6 @@
 		4F636AB5195EA39E004C0A18 /* mark-read.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark-read.png"; sourceTree = "<group>"; };
 		4F92784F197E56AD00DB138B /* ShowCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowCollectionViewCell.h; sourceTree = "<group>"; };
 		4F927850197E56AD00DB138B /* ShowCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowCollectionViewCell.m; sourceTree = "<group>"; };
-		4F927853197F032400DB138B /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		4F927855197F0DFD00DB138B /* crashlytics.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = crashlytics.sh; sourceTree = "<group>"; };
 		4F92785819807EC800DB138B /* Default768x1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default768x1024.png; sourceTree = "<group>"; };
 		4F92785919807EC800DB138B /* Default768x1024@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default768x1024@2x.png"; sourceTree = "<group>"; };
@@ -363,6 +363,8 @@
 		8A371B9EDB2C8515E4F5ADFC /* libPods-iNoco.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iNoco.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9414F5B298449A2ADB5F19E8 /* Pods-iNoco.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iNoco.release.xcconfig"; path = "Pods/Target Support Files/Pods-iNoco/Pods-iNoco.release.xcconfig"; sourceTree = "<group>"; };
 		A40A6AAA3125511B37DD89C3 /* Pods-iNoco.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iNoco.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iNoco/Pods-iNoco.debug.xcconfig"; sourceTree = "<group>"; };
+		BD15CE0C1B738D930023309A /* Octicons-jump-left.svg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-jump-left.svg.png"; sourceTree = "<group>"; };
+		BD15CE0D1B738D930023309A /* Octicons-jump-right.svg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-jump-right.svg.png"; sourceTree = "<group>"; };
 		BD4DFD641B70C435008C3EF5 /* ChromeCastImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ChromeCastImages.xcassets; sourceTree = "<group>"; };
 		BD6670DB1B70A2D700487369 /* Octicons-playback-fast-forward.svg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-playback-fast-forward.svg.png"; sourceTree = "<group>"; };
 		BD6670DC1B70A2D700487369 /* Octicons-playback-rewind.svg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-playback-rewind.svg.png"; sourceTree = "<group>"; };
@@ -391,7 +393,6 @@
 				4F636A871957859B004C0A18 /* MediaPlayer.framework in Frameworks */,
 				4FEECD601949D683002514CE /* CoreGraphics.framework in Frameworks */,
 				4FEECD621949D683002514CE /* UIKit.framework in Frameworks */,
-				4F927854197F032400DB138B /* Crashlytics.framework in Frameworks */,
 				4FEECD5E1949D683002514CE /* Foundation.framework in Frameworks */,
 				3F6E6F1E9BFA50DA5D2F5319 /* libPods-iNoco.a in Frameworks */,
 			);
@@ -561,6 +562,8 @@
 				BD6670DC1B70A2D700487369 /* Octicons-playback-rewind.svg.png */,
 				BD6670DD1B70A2D700487369 /* Octicons-playback-pause.svg.png */,
 				BD6670DE1B70A2D700487369 /* Octicons-primitive-square.svg.png */,
+				BD15CE0C1B738D930023309A /* Octicons-jump-left.svg.png */,
+				BD15CE0D1B738D930023309A /* Octicons-jump-right.svg.png */,
 				BD6670E31B70A6F100487369 /* Octicons-playback-play_cropped.png */,
 			);
 			path = img;
@@ -689,7 +692,6 @@
 		4FEECD5C1949D683002514CE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4F927853197F032400DB138B /* Crashlytics.framework */,
 				4FA802FD19621E7000E820B9 /* AVFoundation.framework */,
 				4F636A861957859B004C0A18 /* MediaPlayer.framework */,
 				4FEECD5D1949D683002514CE /* Foundation.framework */,
@@ -888,6 +890,7 @@
 				4F4594FB196324BA0061381E /* Icon-72@2x.png in Resources */,
 				4F2175CC196D3D890005EB14 /* oss.html in Resources */,
 				BD6670E21B70A2D700487369 /* Octicons-primitive-square.svg.png in Resources */,
+				BD15CE0F1B738D930023309A /* Octicons-jump-right.svg.png in Resources */,
 				4F636AA81958CB19004C0A18 /* Unstar_icon.png in Resources */,
 				BD6670DF1B70A2D700487369 /* Octicons-playback-fast-forward.svg.png in Resources */,
 				4F37F36F1969E3EE00D0AACC /* heart_on.png in Resources */,
@@ -899,6 +902,7 @@
 				4F45950D196328C60061381E /* Octicons-clock.png in Resources */,
 				4F459510196328C60061381E /* Octicons-search@2x.png in Resources */,
 				4F636A991958BBD6004C0A18 /* Octicons-info.png in Resources */,
+				BD15CE0E1B738D930023309A /* Octicons-jump-left.svg.png in Resources */,
 				4F3DE09F196C9A6600D2A0B7 /* Default-568h@2x.png in Resources */,
 				4F636AA21958C56A004C0A18 /* Octicons-bookmark@2x.png in Resources */,
 				4F4594F8196324BA0061381E /* Icon-60.png in Resources */,
@@ -961,7 +965,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#/Users/gizmhail/Documents/Perso/iOS/Noco/git/iNoco/iNoco/TestNoco/crashlytics.sh";
+			shellScript = /Users/spoivre/Documents/Perso/iOS/Noco/git/iNoco/iNoco/TestNoco/crashlytics.sh;
 		};
 		57F05774350B303E4DA0C9E0 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1156,6 +1160,7 @@
 				CODE_SIGN_ENTITLEMENTS = iNocoToday/iNocoToday.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1182,6 +1187,7 @@
 				CODE_SIGN_ENTITLEMENTS = iNocoToday/iNocoToday.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"NLTOAUTH_NO_LOGINCONTROLLER=1",

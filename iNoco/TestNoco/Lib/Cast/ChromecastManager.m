@@ -11,6 +11,7 @@
 @interface ChromecastManager (){
     BOOL finishProgressionSynched;
 }
+@property (retain,nonatomic)NSTimer* retryPlayTimer;
 @property (retain,nonatomic)NSTimer* progressTimer;
 @property (retain, nonatomic) UIAlertView* progressAlert;
 @end
@@ -28,6 +29,12 @@
     [self.deviceScanner startScan];
 }
 
+- (void)disconnect{
+    [self.deviceManager disconnect];
+    self.deviceManager = nil;
+    self.mediaControlChannel = nil;
+
+}
 - (void)selectDevice:(GCKDevice*)selectedDevice{
     NSDictionary *info = [[NSBundle mainBundle] infoDictionary];
     NSString *appIdentifier = [info objectForKey:@"CFBundleIdentifier"];
@@ -57,7 +64,32 @@
     [self.mediaControlChannel loadMedia:mediaInformation autoplay:autoPlay playPosition:startTime];
 }
 
+- (void)retryPlay{
+    if(self.mediaControlChannel){
+        [self playShow:self.currentShow withProgress:self.progress];
+    }else{
+        //Problem with chromecast
+#ifdef DEBUG
+        NSLog(@"Chromecast not detected");
+#endif
+    }
+}
+
 - (void)playShow:(NLTShow*)show withProgress:(float)progress{
+    if(!self.mediaControlChannel){
+        //Started too early, we will retry in a few seconds to see if chromecast has booted
+#ifdef DEBUG
+        NSLog(@"Started too early, we will retry in a few seconds to see if chromecast has booted");
+#endif
+        self.currentShow = show;
+        self.progress = progress;
+        [self.retryPlayTimer invalidate];
+        self.retryPlayTimer = [NSTimer scheduledTimerWithTimeInterval:7 target:self selector:@selector(retryPlay) userInfo:nil repeats:NO];
+        return;
+    }
+
+    
+    
     [[NLTAPI sharedInstance] videoUrlForShow:show withResultBlock:^(id result, NSError *error) {
         if(result){
             NSString* file = [result objectForKey:@"file"];

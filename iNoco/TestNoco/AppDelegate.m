@@ -11,6 +11,7 @@
 #import "NLTAPI.h"
 #import <AVFoundation/AVFoundation.h>
 #import "NocoDownloadsManager.h"
+#import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 #import "RecentShowViewController.h"
 #import "GroupSettingsManager.h"
@@ -31,7 +32,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 #ifdef DEBUG
     //[[Crashlytics sharedInstance] setDebugMode:YES];
 #endif
-    [Crashlytics startWithAPIKey:CRASHLITICS_KEY afterDelay:5];
+    [Fabric with:@[CrashlyticsKit]];
 
     GroupSettingsManager* groupSettings = [GroupSettingsManager sharedInstance];
 #ifdef NLT_RECORD_LOGS

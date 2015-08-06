@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0C16AAF4D4886824B7FECF22"
+               BlueprintIdentifier = "AFED653D32434DB2EDDEF279"
                BuildableName = "libGroupSettingsManager.a"
                BlueprintName = "GroupSettingsManager"
                ReferencedContainer = "container:Pods.xcodeproj">

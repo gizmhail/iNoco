@@ -39,6 +39,7 @@
 {
     [self loadShowsByDay:[NSArray array]];
     [super viewDidLoad];
+   
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"maintenant" style:UIBarButtonItemStylePlain target:self action:@selector(scrollToNow)];
     [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"fond02.png"]]];
     self.tableView.backgroundView.contentMode = UIViewContentModeScaleAspectFill;
@@ -72,6 +73,14 @@
             [self scrollToNow];
         }
     } withCacheDuration:60*10];
+    
+    
+    if([self isNolifeMugenAvailable]){
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"∞" style:UIBarButtonItemStylePlain target:self action:@selector(launchNolifeMugen)];
+    }else{
+        self.navigationItem.leftBarButtonItem = nil;
+    }
+
     [super viewDidAppear:animated];
 }
 
@@ -81,6 +90,23 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark Nolife mugen
+
+- (BOOL)isNolifeMugenAvailable{
+    NSURL *twitchURL = [NSURL URLWithString:@"twitch://channel/nolife"];
+    if ([[UIApplication sharedApplication] canOpenURL:twitchURL]) {
+        return true;
+    }
+    return false;
+}
+
+- (void)launchNolifeMugen{
+    NSURL *twitchURL = [NSURL URLWithString:@"twitch://channel/nolife"];
+    if ([[UIApplication sharedApplication] canOpenURL:twitchURL]) {
+        [[UIApplication sharedApplication] openURL:twitchURL];
+    }
+    
+}
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{

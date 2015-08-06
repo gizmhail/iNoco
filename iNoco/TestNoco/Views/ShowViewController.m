@@ -26,7 +26,8 @@
     int unreadCalls;
     float progress;//In seconds
 }
-@property (retain, nonatomic) NSMutableArray* chapters;
+@property (retain, nonatomic) NSMutableArray* chapters;//Only individual shows
+@property (retain, nonatomic) NSMutableArray* allChapters;//Includes internal sections
 @property (retain, nonatomic) UIView* tooltipView;
 @property (retain, nonatomic) UIAlertView* downloadAlert;
 @property (retain, nonatomic) UIAlertView* readAlert;
@@ -234,10 +235,12 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         [self.chapterActivity stopAnimating];
         if(result&&[result isKindOfClass:[NSArray class]]){
             self.chapters = [NSMutableArray array];
+            self.allChapters = [NSMutableArray array];
             for (NSDictionary* chapter in result) {
                 if([chapter objectForKey:@"id_show_sub"]!=[NSNull null]&&[[chapter objectForKey:@"stand_alone"] intValue]==1){
                     [self.chapters addObject:chapter];
                 }
+                [self.allChapters addObject:chapter];
             }
             if([self.chapters count]>0){
                 self.chapterLabel.hidden = FALSE;
@@ -245,6 +248,7 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
                 [self.collectionView reloadData];
             }
         }
+        [self updateCastPlayerView];
     } withKey:self];
     
     //Favorite
@@ -410,8 +414,7 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     }
     
     if(!deviceFound){
-        [chromecastManager.deviceManager disconnect];
-        chromecastManager.deviceManager = nil;
+        [chromecastManager disconnect];
         [self.castButton setStatus:CIBCastAvailable];
         [self updateCastContainer];
     }else{
@@ -434,27 +437,62 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
 
 - (void)updateFromCastFinished{
     [self updateFromCastProgress];
-    [self syncVideoReadStatus];
+    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+    if(chromecastManager.currentShow == self.show){
+        [self syncVideoReadStatus];
+    }else{
+        //The syncVideoReadStatus should be done in the player/chromecast manager
+        // In the meantime, in this case (we stopped the playback in another show view), the read status won't be affected
+        // as it should (but due to settings defaults, it should have a limited impact...yet, it needs to be cleaned up ^^)po
+    }
 }
 
 - (void) updateCastPlayerView{
+    //We display the cast player if the cast manager has been activated
     ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
     self.castPlayerView.hidden = chromecastManager.deviceManager.device == nil;
     self.tooltipView.hidden = !self.castPlayerView.hidden || self.tooltipView.alpha == 0;
+
+    NLTShow* castedShow = self.show;
     GCKMediaPlayerState playerState = chromecastManager.mediaControlChannel.mediaStatus.playerState;
+    if( (playerState == GCKMediaPlayerStatePlaying||playerState == GCKMediaPlayerStatePaused) && chromecastManager.currentShow != castedShow){
+        //We are playing another show !
+#ifdef DEBUG
+//        NSLog(@"Casting another show: %@",chromecastManager.currentShow);
+#endif
+        castedShow = chromecastManager.currentShow;
+    }
+
     if(playerState == GCKMediaPlayerStatePlaying){
         self.castPlayerPauseButton.selected = TRUE;
         [self.castActivity stopAnimating];
     }else{
         self.castPlayerPauseButton.selected = FALSE;
     }
-    self.castTotalLabel.text = [NLTShow detailedDurationString:self.show.duration_ms];
-    NSTimeInterval position = chromecastManager.mediaControlChannel.mediaStatus.streamPosition;
-    if(!chromecastManager.mediaControlChannel.mediaStatus||chromecastManager.mediaControlChannel.mediaStatus.playerState == GCKMediaPlayerStateIdle){
-        position = progress;
+    
+    //Progress
+    if(castedShow && self.show == castedShow){
+        self.castTimeView.hidden = FALSE;
+        self.castTotalLabel.text = [NLTShow detailedDurationString:castedShow.duration_ms];
+        NSTimeInterval position = chromecastManager.mediaControlChannel.mediaStatus.streamPosition;
+        if(!chromecastManager.mediaControlChannel.mediaStatus||chromecastManager.mediaControlChannel.mediaStatus.playerState == GCKMediaPlayerStateIdle){
+            if(castedShow == self.show){
+                //By default, we use the saved position (playback has not started, but we will be casting this show)
+                position = progress;
+            }
+        }
+        self.castProgressLabel.text = [NLTShow detailedDurationString:(int)(position*1000)];
+        self.castProgressView.progress = ((float)(position*1000.))/(float)castedShow.duration_ms;
+    }else{
+        self.castTimeView.hidden = TRUE;
     }
-    self.castProgressLabel.text = [NLTShow detailedDurationString:(int)(position*1000)];
-    self.castProgressView.progress = position*1000./(float)self.show.duration_ms;
+    
+    //Chapters (if player is casting displayed show)
+    if([self.chapters count]>0 && castedShow == self.show){
+        self.castChapterView.hidden = FALSE;
+    }else{
+        self.castChapterView.hidden = TRUE;
+    }
 }
 
 - (IBAction)castBackward{
@@ -502,6 +540,44 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self updateCastContainer];
     });
+}
+
+
+- (IBAction)castChapterNext:(id)sender {
+    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+    float currentPlaybackTime = chromecastManager.mediaControlChannel.mediaStatus.streamPosition;
+    
+    NSDictionary* nextChapter = nil;
+    for (NSDictionary* chapter in self.allChapters) {
+        float chapterTime = [[chapter objectForKey:@"timecode_ms"] floatValue]/1000.0;
+        if(chapterTime>(currentPlaybackTime + 5) ){
+            nextChapter = chapter;
+            break;
+        }
+    }
+    if(nextChapter){
+        float targetTime = ([[nextChapter objectForKey:@"timecode_ms"] floatValue]/1000.0);
+        [chromecastManager seekToTimeInterval:targetTime];
+    }
+}
+
+- (IBAction)castChapterPrev:(id)sender {
+    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+    float currentPlaybackTime = chromecastManager.mediaControlChannel.mediaStatus.streamPosition;
+    NSDictionary* prevChapter = nil;
+    for (NSDictionary* chapter in self.allChapters) {
+        float chapterTime = [[chapter objectForKey:@"timecode_ms"] floatValue]/1000.0;
+        if(chapterTime<(currentPlaybackTime - 5) ){
+            prevChapter = chapter;
+        }else{
+            break;
+        }
+    }
+    if(prevChapter){
+        float targetTime = ([[prevChapter objectForKey:@"timecode_ms"] floatValue]/1000.0);
+        [chromecastManager seekToTimeInterval:targetTime];
+
+    }
 }
 
 #pragma mark Playlist
@@ -851,6 +927,7 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
                         [playlist addObject:playlistItem];
                     }
                 }
+                //TODO Remove contextPlaylistCurrentItem once migration to new arch done if not used anymore
                 [[ShowPlayerManager sharedInstance] play:self.show withProgress:progress withImage:self.imageView.image withPlaylist:playlist withCurrentPlaylistItem:self.contextPlaylistCurrentItem];
             }
         }

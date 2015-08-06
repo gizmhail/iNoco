@@ -18,6 +18,7 @@
 @property (retain,nonatomic)NLTShow* currentShow;
 
 - (void)deviceScan;
+- (void)disconnect;
 - (void)selectDevice:(GCKDevice*)selectedDevice;
 - (void)playContent:(NSURL*)url withTitle:(NSString*)title withSubtitle:(NSString*)subtitle withThumbnail:(NSURL*)thumbnailURL withContentType:(NSString*)mimeType withDuration:(long)duration withStartime:(long)startTime;
 - (void)playShow:(NLTShow*)show withProgress:(float)progress;
