@@ -16,4 +16,6 @@ typedef void (^NLTEPGResponseBlock)(NSArray* result, NSError *error);
 + (instancetype)sharedInstance;
 - (void)fetchEPG:(NLTEPGResponseBlock)responseBlock withCacheDuration:(int)cacheDuration;
 - (NSArray*)cachedEPG;
+- (void)switchToMugenCatalog;
+- (void)switchToNolifeCatalog;
 @end

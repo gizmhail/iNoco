@@ -8,7 +8,9 @@
 
 #import "NLTEPG.h"
 
-@interface NLTEPG ()
+@interface NLTEPG (){
+    BOOL useMugen;
+}
 @property (retain,nonatomic) NSURLConnection* connection;
 @property (retain,nonatomic) NSMutableData* data;
 @property (retain,nonatomic) NSDate* cacheValidityEnd;
@@ -16,6 +18,8 @@
 @property (retain,nonatomic) NSXMLParser* parser;
 @property (retain,nonatomic) NSError* parserError;
 @property (copy,nonatomic) NLTEPGResponseBlock responseBlock;
+@property (retain,nonatomic) NSDate* mugenCacheValidityEnd;
+@property (retain,nonatomic) NSMutableArray* mugenCache;
 
 @end
 
@@ -40,21 +44,57 @@
     return self;
 }
 
+#pragma mark Catalog
+
+- (void)switchToMugenCatalog{
+    useMugen = TRUE;
+}
+
+- (void)switchToNolifeCatalog{
+    useMugen = FALSE;
+}
+
+- (NSString*)catalogUrl{
+    NSString* urlStr = @"http://www.nolife-tv.com/noair/noair.xml";
+    if(useMugen){
+        urlStr = @"http://nolife-tv.com/noair/noair_twitch.xml";
+    }
+    return urlStr;
+}
+
 #pragma mark NSURLConnectionDataDelegate
 
 - (void)fetchEPG:(NLTEPGResponseBlock)responseBlock withCacheDuration:(int)cacheDuration{
-    if([self.cache count] == 0){
-        NSLog(@"Empty EPG cache");
-        self.cache = nil;
-    }
-    if(self.cache&&[[NSDate date] compare:self.cacheValidityEnd]==NSOrderedAscending){
-        if(responseBlock){
-            responseBlock(self.cache,nil);
+    if(useMugen){
+        if([self.mugenCache count] == 0){
+            NSLog(@"Empty EPG cache");
+            self.mugenCache = nil;
         }
     }else{
-        NSString* urlStr = @"http://www.nolife-tv.com/noair/noair.xml";
-        self.cacheValidityEnd = [[NSDate date] dateByAddingTimeInterval:cacheDuration];
-        self.cache = nil;
+        if([self.cache count] == 0){
+            NSLog(@"Empty EPG cache");
+            self.cache = nil;
+        }
+    }
+    NSMutableArray* cache = self.cache;
+    NSDate*cacheValidityEnd = self.cacheValidityEnd;
+    if(useMugen){
+        cache = self.mugenCache;
+        cacheValidityEnd = self.mugenCacheValidityEnd;
+    }
+    if(cache&&[[NSDate date] compare:cacheValidityEnd]==NSOrderedAscending){
+        if(responseBlock){
+            responseBlock(cache,nil);
+        }
+    }else{
+        NSString* urlStr = [self catalogUrl];
+        if(useMugen){
+            self.mugenCacheValidityEnd = [[NSDate date] dateByAddingTimeInterval:cacheDuration];
+            self.mugenCache = nil;
+        }else{
+            self.cacheValidityEnd = [[NSDate date] dateByAddingTimeInterval:cacheDuration];
+            self.cache = nil;
+        }
         NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
         self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
         if(self.connection){
@@ -101,7 +141,11 @@
             self.responseBlock = nil;
         }
     }else{
-        self.cache = [NSMutableArray array];
+        if(useMugen){
+            self.mugenCache = [NSMutableArray array];
+        }else{
+            self.cache = [NSMutableArray array];
+        }
         if(self.useManualParsing){
             [self manualParsing];
         }else{
@@ -113,22 +157,39 @@
         
         
         if(self.parserError){
-            self.cache = nil;
+            if(useMugen){
+                self.mugenCache = nil;
+            }else{
+                self.cache = nil;
+            }
             if(self.responseBlock){
                 self.responseBlock(nil, self.parserError);
                 self.responseBlock = nil;
                 self.parserError = nil;
             }
         }else{
-            if([self.cache count]==0){
-                self.cache = nil;
+            BOOL emptyCache = FALSE;
+            if(useMugen){
+                if([self.mugenCache count]==0){
+                    self.mugenCache = nil;
+                }
+                emptyCache = !self.mugenCache;
+            }else{
+                if([self.cache count]==0){
+                    self.cache = nil;
+                }
+                emptyCache = !self.cache;
             }
             if(self.responseBlock){
                 NSError* error = nil;
-                if(!self.cache){
+                if(emptyCache){
                     error = [NSError errorWithDomain:@"NLTEPGDomain" code:520 userInfo:@{@"message":@"Unknown parse error"}];
                 }
-                self.responseBlock(self.cache, error);
+                if(useMugen){
+                    self.responseBlock(self.mugenCache, error);
+                }else{
+                    self.responseBlock(self.cache, error);
+                }
                 self.responseBlock = nil;
             }
         }
@@ -137,7 +198,11 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
-    self.cache = nil;
+    if(useMugen){
+        self.mugenCache = nil;
+    }else{
+        self.cache = nil;
+    }
     if(self.responseBlock){
         if(!error){
             error = [NSError errorWithDomain:@"NLTEPGDomain" code:510 userInfo:@{@"message":@"Unknown error"}];
@@ -151,7 +216,11 @@
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict{
     //NSLog(@"%@", [attributeDict description]);
     if([elementName compare:@"slot"]==NSOrderedSame){
-        [self.cache addObject:attributeDict];
+        if(useMugen){
+            [self.mugenCache addObject:attributeDict];
+        }else{
+            [self.cache addObject:attributeDict];
+        }
     }
 }
 
@@ -183,7 +252,11 @@
                         }
                         
                     }];
-                    [self.cache addObject:slot];
+                    if(useMugen){
+                        [self.mugenCache addObject:slot];
+                    }else{
+                        [self.cache addObject:slot];
+                    }
                 }
             }];
         }
@@ -192,8 +265,12 @@
 }
 
 - (NSArray*)cachedEPG{
-    if(self.cache){
-        return self.cache;
+    NSMutableArray* cache = self.cache;
+    if(useMugen){
+        cache = self.mugenCache;
+    }
+    if(cache){
+        return cache;
     }else{
         return [NSArray array];
     }

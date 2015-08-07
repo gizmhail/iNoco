@@ -37,6 +37,11 @@
 
 - (void)viewDidLoad
 {
+    long sourceKind = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PlanningSource"] longValue];
+    if(sourceKind == 1){
+        [[NLTEPG sharedInstance] switchToMugenCatalog];
+    }
+
     [self loadShowsByDay:[NSArray array]];
     [super viewDidLoad];
    
@@ -44,36 +49,15 @@
     [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"fond02.png"]]];
     self.tableView.backgroundView.contentMode = UIViewContentModeScaleAspectFill;
     self.tableView.backgroundView.alpha = 0.5;
+    
+    UISegmentedControl* planningSegmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Nolife",@"Nolife ∞"]];
+    self.navigationItem.titleView = planningSegmentedControl;
+    [planningSegmentedControl addTarget:self action:@selector(planningSourceChange) forControlEvents:UIControlEventValueChanged];
+    planningSegmentedControl.selectedSegmentIndex = sourceKind;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-    __weak NolifeEPGViewControllerTableViewController* weakSelf = self;
-    [self.view makeToastActivity];
-    
-    [NLTAPI sharedInstance].networkActivityCount++;
-    if([NLTAPI sharedInstance].handleNetworkActivityIndicator&&![[UIApplication sharedApplication] isNetworkActivityIndicatorVisible]){
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:TRUE];
-    }
-
-    [[NLTEPG sharedInstance] fetchEPG:^(NSArray *result, NSError *error) {
-        [NLTAPI sharedInstance].networkActivityCount--;
-        if([NLTAPI sharedInstance].handleNetworkActivityIndicator&&[[UIApplication sharedApplication] isNetworkActivityIndicatorVisible]){
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
-        }
-
-        [weakSelf.view hideToastActivity];
-        if(error){
-            [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de charger le guide des programmes de Nolife. Veuillez vérifier votre connection." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
-        }else{
-            [self loadShowsByDay:[[NLTEPG sharedInstance] cachedEPG]];
-        }
-        [self.tableView reloadData];
-        if(!firstFocusOnNowDone&&!error){
-            firstFocusOnNowDone = TRUE;
-            [self scrollToNow];
-        }
-    } withCacheDuration:60*10];
-    
+    [self refreshEPG];
     
     if([self isNolifeMugenAvailable]){
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"∞" style:UIBarButtonItemStylePlain target:self action:@selector(launchNolifeMugen)];
@@ -90,7 +74,53 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark Nolife mugen
+#pragma mark Source (Nolife / Nolife mugen)
+
+- (void)refreshEPG{
+    __weak NolifeEPGViewControllerTableViewController* weakSelf = self;
+    [self.view makeToastActivity];
+    
+    [NLTAPI sharedInstance].networkActivityCount++;
+    if([NLTAPI sharedInstance].handleNetworkActivityIndicator&&![[UIApplication sharedApplication] isNetworkActivityIndicatorVisible]){
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:TRUE];
+    }
+    
+    [[NLTEPG sharedInstance] fetchEPG:^(NSArray *result, NSError *error) {
+        [NLTAPI sharedInstance].networkActivityCount--;
+        if([NLTAPI sharedInstance].handleNetworkActivityIndicator&&[[UIApplication sharedApplication] isNetworkActivityIndicatorVisible]){
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
+        }
+        
+        [weakSelf.view hideToastActivity];
+        if(error){
+            [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de charger le guide des programmes de Nolife. Veuillez vérifier votre connection." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+        }else{
+            [self loadShowsByDay:[[NLTEPG sharedInstance] cachedEPG]];
+        }
+        [self.tableView reloadData];
+        if(!firstFocusOnNowDone&&!error){
+            firstFocusOnNowDone = TRUE;
+            [self scrollToNow];
+        }
+    } withCacheDuration:60*10];
+}
+
+- (void)planningSourceChange{
+    UISegmentedControl* planningSegmentedControl = (UISegmentedControl*)self.navigationItem.titleView;
+    if(planningSegmentedControl.selectedSegmentIndex == 0){
+        [[NLTEPG sharedInstance] switchToNolifeCatalog];
+    }else if(planningSegmentedControl.selectedSegmentIndex == 1){
+        [[NLTEPG sharedInstance] switchToMugenCatalog];
+    }
+    firstFocusOnNowDone = FALSE;
+    self.epgDays = nil;
+    [self.tableView reloadData];
+    [self refreshEPG];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithLong:planningSegmentedControl.selectedSegmentIndex] forKey:@"PlanningSource"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
+}
+#pragma mark Twitch Nolife mugen
 
 - (BOOL)isNolifeMugenAvailable{
     NSURL *twitchURL = [NSURL URLWithString:@"twitch://channel/nolife"];
@@ -102,6 +132,10 @@
 
 - (void)launchNolifeMugen{
     NSURL *twitchURL = [NSURL URLWithString:@"twitch://channel/nolife"];
+    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ){
+        //Channel url seem to have a problem on iPad: we switch to stream url
+        twitchURL = [NSURL URLWithString:@"twitch://open?stream=nolife"];
+    }
     if ([[UIApplication sharedApplication] canOpenURL:twitchURL]) {
         [[UIApplication sharedApplication] openURL:twitchURL];
     }
