@@ -12,6 +12,8 @@
 
 @interface ShowPlayerManager (){
     bool userEndedPlay;
+    bool playbackDurationSet;
+    float initialProgress;
 }
 @property (retain, nonatomic) MPMoviePlayerController* moviePlayer;
 @property (retain, nonatomic) NSTimer* progressTimer;
@@ -192,6 +194,13 @@
     if(self.moviePlayer.loadState & MPMovieLoadStatePlayable){
         [self playerCustomUI];
     }
+    MPMoviePlayerController* player = (MPMoviePlayerController*)notif.object;
+    if ( player.playbackState == MPMoviePlaybackStatePlaying) {
+        if(!playbackDurationSet){
+            [self.moviePlayer setCurrentPlaybackTime:initialProgress];
+            playbackDurationSet=YES;
+        }
+    }
 }
 
 - (void)notificaitonMPMoviePlayerDidExitFullscreenNotification:(NSNotification*)notif{
@@ -234,7 +243,8 @@
                     [self.progressAlert show];
                 }
             }
-            [[NLTAPI sharedInstance] setResumePlay:1000*self.moviePlayer.currentPlaybackTime forShow:self.currentShow withResultBlock:^(id result, NSError *error) {
+            float progressToSave = self.moviePlayer.currentPlaybackTime;
+            [[NLTAPI sharedInstance] setResumePlay:1000*progressToSave forShow:self.currentShow withResultBlock:^(id result, NSError *error) {
                 [self.progressAlert dismissWithClickedButtonIndex:0 animated:YES];
             } withKey:self];
         }
@@ -431,10 +441,16 @@
         [self.delegate moviePlayerPlacedInView];
     }
     [self.moviePlayer setInitialPlaybackTime:progress];
+
+    //As of ios8.4, MPMoviePlayer as a bug: http://stackoverflow.com/questions/31166400/mpmovieplayercontroller-initialplaybacktime-property-not-working-in-ios-8-4
+    //We'll "manually" set progress when plaback starg
+    initialProgress = progress;
+    playbackDurationSet = false;
+
     [self.moviePlayer prepareToPlay];
     self.moviePlayer.shouldAutoplay = TRUE;
     [self.moviePlayer setFullscreen:YES animated:YES];
-
+    
     self.progressTimer = [NSTimer scheduledTimerWithTimeInterval:PROGRESS_UPDATE_UPLOAD_STEP_TIME target:self selector:@selector(progressUpdate) userInfo:nil repeats:YES];
     MPNowPlayingInfoCenter *infoCenter = [MPNowPlayingInfoCenter defaultCenter];
     NSMutableDictionary* info = [NSMutableDictionary dictionaryWithDictionary:infoCenter.nowPlayingInfo];
@@ -447,8 +463,7 @@
     if(image){
         [info setObject:[[MPMediaItemArtwork alloc] initWithImage:image] forKey:MPMediaItemPropertyArtwork];
     }
-    infoCenter.nowPlayingInfo = info;
-}
+    infoCenter.nowPlayingInfo = info;}
 
 #pragma mark Custom UI
 

@@ -26,75 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TestNoco/Core/ShowPlayerManager.m"
-            timestampString = "460549488.50375"
+            timestampString = "460849293.821181"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "324"
-            endingLineNumber = "324"
-            landmarkName = "-play:withProgress:withImage:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TestNoco/Core/ShowPlayerManager.m"
-            timestampString = "460549488.50375"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "323"
-            endingLineNumber = "323"
-            landmarkName = "-play:withProgress:withImage:"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[ShowPlayerManager play:withProgress:withImage:]"
-                  moduleName = "iNoco"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/spoivre/Documents/Perso/iOS/Noco/git/iNoco/iNoco/TestNoco/Core/ShowPlayerManager.m"
-                  timestampString = "460682952.52505"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "323"
-                  endingLineNumber = "323"
-                  offsetFromSymbolStart = "560">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__49-[ShowPlayerManager play:withProgress:withImage:]_block_invoke"
-                  moduleName = "iNoco"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/spoivre/Documents/Perso/iOS/Noco/git/iNoco/iNoco/TestNoco/Core/ShowPlayerManager.m"
-                  timestampString = "460682952.525292"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "323"
-                  endingLineNumber = "323"
-                  offsetFromSymbolStart = "124">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TestNoco/Core/ShowPlayerManager.m"
-            timestampString = "460549290.41654"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
             landmarkName = "-nextShow"
             landmarkType = "5">
          </BreakpointContent>
@@ -106,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TestNoco/Core/ShowPlayerManager.m"
-            timestampString = "460549488.50375"
+            timestampString = "460849325.02011"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "310"
-            endingLineNumber = "310"
+            startingLineNumber = "320"
+            endingLineNumber = "320"
             landmarkName = "-play:withProgress:withImage:withPlaylist:withCurrentPlaylistItem:"
             landmarkType = "5">
          </BreakpointContent>
@@ -122,44 +58,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TestNoco/Core/ShowPlayerManager.m"
-            timestampString = "460559683.818807"
+            timestampString = "460849428.783104"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "574"
-            endingLineNumber = "574"
-            landmarkName = "-fetchShowChapters"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TestNoco/Core/ShowPlayerManager.m"
-            timestampString = "460559758.397905"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "530"
-            endingLineNumber = "530"
+            startingLineNumber = "544"
+            endingLineNumber = "544"
             landmarkName = "-next"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TestNoco/Core/ShowPlayerManager.m"
-            timestampString = "460559770.363615"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "580"
-            endingLineNumber = "580"
-            landmarkName = "-fetchShowChapters"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -176,6 +80,182 @@
             startingLineNumber = "73"
             endingLineNumber = "73"
             landmarkName = "-retryPlay"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TestNoco/Core/ShowPlayerManager.m"
+            timestampString = "460849325.02011"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "229"
+            endingLineNumber = "229"
+            landmarkName = "-notificationMPMoviePlayerPlaybackDidFinishNotification:"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[ShowPlayerManager notificationMPMoviePlayerPlaybackDidFinishNotification:]"
+                  moduleName = "iNoco"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/spoivre/Documents/Perso/iOS/Noco/git/iNoco/iNoco/TestNoco/Core/ShowPlayerManager.m"
+                  timestampString = "460849428.850898"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "229"
+                  endingLineNumber = "229"
+                  offsetFromSymbolStart = "900">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__76-[ShowPlayerManager notificationMPMoviePlayerPlaybackDidFinishNotification:]_block_invoke"
+                  moduleName = "iNoco"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/spoivre/Documents/Perso/iOS/Noco/git/iNoco/iNoco/TestNoco/Core/ShowPlayerManager.m"
+                  timestampString = "460849428.851035"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "229"
+                  endingLineNumber = "229"
+                  offsetFromSymbolStart = "80">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TestNoco/Core/ShowPlayerManager.m"
+            timestampString = "460849325.02011"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "247"
+            endingLineNumber = "247"
+            landmarkName = "-notificationMPMoviePlayerPlaybackDidFinishNotification:"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[ShowPlayerManager notificationMPMoviePlayerPlaybackDidFinishNotification:]"
+                  moduleName = "iNoco"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/spoivre/Documents/Perso/iOS/Noco/git/iNoco/iNoco/TestNoco/Core/ShowPlayerManager.m"
+                  timestampString = "460849428.851813"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "247"
+                  endingLineNumber = "247"
+                  offsetFromSymbolStart = "2232">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__76-[ShowPlayerManager notificationMPMoviePlayerPlaybackDidFinishNotification:]_block_invoke168"
+                  moduleName = "iNoco"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/spoivre/Documents/Perso/iOS/Noco/git/iNoco/iNoco/TestNoco/Core/ShowPlayerManager.m"
+                  timestampString = "460849428.851938"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "247"
+                  endingLineNumber = "247"
+                  offsetFromSymbolStart = "80">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TestNoco/Core/ShowPlayerManager.m"
+            timestampString = "460849325.02011"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "298"
+            endingLineNumber = "298"
+            landmarkName = "-progressUpdate"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[ShowPlayerManager progressUpdate]"
+                  moduleName = "iNoco"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/spoivre/Documents/Perso/iOS/Noco/git/iNoco/iNoco/TestNoco/Core/ShowPlayerManager.m"
+                  timestampString = "460849428.852766"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "298"
+                  endingLineNumber = "298"
+                  offsetFromSymbolStart = "316">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__35-[ShowPlayerManager progressUpdate]_block_invoke"
+                  moduleName = "iNoco"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/spoivre/Documents/Perso/iOS/Noco/git/iNoco/iNoco/TestNoco/Core/ShowPlayerManager.m"
+                  timestampString = "460849428.852916"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "298"
+                  endingLineNumber = "298"
+                  offsetFromSymbolStart = "80">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TestNoco/NoLibTV/NLTAPI.m"
+            timestampString = "460843448.328651"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "922"
+            endingLineNumber = "922"
+            landmarkName = "-setResumePlay:forShow:withResultBlock:withKey:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TestNoco/Core/ShowPlayerManager.m"
+            timestampString = "460849325.02011"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "248"
+            endingLineNumber = "248"
+            landmarkName = "-notificationMPMoviePlayerPlaybackDidFinishNotification:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
