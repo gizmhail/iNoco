@@ -19,6 +19,11 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>iNocoTV.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
 		<key>iNocoToday.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -38,6 +43,11 @@
 			<true/>
 		</dict>
 		<key>4FEECD801949D683002514CE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BD252C361BC96E1200AC8924</key>
 		<dict>
 			<key>primary</key>
 			<true/>

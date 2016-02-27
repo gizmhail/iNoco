@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05265D0CFD9923C050962A27 /* libPods-iNocoTV.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0B5175CE05DE564EB27D546 /* libPods-iNocoTV.a */; };
 		3F6E6F1E9BFA50DA5D2F5319 /* libPods-iNoco.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A371B9EDB2C8515E4F5ADFC /* libPods-iNoco.a */; };
 		4F11173A19823A7A00242C22 /* EPGTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F11173919823A7A00242C22 /* EPGTableViewCell.m */; };
 		4F11173D1982405C00242C22 /* FilterFooterCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F11173C1982405C00242C22 /* FilterFooterCollectionReusableView.m */; };
@@ -147,12 +148,51 @@
 		52A0210735979BBCEB807A8C /* libPods-iNocoToday.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7CF8EAC4B67750EA22A9762 /* libPods-iNocoToday.a */; };
 		BD15CE0E1B738D930023309A /* Octicons-jump-left.svg.png in Resources */ = {isa = PBXBuildFile; fileRef = BD15CE0C1B738D930023309A /* Octicons-jump-left.svg.png */; };
 		BD15CE0F1B738D930023309A /* Octicons-jump-right.svg.png in Resources */ = {isa = PBXBuildFile; fileRef = BD15CE0D1B738D930023309A /* Octicons-jump-right.svg.png */; };
+		BD252C3B1BC96E1200AC8924 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BD252C3A1BC96E1200AC8924 /* main.m */; };
+		BD252C3E1BC96E1200AC8924 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BD252C3D1BC96E1200AC8924 /* AppDelegate.m */; };
+		BD252C471BC96E1200AC8924 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD252C451BC96E1200AC8924 /* Main.storyboard */; };
+		BD252C491BC96E1200AC8924 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BD252C481BC96E1200AC8924 /* Assets.xcassets */; };
+		BD252C4F1BC96FB100AC8924 /* fond01.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2175C2196CA7290005EB14 /* fond01.png */; };
+		BD252C501BC9712200AC8924 /* EL_S14s25_1085838.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F636A4A1955C5F5004C0A18 /* EL_S14s25_1085838.jpg */; };
+		BD252C531BC982F300AC8924 /* TVRecentShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD252C521BC982F300AC8924 /* TVRecentShowViewController.m */; };
+		BD252C541BC9866000AC8924 /* NLTEPG.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F37F3721969EF5900D0AACC /* NLTEPG.m */; };
+		BD252C551BC9868B00AC8924 /* NLTOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1254B51951D457003FEEA5 /* NLTOAuth.m */; };
+		BD252C561BC9869000AC8924 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1254C11951F5E8003FEEA5 /* Base64.m */; };
+		BD252C571BC9869500AC8924 /* NLTOAuthController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1254B81951E60C003FEEA5 /* NLTOAuthController.m */; };
+		BD252C581BC9869A00AC8924 /* NLTAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A461952F0DA004C0A18 /* NLTAPI.m */; };
+		BD252C591BC9869D00AC8924 /* NLTShow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636AAD195CB5D0004C0A18 /* NLTShow.m */; };
+		BD252C5A1BC986A100AC8924 /* NLTFamily.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F459512196330020061381E /* NLTFamily.m */; };
+		BD252C5B1BC98E5100AC8924 /* RecentShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A4D1955C7D4004C0A18 /* RecentShowViewController.m */; };
+		BD252C5C1BC9BE9D00AC8924 /* FavoriteProgramManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F37F367196612FE00D0AACC /* FavoriteProgramManager.m */; };
+		BD252C5D1BC9BEAB00AC8924 /* ShowCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F927850197E56AD00DB138B /* ShowCollectionViewCell.m */; };
+		BD252C5E1BC9BED500AC8924 /* ShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636AAA1958CD6E004C0A18 /* ShowViewController.m */; };
+		BD252C601BCA6AC400AC8924 /* ShowPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F44FC3A19AD0A3C00367C6C /* ShowPlayerManager.m */; };
+		BD252C611BCA6ADC00AC8924 /* ConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A511955CEE0004C0A18 /* ConnectionViewController.m */; };
+		BD252C621BCA73D000AC8924 /* UIView+Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636AB1195CCADB004C0A18 /* UIView+Toast.m */; };
+		BD252C661BCA9E4300AC8924 /* NLTOAuthLoginConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BD252C651BCA9E4300AC8924 /* NLTOAuthLoginConnection.m */; };
+		BD252C671BCB015400AC8924 /* NLTOAuthLoginConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BD252C651BCA9E4300AC8924 /* NLTOAuthLoginConnection.m */; };
+		BD252C681BCB14C300AC8924 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A7619577726004C0A18 /* UIImageView+WebCache.m */; };
+		BD252C6A1BCB14EF00AC8924 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A5B19577726004C0A18 /* NSData+ImageContentType.m */; };
+		BD252C6B1BCB14F500AC8924 /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A5D19577726004C0A18 /* SDImageCache.m */; };
+		BD252C6C1BCB14F900AC8924 /* SDWebImageCompat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A5F19577726004C0A18 /* SDWebImageCompat.m */; };
+		BD252C6D1BCB14FD00AC8924 /* SDWebImageDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A6119577726004C0A18 /* SDWebImageDecoder.m */; };
+		BD252C6E1BCB150200AC8924 /* SDWebImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A6319577726004C0A18 /* SDWebImageDownloader.m */; };
+		BD252C6F1BCB150700AC8924 /* SDWebImageDownloaderOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A6519577726004C0A18 /* SDWebImageDownloaderOperation.m */; };
+		BD252C701BCB150B00AC8924 /* SDWebImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A6719577726004C0A18 /* SDWebImageManager.m */; };
+		BD252C711BCB151100AC8924 /* SDWebImagePrefetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A6A19577726004C0A18 /* SDWebImagePrefetcher.m */; };
+		BD252C721BCB151500AC8924 /* UIButton+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A6C19577726004C0A18 /* UIButton+WebCache.m */; };
+		BD252C731BCB151900AC8924 /* UIImage+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A6E19577726004C0A18 /* UIImage+GIF.m */; };
+		BD252C741BCB151D00AC8924 /* UIImage+MultiFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A7019577726004C0A18 /* UIImage+MultiFormat.m */; };
+		BD252C751BCB152100AC8924 /* UIImage+WebP.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A7219577726004C0A18 /* UIImage+WebP.m */; };
+		BD252C761BCB152600AC8924 /* UIImageView+HighlightedWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A7419577726004C0A18 /* UIImageView+HighlightedWebCache.m */; };
+		BD252C771BCB175600AC8924 /* fond02.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2175C8196CAFD60005EB14 /* fond02.png */; };
 		BD4DFD651B70C435008C3EF5 /* ChromeCastImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BD4DFD641B70C435008C3EF5 /* ChromeCastImages.xcassets */; };
 		BD6670DF1B70A2D700487369 /* Octicons-playback-fast-forward.svg.png in Resources */ = {isa = PBXBuildFile; fileRef = BD6670DB1B70A2D700487369 /* Octicons-playback-fast-forward.svg.png */; };
 		BD6670E01B70A2D700487369 /* Octicons-playback-rewind.svg.png in Resources */ = {isa = PBXBuildFile; fileRef = BD6670DC1B70A2D700487369 /* Octicons-playback-rewind.svg.png */; };
 		BD6670E11B70A2D700487369 /* Octicons-playback-pause.svg.png in Resources */ = {isa = PBXBuildFile; fileRef = BD6670DD1B70A2D700487369 /* Octicons-playback-pause.svg.png */; };
 		BD6670E21B70A2D700487369 /* Octicons-primitive-square.svg.png in Resources */ = {isa = PBXBuildFile; fileRef = BD6670DE1B70A2D700487369 /* Octicons-primitive-square.svg.png */; };
 		BD6670E41B70A6F100487369 /* Octicons-playback-play_cropped.png in Resources */ = {isa = PBXBuildFile; fileRef = BD6670E31B70A6F100487369 /* Octicons-playback-play_cropped.png */; };
+		BDA10B711B8A59EC001EDB4A /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDA10B701B8A59EC001EDB4A /* AVKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -361,17 +401,32 @@
 		4FEF289219ABC20E005D4C33 /* FamilyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FamilyTableViewCell.h; sourceTree = "<group>"; };
 		4FEF289319ABC20E005D4C33 /* FamilyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FamilyTableViewCell.m; sourceTree = "<group>"; };
 		8A371B9EDB2C8515E4F5ADFC /* libPods-iNoco.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iNoco.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		93A71E9FA934A31904825257 /* Pods-iNocoTV.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iNocoTV.release.xcconfig"; path = "Pods/Target Support Files/Pods-iNocoTV/Pods-iNocoTV.release.xcconfig"; sourceTree = "<group>"; };
 		9414F5B298449A2ADB5F19E8 /* Pods-iNoco.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iNoco.release.xcconfig"; path = "Pods/Target Support Files/Pods-iNoco/Pods-iNoco.release.xcconfig"; sourceTree = "<group>"; };
 		A40A6AAA3125511B37DD89C3 /* Pods-iNoco.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iNoco.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iNoco/Pods-iNoco.debug.xcconfig"; sourceTree = "<group>"; };
 		BD15CE0C1B738D930023309A /* Octicons-jump-left.svg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-jump-left.svg.png"; sourceTree = "<group>"; };
 		BD15CE0D1B738D930023309A /* Octicons-jump-right.svg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-jump-right.svg.png"; sourceTree = "<group>"; };
+		BD252C371BC96E1200AC8924 /* iNocoTV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iNocoTV.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BD252C3A1BC96E1200AC8924 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BD252C3C1BC96E1200AC8924 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		BD252C3D1BC96E1200AC8924 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		BD252C461BC96E1200AC8924 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		BD252C481BC96E1200AC8924 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BD252C4A1BC96E1200AC8924 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BD252C511BC982F300AC8924 /* TVRecentShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TVRecentShowViewController.h; sourceTree = "<group>"; };
+		BD252C521BC982F300AC8924 /* TVRecentShowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TVRecentShowViewController.m; sourceTree = "<group>"; };
+		BD252C641BCA9E4300AC8924 /* NLTOAuthLoginConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLTOAuthLoginConnection.h; sourceTree = "<group>"; };
+		BD252C651BCA9E4300AC8924 /* NLTOAuthLoginConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLTOAuthLoginConnection.m; sourceTree = "<group>"; };
 		BD4DFD641B70C435008C3EF5 /* ChromeCastImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ChromeCastImages.xcassets; sourceTree = "<group>"; };
 		BD6670DB1B70A2D700487369 /* Octicons-playback-fast-forward.svg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-playback-fast-forward.svg.png"; sourceTree = "<group>"; };
 		BD6670DC1B70A2D700487369 /* Octicons-playback-rewind.svg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-playback-rewind.svg.png"; sourceTree = "<group>"; };
 		BD6670DD1B70A2D700487369 /* Octicons-playback-pause.svg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-playback-pause.svg.png"; sourceTree = "<group>"; };
 		BD6670DE1B70A2D700487369 /* Octicons-primitive-square.svg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-primitive-square.svg.png"; sourceTree = "<group>"; };
 		BD6670E31B70A6F100487369 /* Octicons-playback-play_cropped.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-playback-play_cropped.png"; sourceTree = "<group>"; };
+		BDA10B701B8A59EC001EDB4A /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
+		CCBC8A61420CD5890135EB1C /* Pods-iNocoTV.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iNocoTV.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iNocoTV/Pods-iNocoTV.debug.xcconfig"; sourceTree = "<group>"; };
 		DBA21A3ADAAA232764EA38C3 /* Pods-iNocoToday.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iNocoToday.release.xcconfig"; path = "Pods/Target Support Files/Pods-iNocoToday/Pods-iNocoToday.release.xcconfig"; sourceTree = "<group>"; };
+		E0B5175CE05DE564EB27D546 /* libPods-iNocoTV.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iNocoTV.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7CF8EAC4B67750EA22A9762 /* libPods-iNocoToday.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iNocoToday.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -389,12 +444,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BDA10B711B8A59EC001EDB4A /* AVKit.framework in Frameworks */,
 				4FA802FE19621E7000E820B9 /* AVFoundation.framework in Frameworks */,
 				4F636A871957859B004C0A18 /* MediaPlayer.framework in Frameworks */,
 				4FEECD601949D683002514CE /* CoreGraphics.framework in Frameworks */,
 				4FEECD621949D683002514CE /* UIKit.framework in Frameworks */,
 				4FEECD5E1949D683002514CE /* Foundation.framework in Frameworks */,
 				3F6E6F1E9BFA50DA5D2F5319 /* libPods-iNoco.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BD252C341BC96E1200AC8924 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05265D0CFD9923C050962A27 /* libPods-iNocoTV.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,6 +480,8 @@
 				4F636AAD195CB5D0004C0A18 /* NLTShow.m */,
 				4F459511196330020061381E /* NLTFamily.h */,
 				4F459512196330020061381E /* NLTFamily.m */,
+				BD252C641BCA9E4300AC8924 /* NLTOAuthLoginConnection.h */,
+				BD252C651BCA9E4300AC8924 /* NLTOAuthLoginConnection.m */,
 			);
 			path = NoLibTV;
 			sourceTree = "<group>";
@@ -674,6 +740,7 @@
 				4FEECD631949D683002514CE /* TestNoco */,
 				4FEECD881949D683002514CE /* TestNocoTests */,
 				4FC35B7C19E477090069C0DD /* iNocoToday */,
+				BD252C381BC96E1200AC8924 /* iNocoTV */,
 				4FEECD5C1949D683002514CE /* Frameworks */,
 				4FEECD5B1949D683002514CE /* Products */,
 				E8652AFA2CF9B6D7BAB9CA19 /* Pods */,
@@ -685,6 +752,7 @@
 			children = (
 				4FEECD5A1949D683002514CE /* iNoco.app */,
 				4FC35B7919E477090069C0DD /* iNocoToday.appex */,
+				BD252C371BC96E1200AC8924 /* iNocoTV.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -692,6 +760,7 @@
 		4FEECD5C1949D683002514CE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BDA10B701B8A59EC001EDB4A /* AVKit.framework */,
 				4FA802FD19621E7000E820B9 /* AVFoundation.framework */,
 				4F636A861957859B004C0A18 /* MediaPlayer.framework */,
 				4FEECD5D1949D683002514CE /* Foundation.framework */,
@@ -702,6 +771,7 @@
 				8A371B9EDB2C8515E4F5ADFC /* libPods-iNoco.a */,
 				2659FA1EF22FDC8A1F10134D /* libPods-iNocoTests.a */,
 				E7CF8EAC4B67750EA22A9762 /* libPods-iNocoToday.a */,
+				E0B5175CE05DE564EB27D546 /* libPods-iNocoTV.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -758,6 +828,37 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		BD252C381BC96E1200AC8924 /* iNocoTV */ = {
+			isa = PBXGroup;
+			children = (
+				BD252C4E1BC96E7D00AC8924 /* Views */,
+				BD252C3C1BC96E1200AC8924 /* AppDelegate.h */,
+				BD252C3D1BC96E1200AC8924 /* AppDelegate.m */,
+				BD252C451BC96E1200AC8924 /* Main.storyboard */,
+				BD252C481BC96E1200AC8924 /* Assets.xcassets */,
+				BD252C4A1BC96E1200AC8924 /* Info.plist */,
+				BD252C391BC96E1200AC8924 /* Supporting Files */,
+			);
+			path = iNocoTV;
+			sourceTree = "<group>";
+		};
+		BD252C391BC96E1200AC8924 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BD252C3A1BC96E1200AC8924 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BD252C4E1BC96E7D00AC8924 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BD252C511BC982F300AC8924 /* TVRecentShowViewController.h */,
+				BD252C521BC982F300AC8924 /* TVRecentShowViewController.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		E8652AFA2CF9B6D7BAB9CA19 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -765,6 +866,8 @@
 				9414F5B298449A2ADB5F19E8 /* Pods-iNoco.release.xcconfig */,
 				3CD5E2B3B9466FF2A4D89430 /* Pods-iNocoToday.debug.xcconfig */,
 				DBA21A3ADAAA232764EA38C3 /* Pods-iNocoToday.release.xcconfig */,
+				CCBC8A61420CD5890135EB1C /* Pods-iNocoTV.debug.xcconfig */,
+				93A71E9FA934A31904825257 /* Pods-iNocoTV.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -814,6 +917,25 @@
 			productReference = 4FEECD5A1949D683002514CE /* iNoco.app */;
 			productType = "com.apple.product-type.application";
 		};
+		BD252C361BC96E1200AC8924 /* iNocoTV */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BD252C4D1BC96E1200AC8924 /* Build configuration list for PBXNativeTarget "iNocoTV" */;
+			buildPhases = (
+				A89E9EBFA7B38A8BB59D3DF3 /* Check Pods Manifest.lock */,
+				BD252C331BC96E1200AC8924 /* Sources */,
+				BD252C341BC96E1200AC8924 /* Frameworks */,
+				BD252C351BC96E1200AC8924 /* Resources */,
+				47E019DBD0E85AE108B9EEFD /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = iNocoTV;
+			productName = iNocoTV;
+			productReference = BD252C371BC96E1200AC8924 /* iNocoTV.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -843,6 +965,10 @@
 							};
 						};
 					};
+					BD252C361BC96E1200AC8924 = {
+						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = PBY238DS28;
+					};
 				};
 			};
 			buildConfigurationList = 4FEECD551949D683002514CE /* Build configuration list for PBXProject "iNoco" */;
@@ -860,6 +986,7 @@
 			targets = (
 				4FEECD591949D683002514CE /* iNoco */,
 				4FC35B7819E477090069C0DD /* iNocoToday */,
+				BD252C361BC96E1200AC8924 /* iNocoTV */,
 			);
 		};
 /* End PBXProject section */
@@ -951,9 +1078,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BD252C351BC96E1200AC8924 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD252C491BC96E1200AC8924 /* Assets.xcassets in Resources */,
+				BD252C471BC96E1200AC8924 /* Main.storyboard in Resources */,
+				BD252C501BC9712200AC8924 /* EL_S14s25_1085838.jpg in Resources */,
+				BD252C4F1BC96FB100AC8924 /* fond01.png in Resources */,
+				BD252C771BCB175600AC8924 /* fond02.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		47E019DBD0E85AE108B9EEFD /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iNocoTV/Pods-iNocoTV-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		4F927852197F019E00DB138B /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -965,7 +1119,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = /Users/spoivre/Documents/Perso/iOS/Noco/git/iNoco/iNoco/TestNoco/crashlytics.sh;
+			shellScript = /Users/gizmhail/Documents/iOS/Noco/git/iNoco/iNoco/TestNoco/crashlytics.sh;
 		};
 		57F05774350B303E4DA0C9E0 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1027,6 +1181,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iNoco/Pods-iNoco-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		A89E9EBFA7B38A8BB59D3DF3 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1067,6 +1236,7 @@
 				4F636A7719577726004C0A18 /* MKAnnotationView+WebCache.m in Sources */,
 				4FEECD6E1949D683002514CE /* AppDelegate.m in Sources */,
 				4F37F36B19675CD500D0AACC /* WatchListHeaderReusableView.m in Sources */,
+				BD252C661BCA9E4300AC8924 /* NLTOAuthLoginConnection.m in Sources */,
 				4F636A7F19577726004C0A18 /* SDWebImagePrefetcher.m in Sources */,
 				4F636AB2195CCADB004C0A18 /* UIView+Toast.m in Sources */,
 				4F37F3731969EF5900D0AACC /* NLTEPG.m in Sources */,
@@ -1109,6 +1279,45 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BD252C331BC96E1200AC8924 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD252C671BCB015400AC8924 /* NLTOAuthLoginConnection.m in Sources */,
+				BD252C711BCB151100AC8924 /* SDWebImagePrefetcher.m in Sources */,
+				BD252C531BC982F300AC8924 /* TVRecentShowViewController.m in Sources */,
+				BD252C751BCB152100AC8924 /* UIImage+WebP.m in Sources */,
+				BD252C6F1BCB150700AC8924 /* SDWebImageDownloaderOperation.m in Sources */,
+				BD252C541BC9866000AC8924 /* NLTEPG.m in Sources */,
+				BD252C761BCB152600AC8924 /* UIImageView+HighlightedWebCache.m in Sources */,
+				BD252C5A1BC986A100AC8924 /* NLTFamily.m in Sources */,
+				BD252C6D1BCB14FD00AC8924 /* SDWebImageDecoder.m in Sources */,
+				BD252C6A1BCB14EF00AC8924 /* NSData+ImageContentType.m in Sources */,
+				BD252C5E1BC9BED500AC8924 /* ShowViewController.m in Sources */,
+				BD252C611BCA6ADC00AC8924 /* ConnectionViewController.m in Sources */,
+				BD252C6B1BCB14F500AC8924 /* SDImageCache.m in Sources */,
+				BD252C5D1BC9BEAB00AC8924 /* ShowCollectionViewCell.m in Sources */,
+				BD252C571BC9869500AC8924 /* NLTOAuthController.m in Sources */,
+				BD252C701BCB150B00AC8924 /* SDWebImageManager.m in Sources */,
+				BD252C581BC9869A00AC8924 /* NLTAPI.m in Sources */,
+				BD252C621BCA73D000AC8924 /* UIView+Toast.m in Sources */,
+				BD252C681BCB14C300AC8924 /* UIImageView+WebCache.m in Sources */,
+				BD252C6E1BCB150200AC8924 /* SDWebImageDownloader.m in Sources */,
+				BD252C731BCB151900AC8924 /* UIImage+GIF.m in Sources */,
+				BD252C3E1BC96E1200AC8924 /* AppDelegate.m in Sources */,
+				BD252C5C1BC9BE9D00AC8924 /* FavoriteProgramManager.m in Sources */,
+				BD252C5B1BC98E5100AC8924 /* RecentShowViewController.m in Sources */,
+				BD252C591BC9869D00AC8924 /* NLTShow.m in Sources */,
+				BD252C741BCB151D00AC8924 /* UIImage+MultiFormat.m in Sources */,
+				BD252C3B1BC96E1200AC8924 /* main.m in Sources */,
+				BD252C6C1BCB14F900AC8924 /* SDWebImageCompat.m in Sources */,
+				BD252C561BC9869000AC8924 /* Base64.m in Sources */,
+				BD252C601BCA6AC400AC8924 /* ShowPlayerManager.m in Sources */,
+				BD252C721BCB151500AC8924 /* UIButton+WebCache.m in Sources */,
+				BD252C551BC9868B00AC8924 /* NLTOAuth.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1147,6 +1356,14 @@
 				4FEECD8C1949D683002514CE /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		BD252C451BC96E1200AC8924 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BD252C461BC96E1200AC8924 /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1325,6 +1542,65 @@
 			};
 			name = Release;
 		};
+		BD252C4B1BC96E1200AC8924 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CCBC8A61420CD5890135EB1C /* Pods-iNocoTV.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					"TVOS_NOCO=1",
+				);
+				INFOPLIST_FILE = iNocoTV/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = name.poivre.iNocoTV;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Debug;
+		};
+		BD252C4C1BC96E1200AC8924 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 93A71E9FA934A31904825257 /* Pods-iNocoTV.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TVOS_NOCO=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = iNocoTV/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = name.poivre.iNocoTV;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1351,6 +1627,15 @@
 			buildConfigurations = (
 				4FEECD931949D683002514CE /* Debug */,
 				4FEECD941949D683002514CE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BD252C4D1BC96E1200AC8924 /* Build configuration list for PBXNativeTarget "iNocoTV" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BD252C4B1BC96E1200AC8924 /* Debug */,
+				BD252C4C1BC96E1200AC8924 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

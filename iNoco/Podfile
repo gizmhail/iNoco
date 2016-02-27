@@ -20,3 +20,7 @@ target 'iNocoToday' do
     pod 'Crashlytics'
 end
 
+target 'iNocoTV' do
+    pod 'GroupSettingsManager'
+end
+

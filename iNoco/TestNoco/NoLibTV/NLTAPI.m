@@ -265,18 +265,22 @@
 - (void)incrementNetWorkActivityCounter{
 #ifndef NLTAPI_NO_NETWORKACTIVITY
     self.networkActivityCount++;
+#ifndef TVOS_NOCO
     if(self.handleNetworkActivityIndicator&&![[UIApplication sharedApplication] isNetworkActivityIndicatorVisible]){
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:TRUE];
     }
+#endif
 #endif
 }
 
 - (void)decrementActivityCounter{
 #ifndef NLTAPI_NO_NETWORKACTIVITY
     self.networkActivityCount--;
+#ifndef TVOS_NOCO
     if(self.handleNetworkActivityIndicator&&[[UIApplication sharedApplication] isNetworkActivityIndicatorVisible]){
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
     }
+#endif
 #endif
 }
 

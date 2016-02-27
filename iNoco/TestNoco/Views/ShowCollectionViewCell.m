@@ -9,6 +9,7 @@
 #import "ShowCollectionViewCell.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIImageView+WebCache.h"
+#include "commonSettings.h"
 
 @implementation ShowCollectionViewCell
 
@@ -189,4 +190,11 @@
     }
 }
 
+-(void)didUpdateFocusInContext:(UIFocusUpdateContext *)context withAnimationCoordinator:(UIFocusAnimationCoordinator *)coordinator{
+    if(self.focused){
+        self.backgroundColor = [UIColor colorWithRed:((float)0x2f)/255.0 green:((float)0xcb)/255. blue:((float)0xff)/255. alpha:1];
+    }else{
+        self.backgroundColor = [UIColor whiteColor];
+    }
+}
 @end

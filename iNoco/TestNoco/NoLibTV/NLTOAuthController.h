@@ -7,7 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
+#ifndef TVOS_NOCO
 @interface NLTOAuthController : UIViewController <UIWebViewDelegate>
+#else
+@interface NLTOAuthController : UIViewController
+#endif
 
 @end

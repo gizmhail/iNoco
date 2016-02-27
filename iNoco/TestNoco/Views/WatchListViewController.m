@@ -16,8 +16,9 @@
 #import "FavoriteProgramManager.h"
 #import "WatchListHeaderReusableView.h"
 #import "UIView+Toast.h"
+#ifndef TVOS_NOCO
 #import "NocoDownloadsManager.h"
-
+#endif
 @interface WatchListViewController (){
 }
 @property (retain,nonatomic)NSMutableArray* watchlistIds;

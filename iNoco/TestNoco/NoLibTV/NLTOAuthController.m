@@ -10,7 +10,9 @@
 #import "NLTOAuth.h"
 
 @interface NLTOAuthController ()
+#ifndef TVOS_NOCO
 @property (retain,nonatomic) UIWebView* webview;
+#endif
 @property (retain,nonatomic) UIActivityIndicatorView* activity;
 @end
 
@@ -20,22 +22,28 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.webview = [[UIWebView alloc] initWithFrame:self.view.bounds];
     self.edgesForExtendedLayout = UIRectEdgeNone;
+#ifndef TVOS_NOCO
+    self.webview = [[UIWebView alloc] initWithFrame:self.view.bounds];
     self.webview.delegate = self;
     self.webview.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+    [self.view addSubview:self.webview];
+#endif
     self.activity = [[UIActivityIndicatorView alloc] initWithFrame:self.view.bounds];
     self.activity.hidesWhenStopped = TRUE;
+#ifndef TVOS_NOCO
     self.activity.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+#endif
     self.activity.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
-    [self.view addSubview:self.webview];
     [self.view addSubview:self.activity];
     [self.activity startAnimating];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     NSString* urlStr = [NSString stringWithFormat:@"%@/OAuth2/authorize.php?response_type=code&client_id=%@&state=STATE",NOCO_ENDPOINT,[NLTOAuth sharedInstance].clientId];
+#ifndef TVOS_NOCO
     [self.webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]]];
+#endif
     [super viewDidAppear:animated];
 }
 
@@ -46,8 +54,12 @@
 }
 
 -(void)dealloc{
+#ifndef TVOS_NOCO
     self.webview.delegate = nil;
+#endif
 }
+
+#ifndef TVOS_NOCO
 
 #pragma mark -  UIWebviewDelegate
 
@@ -118,4 +130,7 @@
 
     }
 }
+
+#endif
+
 @end

@@ -7,8 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "NLTOAuthLoginConnection.h"
 #ifndef NLTOAUTH_NO_LOGINCONTROLLER
 #import "NLTOAuthController.h"
+
 #endif
 
 #if ! __has_feature(objc_arc)
@@ -23,7 +25,7 @@ typedef void (^NLTCallResponseBlock)(id result, NSError *error);
 #define NLTDefines
 #endif
 
-@interface NLTOAuth : NSObject <NSURLConnectionDataDelegate>
+@interface NLTOAuth : NSObject <NSURLConnectionDataDelegate, NLTOAuthLoginConnectionDelegate>
 @property (retain, nonatomic) NSString* clientId;
 @property (retain, nonatomic) NSString* clientSecret;
 @property (retain, nonatomic) NSString* redirectUri;
@@ -34,6 +36,9 @@ typedef void (^NLTCallResponseBlock)(id result, NSError *error);
 #ifndef NLTOAUTH_NO_LOGINCONTROLLER
 @property (retain,nonatomic) NLTOAuthController* oauthController;
 #endif
+//For AppleTV login:
+@property (retain, nonatomic) NSString* userLogin;
+@property (retain, nonatomic) NSString* userPassword;
 
 
 //Return the NLTOAuth singleton

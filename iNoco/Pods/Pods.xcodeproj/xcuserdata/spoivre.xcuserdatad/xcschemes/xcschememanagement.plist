@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-iNocoTV.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-iNocoToday.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -37,12 +42,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>6AF0CBF46B1C1B9FE632A391E84A9D38</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>7DE4DAB5F7C07641182E7165BECD0FD3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9A50839CDC684AD72A8F6AF5E90ED274</key>
+		<key>BBEAF29997E6D8FB1E9804B8AC98CD8C</key>
 		<dict>
 			<key>primary</key>
 			<true/>

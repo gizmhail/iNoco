@@ -28,21 +28,16 @@ void uncaughtExceptionHandler(NSException *exception) {
 @end
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
-#ifdef DEBUG
-    //[[Crashlytics sharedInstance] setDebugMode:YES];
-#endif
-    [Fabric with:@[CrashlyticsKit]];
-
+#pragma mark Initial settings
+- (void)gsmInit{
     GroupSettingsManager* groupSettings = [GroupSettingsManager sharedInstance];
 #ifdef NLT_RECORD_LOGS
     groupSettings.debugKeys = @[@"NLTOAuth_oauthAccessToken",
                                 @"NLTOAuth_oauthRefreshToken"];
 #endif
+}
 
-#ifdef DEBUG
-    //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-#endif
+- (void)audioInit{
     NSError *setCategoryError = nil;
     BOOL success = [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error: &setCategoryError];
     if (!success) {
@@ -50,7 +45,10 @@ void uncaughtExceptionHandler(NSException *exception) {
     }else{
         [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     }
-    
+}
+
+- (void)nocoInit{
+    GroupSettingsManager* groupSettings = [GroupSettingsManager sharedInstance];
     [[NLTOAuth sharedInstance] configureWithClientId:nolibtv_client_id withClientSecret:nolibtv_client_secret withRedirectUri:nolibtv_redirect_uri];
     
     //NLTAPI conf
@@ -88,7 +86,7 @@ void uncaughtExceptionHandler(NSException *exception) {
         [[NLTAPI sharedInstance] setSubscribedOnly:false];
         [[NLTAPI sharedInstance] setPartnerKey:catalog];
     }
-  
+    
     [[NLTAPI sharedInstance] setHandleNetworkActivityIndicator:TRUE];
     
     [NLTAPI sharedInstance].preferedLanguage = DEFAULT_LANGUAGE;//Use VO
@@ -110,8 +108,26 @@ void uncaughtExceptionHandler(NSException *exception) {
     if([settings objectForKey:@"trustBackendQualityAdaptation" ]){
         [NLTAPI sharedInstance].trustBackendQualityAdaptation = [settings boolForKey:@"trustBackendQualityAdaptation"];
     }
-
+    
     [[NocoDownloadsManager sharedInstance] fixDownloadInfoPath];
+}
+
+#pragma mark -
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
+#ifdef DEBUG
+    //[[Crashlytics sharedInstance] setDebugMode:YES];
+#endif
+    [Fabric with:@[CrashlyticsKit]];
+
+    [self gsmInit];
+
+#ifdef DEBUG
+    //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+#endif
+    [self audioInit];
+    
+    [self nocoInit];
+
 
 
     //Lock screen audio events

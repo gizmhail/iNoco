@@ -12,7 +12,11 @@
 #import "NLTAPI.h"
 #import "ShowCollectionViewCell.h"
 
+#ifndef TVOS_NOCO
 @interface RecentShowViewController : UIViewController <UICollectionViewDataSource,UICollectionViewDelegate,ConnectionViewControllerDelegate,UISearchBarDelegate,UIAlertViewDelegate>{
+#else
+    @interface RecentShowViewController : UIViewController <UICollectionViewDataSource,UICollectionViewDelegate,ConnectionViewControllerDelegate,UISearchBarDelegate>{
+#endif
     long maxShows;
 }
 @property (assign,nonatomic) BOOL initialAuthentCheckDone;
@@ -27,8 +31,10 @@
 @property (weak, nonatomic) IBOutlet UIView *filterView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *watchSegmentedControl;
 @property (weak, nonatomic) IBOutlet UIView *filterBackground;
+#ifndef TVOS_NOCO
 @property (retain,nonatomic)UIAlertView* errorAlert;
 @property (retain,nonatomic)UIAlertView* quotaAlert;
+#endif
 @property (retain,nonatomic)NSMutableArray* playlistContext;
 @property (retain,nonatomic)NSString* playlistType;
 

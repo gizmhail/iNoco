@@ -66,11 +66,24 @@
             }
             
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                NSString*message = @"Impossible de se connecter. Veuillez vérifier votre connection.";
                 if([error.domain compare:@"NLTErrorDomain"]==NSOrderedSame && error.code == 666){
-                    [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Les serveurs d'authentification de noco sont actuellement indisponibles. Veuillez réessayer plus tard, désolé pour ce dérangement." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
-                }else{
-                    [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+                    message = @"Les serveurs d'authentification de noco sont actuellement indisponibles. Veuillez réessayer plus tard, désolé pour ce dérangement.";
                 }
+#ifndef TVOS_NOCO
+                [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+                
+#else
+                UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Erreur"
+                                                                               message:message
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault
+                                                                      handler:^(UIAlertAction * action) {}];
+                
+                [alert addAction:defaultAction];
+                [self presentViewController:alert animated:YES completion:nil];
+#endif
             });
         }
     }];

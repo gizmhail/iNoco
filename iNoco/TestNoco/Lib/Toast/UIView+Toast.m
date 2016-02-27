@@ -105,7 +105,9 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
         UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:toast action:@selector(handleToastTapped:)];
         [toast addGestureRecognizer:recognizer];
         toast.userInteractionEnabled = YES;
+#ifndef TVOS_NOCO
         toast.exclusiveTouch = YES;
+#endif
     }
     
     [self addSubview:toast];
@@ -233,8 +235,11 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
         CGRect boundingRect = [string boundingRectWithSize:constrainedSize options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
         return CGSizeMake(ceilf(boundingRect.size.width), ceilf(boundingRect.size.height));
     }
-
-    return [string sizeWithFont:font constrainedToSize:constrainedSize lineBreakMode:lineBreakMode];
+    CGSize size = CGSizeMake(100, 30);
+#ifndef TVOS_NOCO
+    size = [string sizeWithFont:font constrainedToSize:constrainedSize lineBreakMode:lineBreakMode];
+#endif
+    return size;
 }
 
 - (UIView *)viewForMessage:(NSString *)message title:(NSString *)title image:(UIImage *)image {

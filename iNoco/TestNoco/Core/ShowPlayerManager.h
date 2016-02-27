@@ -11,11 +11,14 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import <QuartzCore/QuartzCore.h>
 #import "NLTAPI.h"
+#ifndef TVOS_NOCO
 #import "NocoDownloadsManager.h"
+#endif
 
 @protocol ShowPlayerManagerDelegate <NSObject>
 - (CGRect)moviePlayerFrame;
 - (UIView*)moviePlayerSuperview;
+- (UIViewController*)containingController;
 @optional
 - (void)moviePlayerDidExitFullscreen;
 - (void)moviePlayerNowPlayingMovieDidChange;

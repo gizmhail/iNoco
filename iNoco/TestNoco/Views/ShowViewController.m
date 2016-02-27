@@ -17,10 +17,13 @@
 #import <AVFoundation/AVFoundation.h>
 #import "FavoriteProgramManager.h"
 #import "RecentShowViewController.h"
-#import "NocoDownloadsManager.h"
 #import "ShowCollectionViewCell.h"
+#include "commonSettings.h"
+#ifndef TVOS_NOCO
+#import "NocoDownloadsManager.h"
 #import "ChromecastManager.h"
 #import "AppDelegate.h"
+#endif
 
 @interface ShowViewController (){
     int unreadCalls;
@@ -29,6 +32,7 @@
 @property (retain, nonatomic) NSMutableArray* chapters;//Only individual shows
 @property (retain, nonatomic) NSMutableArray* allChapters;//Includes internal sections
 @property (retain, nonatomic) UIView* tooltipView;
+#ifndef TVOS_NOCO
 @property (retain, nonatomic) UIAlertView* downloadAlert;
 @property (retain, nonatomic) UIAlertView* readAlert;
 @property (retain, nonatomic) UIAlertView* statusAlert;
@@ -36,6 +40,7 @@
 @property (retain, nonatomic) UIActionSheet* statusSheet;
 @property (retain, nonatomic) UIActionSheet* castSheet;
 @property (retain, nonatomic) UIActionSheet* playlistSheet;
+#endif
 @property (retain, nonatomic) UIProgressView* downloadProgress;
 @property (retain, nonatomic) UIButton* downloadTextButton;
 @property (retain, nonatomic) UIButton* downloadImageButton;
@@ -140,10 +145,11 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     self.actionsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 180, 40)];
     self.downloadView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 180, 40)];
     [self.actionsView addSubview:self.downloadView];
+#ifndef TVOS_NOCO
     self.castButton = [CastIconButton buttonWithFrame:CGRectMake(186, 5, 29, 22)];
     [self.castButton addTarget:self action:@selector(castClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.actionsView addSubview:self.castButton];
-
+#endif
     //self.actionsView.backgroundColor = [UIColor blueColor];
     //self.downloadView.backgroundColor = [UIColor redColor];
 
@@ -308,13 +314,16 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     }
     
     //Chromecast
-    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+#ifndef TVOS_NOCO
+    ChromecastManager* chromecastManager = [self chromecastManager];
 
     if([chromecastManager.deviceScanner.devices count]>0){
         self.castButton.hidden = FALSE;
         [self.castButton setStatus:CIBCastAvailable];
         [self updateCastContainer];
     }
+#endif
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFromCastProgress) name:@"ChromecastPlayerProgress" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFromCastFinished) name:@"ChromecastPlayerFinished" object:nil];
     [self updateCastContainer];
@@ -351,7 +360,9 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
 }
 -(void)viewWillAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = FALSE;
+#ifndef TVOS_NOCO
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setRemoteControlDelegate:self];
+#endif
     [super viewWillAppear:animated];
 }
 
@@ -364,6 +375,7 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
 #pragma mark Cast
 
 - (void)updateCastContainer{
+#ifndef TVOS_NOCO
     float currentWidth = self.actionsView.frame.size.width;
     float targetWidth = currentWidth;
     if(self.castButton.status == CIBCastUnavailable){
@@ -376,10 +388,12 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.actionsView];
     }
     [self updateCastPlayerView];
+#endif
 }
 
 - (IBAction)castClick:(id)sender {
-    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+#ifndef TVOS_NOCO
+    ChromecastManager* chromecastManager = [self chromecastManager];
     NSString* currentDevice = @"iPhone";
     if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ){
         currentDevice = @"iPad";
@@ -399,11 +413,13 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     [self.castSheet showFromTabBar:self.navigationController.tabBarController.tabBar];
     [self.castButton setStatus:CIBCastConnecting];
     [self updateCastContainer];
+#endif
 }
 
 - (void)castDeviceSelected:(NSString*)deviceName{
+#ifndef TVOS_NOCO
     deviceName = [deviceName stringByReplacingOccurrencesOfString:@"√ " withString:@""];
-    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+    ChromecastManager* chromecastManager = [self chromecastManager];
 
     BOOL deviceFound = FALSE;
     for (GCKDevice* device in chromecastManager.deviceScanner.devices) {
@@ -422,10 +438,12 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         [self.castButton setTintColor:self.view.window.tintColor];
         [self updateCastContainer];
     }
+#endif
 }
 
 - (void)updateFromCastProgress{
-    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+#ifndef TVOS_NOCO
+    ChromecastManager* chromecastManager = [self chromecastManager];
     float lastKnownProgress = chromecastManager.progress;
     if (ABS(1000*lastKnownProgress-self.show.duration_ms)<10000) {
         progress = 0;
@@ -433,11 +451,13 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         progress = lastKnownProgress;
     }
     [self updateCastPlayerView];
+#endif
 }
 
 - (void)updateFromCastFinished{
+#ifndef TVOS_NOCO
     [self updateFromCastProgress];
-    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+    ChromecastManager* chromecastManager = [self chromecastManager];
     if(chromecastManager.currentShow == self.show){
         [self syncVideoReadStatus];
     }else{
@@ -445,11 +465,13 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         // In the meantime, in this case (we stopped the playback in another show view), the read status won't be affected
         // as it should (but due to settings defaults, it should have a limited impact...yet, it needs to be cleaned up ^^)po
     }
+#endif
 }
 
 - (void) updateCastPlayerView{
+#ifndef TVOS_NOCO
     //We display the cast player if the cast manager has been activated
-    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+    ChromecastManager* chromecastManager = [self chromecastManager];
     self.castPlayerView.hidden = chromecastManager.deviceManager.device == nil;
     self.tooltipView.hidden = !self.castPlayerView.hidden || self.tooltipView.alpha == 0;
 
@@ -493,32 +515,49 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     }else{
         self.castChapterView.hidden = TRUE;
     }
+#endif
 }
 
-- (IBAction)castBackward{
+#pragma mark Chromecast
+
+#ifndef TVOS_NOCO
+- (ChromecastManager*)chromecastManager{
     ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+    return chromecastManager;
+}
+#endif
+
+- (IBAction)castBackward{
+#ifndef TVOS_NOCO
+    ChromecastManager* chromecastManager = [self chromecastManager];
     [chromecastManager seekToTimeInterval:chromecastManager.mediaControlChannel.mediaStatus.streamPosition - 30.];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self updateCastContainer];
     });
+#endif
 }
 
 - (IBAction)castForward{
-    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+#ifndef TVOS_NOCO
+    ChromecastManager* chromecastManager = [self chromecastManager];
     [chromecastManager seekToTimeInterval:chromecastManager.mediaControlChannel.mediaStatus.streamPosition + 30.];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self updateCastContainer];
     });
+#endif
 }
 
 - (IBAction)castStartPlaying{
-    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+#ifndef TVOS_NOCO
+    ChromecastManager* chromecastManager = [self chromecastManager];
     [self.castActivity startAnimating];
     [chromecastManager playShow:self.show withProgress:progress];
+#endif
 }
 
 - (IBAction)castPause{
-    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+#ifndef TVOS_NOCO
+    ChromecastManager* chromecastManager = [self chromecastManager];
     GCKMediaPlayerState playerState = chromecastManager.mediaControlChannel.mediaStatus.playerState;
     if(playerState == GCKMediaPlayerStatePaused){
         [chromecastManager resume];
@@ -531,20 +570,24 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self updateCastContainer];
     });
+#endif
 }
 
 - (IBAction)castStop{
+#ifndef TVOS_NOCO
     [self.castActivity stopAnimating];
-    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+    ChromecastManager* chromecastManager = [self chromecastManager];
     [chromecastManager stop];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self updateCastContainer];
     });
+#endif
 }
 
 
 - (IBAction)castChapterNext:(id)sender {
-    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+#ifndef TVOS_NOCO
+    ChromecastManager* chromecastManager = [self chromecastManager];
     float currentPlaybackTime = chromecastManager.mediaControlChannel.mediaStatus.streamPosition;
     
     NSDictionary* nextChapter = nil;
@@ -559,10 +602,12 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         float targetTime = ([[nextChapter objectForKey:@"timecode_ms"] floatValue]/1000.0);
         [chromecastManager seekToTimeInterval:targetTime];
     }
+#endif
 }
 
 - (IBAction)castChapterPrev:(id)sender {
-    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+#ifndef TVOS_NOCO
+    ChromecastManager* chromecastManager = [self chromecastManager];
     float currentPlaybackTime = chromecastManager.mediaControlChannel.mediaStatus.streamPosition;
     NSDictionary* prevChapter = nil;
     for (NSDictionary* chapter in self.allChapters) {
@@ -578,11 +623,13 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         [chromecastManager seekToTimeInterval:targetTime];
 
     }
+#endif
 }
 
 #pragma mark Playlist
 
 - (void)launchPlaylist{
+#ifndef TVOS_NOCO
     if(self.contextPlaylist){
         NSString* title = @"l'émission";
         NSString* type = @"émissions";
@@ -605,12 +652,16 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         self.playlistSheet = [[UIActionSheet alloc] initWithTitle:[NSString stringWithFormat:@"Lire \"%@\" puis les autres %@",title,type] delegate:self cancelButtonTitle:@"annuler" destructiveButtonTitle:nil otherButtonTitles:playListOlderToNewer,playListNewerToOlder, nil];
         [self.playlistSheet showFromTabBar:self.tabBarController.tabBar];
     }
+#else
+    NSLog(@"TODO  handle Playlist");
+#endif
 }
 
 
 #pragma mark - Video status
 
 - (void)syncVideoReadStatus{
+#ifndef TVOS_NOCO
     [self.readAlert dismissWithClickedButtonIndex:0 animated:NO];
     self.readAlert = [[UIAlertView alloc] initWithTitle:@"Connection en cours ..." message:@"Récupération de l'état lu/non lu..." delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
     [self.readAlert show];
@@ -645,11 +696,19 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
             }
         }
     } withKey:self noCache:YES];
+#else
+    NSLog(@"TODO: handle mark as read messages/alerts");
+#endif
 }
 
 #pragma mark - Player
 
 #pragma mark ShowPlayerManagerDelegate
+
+- (UIViewController*)containingController{
+    return self;
+}
+
 - (void)progressChanged:(float)p{
     progress = p;
 }
@@ -704,11 +763,13 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     }
     self.playStart = nil;
     
-    ChromecastManager* chromecastManager = [(AppDelegate*)[[UIApplication sharedApplication] delegate] chromecastManager];
+#ifndef TVOS_NOCO
+    ChromecastManager* chromecastManager = [self chromecastManager];
     if(chromecastManager.deviceManager.device){
         [self castStartPlaying];
         return;
     }
+#endif
     
     [[ShowPlayerManager sharedInstance] setDelegate:self];
     [[ShowPlayerManager sharedInstance] play:self.show withProgress:progress withImage:self.imageView.image];
@@ -734,6 +795,7 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     //Download zone
     self.downloadedVersionLabel.hidden = TRUE;
     self.downloadedVersionBackground.hidden = TRUE;
+#ifndef TVOS_NOCO
     if([[NocoDownloadsManager sharedInstance] isDownloaded:self.show]){
         [self.downloadTextButton setTitle:@"téléchargé" forState:UIControlStateNormal];
         [self.downloadImageButton setImage:[UIImage imageNamed:@"ok.png"] forState:UIControlStateNormal];
@@ -758,11 +820,13 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
                 self.downloadProgress.hidden = TRUE;
             }
     }
+#endif
 }
 
 #pragma mark Interactions
 
 - (void)downloadClick{
+#ifndef TVOS_NOCO
     if([[NocoDownloadsManager sharedInstance] isDownloaded:self.show]){
         self.downloadAlert = [[UIAlertView alloc] initWithTitle:@"Mode hors ligne" message:@"Effacer la vidéo téléchargée ?" delegate:self cancelButtonTitle:@"Non" otherButtonTitles:@"Oui", nil];
         [self.downloadAlert show];
@@ -776,6 +840,9 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
             [self.downloadAlert show];
         }
     }
+#else
+    NSLog(@"TODO:  Disable downloads on TVOS");
+#endif
 }
 
 - (IBAction)favoriteFamillyClick:(id)sender {
@@ -791,9 +858,17 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
 
 - (IBAction)toggleRead:(id)sender {
     if(!self.readButton.selected){
-        if(self.chapters&&[self.chapters count]>0){
+        BOOL ignoreSubchapters = false;
+#ifndef TVOS_NOCO
+        ignoreSubchapters = true;
+#else
+        NSLog(@"TODO: handle mark as read for chapters");
+#endif
+        if(!ignoreSubchapters&&self.chapters&&[self.chapters count]>0){
+#ifndef TVOS_NOCO
             self.readSheet = [[UIActionSheet alloc] initWithTitle:@"Marquer comme lu" delegate:self cancelButtonTitle:@"Ne pas marquer comme lu" destructiveButtonTitle:nil otherButtonTitles:allReadMessage, @"l'émission seule", nil];
             [self.readSheet showFromTabBar:self.navigationController.tabBarController.tabBar];
+#endif
         }else{
             [self markRead:self.show];
         }
@@ -806,11 +881,16 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
 - (IBAction)watchListClick:(id)sender {
     __weak ShowViewController* weakSelf = self;
     if(!self.watchListButton.selected){
+#ifndef TVOS_NOCO
         if(!self.statusAlert){
             self.statusAlert = [[UIAlertView alloc] initWithTitle:@"Connection en cours ..." message:@"L'émision est en train d'être ajoutée à la liste de lecture..." delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
             [self.statusAlert show];
         }
+#else
+        NSLog(@"TODO: Add progress message");
+#endif
         [[NLTAPI sharedInstance] addToQueueList:self.show withResultBlock:^(id result, NSError *error) {
+#ifndef TVOS_NOCO
             [weakSelf.statusAlert dismissWithClickedButtonIndex:0 animated:YES];
             weakSelf.statusAlert = nil;
             if(error){
@@ -820,13 +900,20 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
                 weakSelf.watchListTextButton.selected = TRUE;
                 [weakSelf updateInterctiveUI];
             }
+#endif
         } withKey:self];
     }else{
+#ifndef TVOS_NOCO
         self.statusAlert = [[UIAlertView alloc] initWithTitle:@"Connection en cours ..." message:@"L'émision est en train d'être retirée de la liste de lecture..." delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
         [self.statusAlert show];
+#else
+        NSLog(@"TODO: Add progress message");
+#endif
         [[NLTAPI sharedInstance] removeFromQueueList:self.show withResultBlock:^(id result, NSError *error) {
+#ifndef TVOS_NOCO
             [weakSelf.statusAlert dismissWithClickedButtonIndex:0 animated:YES];
             weakSelf.statusAlert = nil;
+#endif
             if(error){
                 [weakSelf.tabBarController.view makeToast:[NSString stringWithFormat:@"Impossible d'enlever l'émission de la liste de lecture"] duration:2 position:@"bottom"];
             }else{
@@ -843,12 +930,16 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     [[ShowPlayerManager sharedInstance] setDelegate:nil];
     [[NLTAPI sharedInstance] cancelCallsWithKey:self];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+#ifndef TVOS_NOCO
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setRemoteControlDelegate:nil];
+#endif
 }
 
 #pragma mark - Status messages
 
 #pragma mark Alert view delegate
+
+#ifndef TVOS_NOCO
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if(buttonIndex != alertView.cancelButtonIndex){
@@ -868,9 +959,11 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         }
     }
 }
+#endif
 
 #pragma mark Action sheet delegate
 
+#ifndef TVOS_NOCO
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     if(actionSheet == self.castSheet){
         if(actionSheet.cancelButtonIndex != buttonIndex){
@@ -934,15 +1027,19 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
     
     }
 }
-
+#endif
 #pragma mark Watchlist
 
 
 - (void)proposeToRemoveFromWatchList{
     if(self.watchListButton.selected){
         //Propose to remove from watchlist, as it is read
+#ifndef TVOS_NOCO
         self.statusSheet = [[UIActionSheet alloc] initWithTitle:@"Liste de lecture" delegate:self cancelButtonTitle:@"Ne pas retirer" destructiveButtonTitle:nil otherButtonTitles:removeFromWatchlist, nil];
         [self.statusSheet showFromTabBar:self.navigationController.tabBarController.tabBar];
+#else
+        NSLog(@"TODO: Add remove from reading list message");
+#endif
     }
     
 }
@@ -950,15 +1047,21 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
 #pragma mark  Read status
 
 - (void)markUnread:(NLTShow*)show{
+#ifndef TVOS_NOCO
     if(!self.readAlert){
         self.readAlert = [[UIAlertView alloc] initWithTitle:@"Connection en cours ..." message:@"L'émision est en train d'être marquée comme non lue..." delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
         [self.readAlert show];
     }
+#else
+    NSLog(@"TODO: Add progress message");
+#endif
     __weak ShowViewController* weakSelf = self;
     
     [[NLTAPI sharedInstance] setReadStatus:false forShow:show withResultBlock:^(id result, NSError *error) {
+#ifndef TVOS_NOCO
         [weakSelf.readAlert dismissWithClickedButtonIndex:0 animated:YES];
         weakSelf.readAlert = nil;
+#endif
         weakSelf.readError = nil;
         if(error){
             [weakSelf.tabBarController.view makeToast:[NSString stringWithFormat:@"Impossible de marquer comme non lu"] duration:3 position:@"bottom"];
@@ -974,10 +1077,14 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
 
 - (void)markRead:(NLTShow*)show{
     unreadCalls++;
+#ifndef TVOS_NOCO
     if(!self.readAlert){
         self.readAlert = [[UIAlertView alloc] initWithTitle:@"Connection en cours ..." message:@"L'émision est en train d'être marquée comme lue..." delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
         [self.readAlert show];
     }
+#else
+    NSLog(@"TODO: Add progress message");
+#endif
     __weak ShowViewController* weakSelf = self;
     
     [[NLTAPI sharedInstance] setReadStatus:true forShow:show withResultBlock:^(id result, NSError *error) {
@@ -991,12 +1098,16 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
             }
         }
         if(unreadCalls == 0){
+#ifndef TVOS_NOCO
             [weakSelf.readAlert dismissWithClickedButtonIndex:0 animated:YES];
+            weakSelf.readAlert = nil;
+#else
+            NSLog(@"TODO: Add progress dismiss");
+#endif
             if(weakSelf.readError){
                 [weakSelf.tabBarController.view makeToast:[NSString stringWithFormat:@"Impossible de marquer comme lu"] duration:3 position:@"bottom"];
             }else{
             }
-            weakSelf.readAlert = nil;
             weakSelf.readError = nil;
             [weakSelf updateInterctiveUI];
             [weakSelf proposeToRemoveFromWatchList];

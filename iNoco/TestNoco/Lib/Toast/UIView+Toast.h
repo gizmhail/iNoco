@@ -27,8 +27,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  
 ***************************************************************************/
 
+#include "commonSettings.h"
 #define TOAST_MAIN_COLOR THEME_COLOR
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface UIView (Toast)
 

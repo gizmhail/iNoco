@@ -16,6 +16,7 @@
 @property (copy,nonatomic) NLTAuthResponseBlock authResponseBlock;
 @property (retain,nonatomic) NSURLConnection* connection;
 @property (retain,nonatomic) NSMutableData* data;
+@property (retain,nonatomic) NLTOAuthLoginConnection* loginConnection;
 
 @end
 
@@ -187,6 +188,17 @@
 }
 
 - (void)displayOAuthControllerOverlay{
+#ifdef TVOS_NOCO
+    //We cannot use the webview
+    self.loginConnection = [[NLTOAuthLoginConnection alloc] init];
+    self.loginConnection.delegate = self;
+    //TMP REMOVE
+    NSLog(@"\n\n\n\n\nWARNING - REMOVE \n\n\n\n\n");
+    self.userLogin = @"gizmhail";
+    self.userPassword = @"***";
+    [self.loginConnection connectWithLogin:self.userLogin withPassword:self.userPassword withClientId:self.clientId];
+    return;
+#else
 #ifndef NLTOAUTH_NO_LOGINCONTROLLER
 
     self.oauthController = [[NLTOAuthController alloc] init];
@@ -196,6 +208,7 @@
         controller = controller.presentedViewController;
     }
     [self requestAccessTokenWebviewFrom:controller];
+#endif
 #endif
 }
 
@@ -430,6 +443,15 @@
         [info setObject:@"oauthTokenType" forKey:self.oauthTokenType];
     }
     return info;
+}
+
+#pragma mark NLTOAuthLoginConnectionDelegate
+- (void)loginConnectionSuccessWithCode:(NSString*)code{
+    [self fetchAccessTokenFromAuthCode:code];
+}
+
+- (void)loginConnectionFailWithError:(NSError*)error{
+    [self errorDuringNLTOAuthControllerDisplay:error];
 }
 
 @end

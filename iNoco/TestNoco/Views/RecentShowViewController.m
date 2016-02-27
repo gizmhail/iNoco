@@ -16,6 +16,7 @@
 #import "FilterFooterCollectionReusableView.h"
 #import "SearchViewController.h"
 #import "ConnectionViewController.h"
+#include "commonSettings.h"
 
 @interface RecentShowViewController (){
     BOOL emptyPageFound;
@@ -23,7 +24,9 @@
     int firstEmptyPageFound;
 }
 @property (retain,nonatomic)UIButton* favoriteFamilly;
+#ifndef TVOS_NOCO
 @property (retain,nonatomic)UIRefreshControl* refreshControl;
+#endif
 @end
 
 @implementation RecentShowViewController
@@ -60,6 +63,7 @@
 }
 
 - (void)refreshControlSetup{
+#ifndef TVOS_NOCO
     self.refreshControl = [[UIRefreshControl alloc] init];
     //self.refreshControl.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.6];
     //self.refreshControl.frame = CGRectMake(0, 0, self.collectionView.frame.size.width, 2);
@@ -76,6 +80,7 @@
     [self.collectionView addSubview:self.refreshControl];
     
     self.collectionView.alwaysBounceVertical = YES;
+#endif
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -167,10 +172,22 @@
     if(error && [error.domain compare:@"NLTAPIDomain"]==NSOrderedSame && error.code == NLTAPI_NOCO_ERROR){
         if([error.userInfo objectForKey:@"code"] && [(NSString*)[error.userInfo objectForKey:@"code"] compare:@"TOO_MANY_REQUESTS"]==NSOrderedSame){
             quotaError = TRUE;
+#ifndef TVOS_NOCO
             if(![self.quotaAlert isVisible]){
                 self.quotaAlert = [[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Trop de connections simultanées faites à Noco : veuillez attendre quelques instants (une minute environ) avant de refaire un appel" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [self.quotaAlert show];
             }
+#else
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Erreur"
+                                                                           message:@"Trop de connections simultanées faites à Noco : veuillez attendre quelques instants (une minute environ) avant de refaire un appel"
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {}];
+            
+            [alert addAction:defaultAction];
+            [self presentViewController:alert animated:YES completion:nil];
+#endif
         }
     }
     return quotaError;
@@ -212,7 +229,9 @@
 #pragma mark ConnectionViewControllerDelegate
 
 - (void) stopRefreshControl{
+#ifndef TVOS_NOCO
     [self.refreshControl endRefreshing];
+#endif
     /*
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         NSMutableAttributedString* attr = [[NSMutableAttributedString alloc] initWithString:@"Tirer pour rafraichir"];
@@ -247,7 +266,20 @@
             [weakSelf hideLoadingActivity];
             if([error.domain compare:NSURLErrorDomain]==NSOrderedSame && error.code == -1009){
                 [weakSelf stopRefreshControl];
+#ifndef TVOS_NOCO
                 [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:self   cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+#else
+                UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Erreur"
+                                                                               message:@"Impossible de se connecter. Veuillez vérifier votre connection."
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault
+                                                                      handler:^(UIAlertAction * action) {}];
+                
+                [alert addAction:defaultAction];
+                [self presentViewController:alert animated:YES completion:nil];
+
+#endif
             }else{
                 //Segueue should not occur during viewWilll/DidAppear
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -316,10 +348,22 @@
 #endif
                             BOOL quotaError = [self checkErrorForQuotaLimit:error];
                             maxShows = [self entriesCount];
+#ifndef TVOS_NOCO
                             if(!self.errorAlert&&!quotaError){
                                 self.errorAlert = [[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de se connecter. Veuillez vérifier votre connection." delegate:self   cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                                 [self.errorAlert show];
                             }
+#else
+                            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Erreur"
+                                 message:@"Impossible de se connecter. Veuillez vérifier votre connection."
+                                 preferredStyle:UIAlertControllerStyleAlert];
+                            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault
+                                                                                  handler:^(UIAlertAction * action) {}];
+                            
+                            [alert addAction:defaultAction];
+                            [self presentViewController:alert animated:YES completion:nil];
+
+#endif
                             [weakSelf.collectionView reloadData];
                         }else{
                             [weakSelf insertPageResult:page withResult:result withError:error];
@@ -572,11 +616,14 @@
 
 #pragma mark UIAlertviewDelegate
 
+#ifndef TVOS_NOCO
 -(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
     if(alertView==self.errorAlert){
         self.errorAlert = nil;
     }
 }
+#endif
+
 #pragma mark UISearchbarDelegate
 
 
@@ -607,8 +654,9 @@
     [self.collectionView reloadData];
     UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, @"Annulation du filtre");
     [searchBar resignFirstResponder];
+#ifndef TVOS_NOCO
     [[UISegmentedControl appearanceWhenContainedIn:[UISearchBar class], nil] setTintColor:searchBar.tintColor];
-    
+#endif
     
     BOOL displayFilter = self.family != nil;
     displayFilter = displayFilter || (ALWAYS_DISPLAY_READFILTER_IN_RECENT_SHOWS && [self isMemberOfClass:[RecentShowViewController class]]);

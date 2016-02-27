@@ -8,11 +8,17 @@
 
 #import "NLTAPI.h"
 #import <UIKit/UIKit.h>
+#ifndef TVOS_NOCO
 #import "AppDelegate.h"
-#import "ShowPlayerManager.h"
 #import "CastIconButton.h"
+#endif
+#import "ShowPlayerManager.h"
 
+#ifndef TVOS_NOCO
 @interface ShowViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UIActionSheetDelegate,RemoteControlEventHandlerProtocol,UIAlertViewDelegate,ShowPlayerManagerDelegate,UIScrollViewDelegate>
+#else
+@interface ShowViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,ShowPlayerManagerDelegate,UIScrollViewDelegate>
+#endif
 @property (weak, nonatomic) IBOutlet UILabel *famillyLabel;
 @property (weak, nonatomic) IBOutlet UILabel *episodeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
@@ -42,7 +48,9 @@
 @property (retain, nonatomic) NSMutableArray* contextPlaylist;
 @property (retain, nonatomic) id contextPlaylistCurrentItem;
 @property (retain, nonatomic) NSString* playlistType;
+#ifndef TVOS_NOCO
 @property (retain, nonatomic) IBOutlet CastIconButton *castButton;
+#endif
 @property (weak, nonatomic) IBOutlet UIView* castPlayerView;
 @property (weak, nonatomic) IBOutlet UIButton *castPlayerPauseButton;
 @property (weak, nonatomic) IBOutlet UIProgressView *castProgressView;

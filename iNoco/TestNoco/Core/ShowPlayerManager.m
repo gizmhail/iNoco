@@ -7,17 +7,26 @@
 //
 
 #import "ShowPlayerManager.h"
+#ifndef TVOS_NOCO
 #import "ChromecastManager.h"
 #import "AppDelegate.h"
+#endif
+@import AVKit;
+#import <AVFoundation/AVPlayer.h>
+#import <AVFoundation/AVPlayerItem.h>
+#import "commonSettings.h"
 
 @interface ShowPlayerManager (){
     bool userEndedPlay;
     bool playbackDurationSet;
     float initialProgress;
 }
-@property (retain, nonatomic) MPMoviePlayerController* moviePlayer;
+@property (retain, nonatomic) AVPlayerViewController* playerViewController;
 @property (retain, nonatomic) NSTimer* progressTimer;
+#ifndef TVOS_NOCO
+@property (retain, nonatomic) MPMoviePlayerController* moviePlayer;
 @property (retain, nonatomic) UIAlertView* progressAlert;
+#endif
 @property (retain, nonatomic) NLTShow* currentShow;
 @property (retain, nonatomic) id currentPlaylistItem;
 @property (retain, nonatomic) NSMutableArray* showList;
@@ -107,7 +116,13 @@
 #endif
 #warning See if we should keep it in the superview
     [self removeCustomUI];
-    [self.moviePlayer.view removeFromSuperview];
+    if([self useAVPlayer]){
+        [self.playerViewController.view removeFromSuperview];
+    }else{
+#ifndef TVOS_NOCO
+        [self.moviePlayer.view removeFromSuperview];
+#endif
+    }
     id siblingShow = [self nextShow];
     if(!isNext){
         siblingShow = [self previousShow];
@@ -174,141 +189,52 @@
 #pragma mark Player
 
 - (void)playerNotificationSubscription{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationMPMoviePlayerNowPlayingMovieDidChangeNotification:) name:MPMoviePlayerNowPlayingMovieDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationMPMoviePlayerPlaybackDidFinishNotification:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificaitonMPMoviePlayerDidExitFullscreenNotification:) name:MPMoviePlayerDidExitFullscreenNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(notificationMPMoviePlayerPlaybackDidFinishNotification:)
-                                                 name:MPMoviePlayerWillExitFullscreenNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(notificationMPMoviePlayerLoadStateDidChangeNotification:)
-                                                 name:MPMoviePlayerLoadStateDidChangeNotification
-                                               object:nil];
-}
-
-- (void)notificationMPMoviePlayerLoadStateDidChangeNotification:(NSNotification*)notif{
-#ifdef DEBUG
-    NSLog(@"Load state %li", (long)self.moviePlayer.loadState);
-#endif
-    if(self.moviePlayer.loadState & MPMovieLoadStatePlayable){
-        [self playerCustomUI];
-    }
-    MPMoviePlayerController* player = (MPMoviePlayerController*)notif.object;
-    if ( player.playbackState == MPMoviePlaybackStatePlaying) {
-        if(!playbackDurationSet){
-            [self.moviePlayer setCurrentPlaybackTime:initialProgress];
-            playbackDurationSet=YES;
-        }
-    }
-}
-
-- (void)notificaitonMPMoviePlayerDidExitFullscreenNotification:(NSNotification*)notif{
-    if([self.delegate respondsToSelector:@selector(moviePlayerDidExitFullscreen)]){
-        [self.delegate moviePlayerDidExitFullscreen];
-    }
-}
-
-- (void)notificationMPMoviePlayerPlaybackDidFinishNotification:(NSNotification*)notif{
-    [self.progressTimer invalidate];
-    int reason = MPMovieFinishReasonUserExited;
-    if([notif.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey]){
-        reason = [[notif.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] intValue];
-    }
-    bool playbackCameToCompletion = self.moviePlayer.currentPlaybackTime == self.moviePlayer.duration;
-    //MPMovieFinishReasonPlaybackEnded will be callend after MPMovieFinishReasonUserExited so we prevent reset the progress when an MPMovieFinishReasonUserExited occured
-    if (reason == MPMovieFinishReasonPlaybackEnded && ! userEndedPlay) {
-        //movie finished playin
-        NSLog(@"Stopped at end");
-        if([self displayAlerts]){
-            if(!self.progressAlert){
-                self.progressAlert = [[UIAlertView alloc] initWithTitle:@"Connection en cours ..." message:@"Mise à jour de la progression de la lecture..." delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
-                [self.progressAlert show];
-            }
-        }
-        [[NLTAPI sharedInstance] setResumePlay:0 forShow:self.currentShow withResultBlock:^(id result, NSError *error) {
-            [self.progressAlert dismissWithClickedButtonIndex:0 animated:YES];
-            [self progressChanged:0];
-        } withKey:self];
-        [self.moviePlayer stop];
-    }else if (reason == MPMovieFinishReasonUserExited) {
-        //user hit the done button
-        if(self.moviePlayer.currentPlaybackTime > 0 && self.moviePlayer.currentPlaybackTime < self.moviePlayer.duration){
-            userEndedPlay = TRUE;
-            NSLog(@"Stopped before end - %f / %f",self.moviePlayer.currentPlaybackTime, self.moviePlayer.duration);
-            [self progressChanged:self.moviePlayer.currentPlaybackTime];
-            if([self displayAlerts]){
-                if(!self.progressAlert){
-                    self.progressAlert = [[UIAlertView alloc] initWithTitle:@"Connection en cours ..." message:@"Mise à jour de la progression de la lecture..." delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
-                    [self.progressAlert show];
-                }
-            }
-            float progressToSave = self.moviePlayer.currentPlaybackTime;
-            [[NLTAPI sharedInstance] setResumePlay:1000*progressToSave forShow:self.currentShow withResultBlock:^(id result, NSError *error) {
-                [self.progressAlert dismissWithClickedButtonIndex:0 animated:YES];
-            } withKey:self];
-        }
-        [self.moviePlayer stop];
-    }else if (reason == MPMovieFinishReasonPlaybackError) {
-        //error
-        NSLog(@"Stoped due to error");
-        [self.moviePlayer stop];
-#warning Add emssage, fix fullscreen exit problems
-        if([self displayAlerts]){
-            [[[UIAlertView alloc] initWithTitle:@"Lecture impossible" message:@"Impossible de lire cette émission" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
-        }
-    }
-
-    [self.moviePlayer setFullscreen:NO animated:YES];
-    [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = [NSMutableDictionary dictionary];
-    
-    
-    if(playbackCameToCompletion){
-        //self.currentShow = nil;
-#ifdef DEBUG
-        NSLog(@"Skipping next show (playback came to completion)");
-#endif
-        NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
-        [settings removeObjectForKey:@"InterruptedShow" ];
-        [settings synchronize];
-
-        [self switchToNextShow];
+    if([self useAVPlayer]){
     }else{
-        //User stopped playback before end
-        NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
-        NSData* cacheData = [NSKeyedArchiver archivedDataWithRootObject:self.currentShow.rawShow];
-
-        [settings setObject:cacheData forKey:@"InterruptedShow" ];
-        [settings synchronize];
-        [self removeCustomUI];
-        [self.moviePlayer.view removeFromSuperview];
+#ifndef TVOS_NOCO
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationMPMoviePlayerNowPlayingMovieDidChangeNotification:) name:MPMoviePlayerNowPlayingMovieDidChangeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationMPMoviePlayerPlaybackDidFinishNotification:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificaitonMPMoviePlayerDidExitFullscreenNotification:) name:MPMoviePlayerDidExitFullscreenNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(notificationMPMoviePlayerPlaybackDidFinishNotification:)
+                                                     name:MPMoviePlayerWillExitFullscreenNotification
+                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(notificationMPMoviePlayerLoadStateDidChangeNotification:)
+                                                     name:MPMoviePlayerLoadStateDidChangeNotification
+                                                   object:nil];
+#endif
     }
-}
 
-- (void)notificationMPMoviePlayerNowPlayingMovieDidChangeNotification:(NSNotification*)notif{
-    [self.delegate endedLookingForMovieUrl];
-    if([self.delegate respondsToSelector:@selector(moviePlayerNowPlayingMovieDidChange)]){
-        [self.delegate moviePlayerNowPlayingMovieDidChange];
-    }
 }
 
 //NSTimer
 - (void)progressUpdate{
+#ifndef TVOS_NOCO
     if(self.moviePlayer && self.moviePlayer.playbackState == MPMoviePlaybackStatePlaying && self.currentShow){
         [[NLTAPI sharedInstance] setResumePlay:1000*self.moviePlayer.currentPlaybackTime forShow:self.currentShow withResultBlock:^(id result, NSError *error) {
         } withKey:self];
     }
+#else
+    NSLog(@"TODO : handle progress with AVPlayer");
+#endif
 }
 
 - (void)tooglePlay{
-    if(self.moviePlayer){
-        if(self.moviePlayer.playbackState == MPMoviePlaybackStatePlaying){
-            //Playing
-            [self.moviePlayer pause];
-        }else{
-            //Not playing
-            [self.moviePlayer play];
+    if([self useAVPlayer]){
+        NSLog(@"TODO: Handle play with AVPlayer");
+    }else{
+#ifndef TVOS_NOCO
+        if(self.moviePlayer){
+            if(self.moviePlayer.playbackState == MPMoviePlaybackStatePlaying){
+                //Playing
+                [self.moviePlayer pause];
+            }else{
+                //Not playing
+                [self.moviePlayer play];
+            }
         }
+#endif
     }
 }
 
@@ -339,8 +265,22 @@
 #ifdef DEBUG
                                 NSLog(@"Unable to read: not subscribed");
 #endif
-                                [[[UIAlertView alloc] initWithTitle:@"Lecture impossible" message:[NSString stringWithFormat:@"Vous n'êtes pas abonné(e) à %@", [partner objectForKey:@"partner_name"]] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
                                 partnerFound = TRUE;
+                                NSString* message = [NSString stringWithFormat:@"Vous n'êtes pas abonné(e) à %@", [partner objectForKey:@"partner_name"]];
+                                NSString* messageTitle = @"Lecture impossible";
+#ifndef TVOS_NOCO
+                                [[[UIAlertView alloc] initWithTitle:messageTitle message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
+#else
+                                UIAlertController* alert = [UIAlertController alertControllerWithTitle:messageTitle
+                                                                                               message:message
+                                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                                
+                                UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault
+                                                                                      handler:^(UIAlertAction * action) {}];
+                                
+                                [alert addAction:defaultAction];
+                                [[self.delegate containingController] presentViewController:alert animated:YES completion:nil];
+#endif
                             }
                             break;
                         }
@@ -352,7 +292,21 @@
                         NSLog(@"Unable to read: partner not found");
 #endif
 
-                        [[[UIAlertView alloc] initWithTitle:@"Lecture impossible" message:@"Impossible de lire cette émission" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
+                        NSString* messageTitle = @"Lecture impossible";
+                        NSString* message = @"Impossible de lire cette émission";
+#ifndef TVOS_NOCO
+                        [[[UIAlertView alloc] initWithTitle:messageTitle message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
+#else
+                        UIAlertController* alert = [UIAlertController alertControllerWithTitle:messageTitle
+                                                                                       message:message
+                                                                                preferredStyle:UIAlertControllerStyleAlert];
+                        
+                        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault
+                                                                              handler:^(UIAlertAction * action) {}];
+                        
+                        [alert addAction:defaultAction];
+                        [[self.delegate containingController] presentViewController:alert animated:YES completion:nil];
+#endif
                     }
                 }
 #ifdef DEBUG
@@ -366,7 +320,21 @@
 #ifdef DEBUG
                 NSLog(@"Unable to read");
 #endif
-                [[[UIAlertView alloc] initWithTitle:@"Lecture impossible" message:@"Impossible de lire cette émission" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
+                NSString* messageTitle = @"Lecture impossible";
+                NSString* message = @"Impossible de lire cette émission";
+#ifndef TVOS_NOCO
+                [[[UIAlertView alloc] initWithTitle:messageTitle message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
+#else
+                UIAlertController* alert = [UIAlertController alertControllerWithTitle:messageTitle
+                                                                               message:message
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault
+                                                                      handler:^(UIAlertAction * action) {}];
+                
+                [alert addAction:defaultAction];
+                [[self.delegate containingController] presentViewController:alert animated:YES completion:nil];
+#endif
             }
 #ifdef DEBUG
             NSLog(@"Skipping next show (you do not have acess to this video, unknown reason)");
@@ -379,7 +347,12 @@
     __weak ShowPlayerManager* weakSelf = self;
     
     NSURL* url = nil;
-    if([[NocoDownloadsManager sharedInstance] isDownloaded:self.currentShow]){
+    BOOL downloaded = false;
+#ifndef TVOS_NOCO
+    downloaded = [[NocoDownloadsManager sharedInstance] isDownloaded:self.currentShow];
+#endif
+    if(downloaded){
+#ifndef TVOS_NOCO
         NSString* file = [[NocoDownloadsManager sharedInstance] downloadFilePathForShow:self.currentShow];
         if(file){
             url = [NSURL fileURLWithPath:file];
@@ -388,12 +361,28 @@
             if(!fileExists){
                 [[NocoDownloadsManager sharedInstance] eraseDownloadForShow:self.currentShow];
                 if([self displayAlerts]){
-                    [[[UIAlertView alloc] initWithTitle:@"Emission effacée" message:@"Le fichier téléchargé n'est plus disponible.\nCela peut arriver lors d'une mise-à-jour de l'application.\nVeuillez le retélécharger." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
+                    NSString* messageTitle = @"Emission effacée";
+                    NSString* message = @"Le fichier téléchargé n'est plus disponible.\nCela peut arriver lors d'une mise-à-jour de l'application.\nVeuillez le retélécharger.";
+#ifndef TVOS_NOCO
+                    [[[UIAlertView alloc] initWithTitle:messageTitle message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
+#else
+                    UIAlertController* alert = [UIAlertController alertControllerWithTitle:messageTitle
+                                                                                   message:message
+                                                                            preferredStyle:UIAlertControllerStyleAlert];
+                    
+                    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault
+                                                                          handler:^(UIAlertAction * action) {}];
+                    
+                    [alert addAction:defaultAction];
+                    [[self.delegate containingController] presentViewController:alert animated:YES completion:nil];
+#endif
+
                 }
                 [self switchToNextShow];
                 return;
             }
        }
+#endif
     }
     
     if([self.delegate respondsToSelector:@selector(startedLookingForMovieUrl)]){
@@ -420,36 +409,80 @@
                     [self.delegate endedLookingForMovieUrl];
                 }
                 if([self displayAlerts]){
+                    NSString* messageTitle = @"Erreur";
+                    NSString* message = @"Impossible de lire la vidéo";
                     if(error.code == NLTAPI_ERROR_VIDEO_UNAVAILABLE_WITH_POPMESSAGE && [error.userInfo objectForKey:@"popmessage"]&&[[error.userInfo objectForKey:@"popmessage"] objectForKey:@"message"]){
-                        [[[UIAlertView alloc] initWithTitle:@"Erreur" message:[[error.userInfo objectForKey:@"popmessage"] objectForKey:@"message"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
-                    }else{
-                        [[[UIAlertView alloc] initWithTitle:@"Erreur" message:@"Impossible de lire la vidéo" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+                        message = [[error.userInfo objectForKey:@"popmessage"] objectForKey:@"message"];
                     }
+#ifndef TVOS_NOCO
+                    [[[UIAlertView alloc] initWithTitle:messageTitle message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
+#else
+                    UIAlertController* alert = [UIAlertController alertControllerWithTitle:messageTitle
+                                                                                   message:message
+                                                                            preferredStyle:UIAlertControllerStyleAlert];
+                    
+                    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault
+                                                                          handler:^(UIAlertAction * action) {}];
+                    
+                    [alert addAction:defaultAction];
+                    [[self.delegate containingController] presentViewController:alert animated:YES completion:nil];
+#endif
+             
+                    
                 }
             }
         } withKey:self];
     }
 }
 
+- (BOOL)useAVPlayer{
+    //TODO Once stable, always use AVPlayer for iOS > 9
+#ifdef TVOS_NOCO
+    return true;
+#endif
+    return FALSE;
+    /*
+    if([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0){
+        return TRUE;
+    }
+    */
+}
+
 - (void)playURL:(NSURL*)url withProgress:(float)progress withImage:(UIImage*)image{
     NSLog(@"Reading url %@ (%@)",url, self.currentShow.show_TT);
-    self.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:url];
-    self.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
-    self.moviePlayer.view.frame = [self.delegate moviePlayerFrame];
-    [[self.delegate moviePlayerSuperview] addSubview:self.moviePlayer.view];
-    if([self.delegate respondsToSelector:@selector(moviePlayerPlacedInView)]){
-        [self.delegate moviePlayerPlacedInView];
+    if([self useAVPlayer]){
+#ifdef __IPHONE_9_0
+        self.playerViewController = [[AVPlayerViewController alloc] init];
+        self.playerViewController.player = [AVPlayer playerWithURL:url];
+        self.playerViewController.contentOverlayView.backgroundColor = [UIColor blueColor];
+        [[self.delegate moviePlayerSuperview] addSubview:self.playerViewController.view];
+        if([self.delegate respondsToSelector:@selector(moviePlayerPlacedInView)]){
+            // [self.delegate moviePlayerPlacedInView];
+        }
+        //self.playerViewController.view.frame = [self.delegate moviePlayerFrame];
+        self.playerViewController.view.frame = CGRectMake(0, 0, [self.delegate moviePlayerFrame].size.width, [self.delegate moviePlayerFrame].size.height - 23);
+#endif
+    }else{
+#ifndef TVOS_NOCO
+        self.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:url];
+        self.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
+        self.moviePlayer.view.frame = [self.delegate moviePlayerFrame];
+        [[self.delegate moviePlayerSuperview] addSubview:self.moviePlayer.view];
+        if([self.delegate respondsToSelector:@selector(moviePlayerPlacedInView)]){
+            [self.delegate moviePlayerPlacedInView];
+        }
+        [self.moviePlayer setInitialPlaybackTime:progress];    
+        
+        //As of ios8.4, MPMoviePlayer as a bug: http://stackoverflow.com/questions/31166400/mpmovieplayercontroller-initialplaybacktime-property-not-working-in-ios-8-4
+        //We'll "manually" set progress when plaback starg
+        initialProgress = progress;
+        playbackDurationSet = false;
+        [self.moviePlayer prepareToPlay];
+        self.moviePlayer.shouldAutoplay = TRUE;
+        [self.moviePlayer setFullscreen:YES animated:YES];
+#endif
     }
-    [self.moviePlayer setInitialPlaybackTime:progress];
 
-    //As of ios8.4, MPMoviePlayer as a bug: http://stackoverflow.com/questions/31166400/mpmovieplayercontroller-initialplaybacktime-property-not-working-in-ios-8-4
-    //We'll "manually" set progress when plaback starg
-    initialProgress = progress;
-    playbackDurationSet = false;
-
-    [self.moviePlayer prepareToPlay];
-    self.moviePlayer.shouldAutoplay = TRUE;
-    [self.moviePlayer setFullscreen:YES animated:YES];
     
     self.progressTimer = [NSTimer scheduledTimerWithTimeInterval:PROGRESS_UPDATE_UPLOAD_STEP_TIME target:self selector:@selector(progressUpdate) userInfo:nil repeats:YES];
     MPNowPlayingInfoCenter *infoCenter = [MPNowPlayingInfoCenter defaultCenter];
@@ -461,7 +494,12 @@
     if(self.currentShow.family_TT) [info setObject:self.currentShow.family_TT forKey:MPMediaItemPropertyArtist];
     [info setObject:[NSNumber numberWithInt:self.currentShow.episode_number] forKey:MPMediaItemPropertyAlbumTrackNumber];
     if(image){
-        [info setObject:[[MPMediaItemArtwork alloc] initWithImage:image] forKey:MPMediaItemPropertyArtwork];
+        if([self useAVPlayer]){
+        }else{
+#ifndef TVOS_NOCO
+            [info setObject:[[MPMediaItemArtwork alloc] initWithImage:image] forKey:MPMediaItemPropertyArtwork];
+#endif
+        }
     }
     infoCenter.nowPlayingInfo = info;}
 
@@ -543,16 +581,22 @@
         [self switchToNextShow];
     }else{
         NSDictionary* nextChapter = nil;
-        for (NSDictionary* chapter in self.chapters) {
-            if(([[chapter objectForKey:@"timecode_ms"] floatValue]/1000.0)>(self.moviePlayer.currentPlaybackTime + 5) ){
-                nextChapter = chapter;
-                break;
-            }
-        }
-        if(nextChapter){
-            [self.moviePlayer setCurrentPlaybackTime:([[nextChapter objectForKey:@"timecode_ms"] floatValue]/1000.0)];
+        if([self useAVPlayer]){
+            NSLog(@"TODO: Handle next");
         }else{
-            [self switchToNextShow];
+#ifndef TVOS_NOCO
+            for (NSDictionary* chapter in self.chapters) {
+                if(([[chapter objectForKey:@"timecode_ms"] floatValue]/1000.0)>(self.moviePlayer.currentPlaybackTime + 5) ){
+                    nextChapter = chapter;
+                    break;
+                }
+            }
+            if(nextChapter){
+                [self.moviePlayer setCurrentPlaybackTime:([[nextChapter objectForKey:@"timecode_ms"] floatValue]/1000.0)];
+            }else{
+                [self switchToNextShow];
+            }
+#endif
         }
     }
 }
@@ -562,18 +606,24 @@
         [self switchToSiblingFollowing:FALSE];
     }else{
         NSDictionary* prevChapter = nil;
-        for (NSDictionary* chapter in self.chapters) {
-            if(([[chapter objectForKey:@"timecode_ms"] floatValue]/1000.0)<(self.moviePlayer.currentPlaybackTime - 5) ){
-                prevChapter = chapter;
-            }else{
-                break;
-            }
-        }
-        if(prevChapter){
-            [self.moviePlayer setCurrentPlaybackTime:([[prevChapter objectForKey:@"timecode_ms"] floatValue]/1000.0)];
+        if([self useAVPlayer]){
+            NSLog(@"TODO: Handle next");
         }else{
-            [self switchToSiblingFollowing:FALSE];
-
+#ifndef TVOS_NOCO
+            for (NSDictionary* chapter in self.chapters) {
+                if(([[chapter objectForKey:@"timecode_ms"] floatValue]/1000.0)<(self.moviePlayer.currentPlaybackTime - 5) ){
+                    prevChapter = chapter;
+                }else{
+                    break;
+                }
+            }
+            if(prevChapter){
+                [self.moviePlayer setCurrentPlaybackTime:([[prevChapter objectForKey:@"timecode_ms"] floatValue]/1000.0)];
+            }else{
+                [self switchToSiblingFollowing:FALSE];
+                
+            }
+#endif
         }
     }
 }
@@ -605,6 +655,117 @@
         [self.delegate progressChanged:progress];
     }
 }
+
+#pragma mark Movie Player delegates
+#ifndef TVOS_NOCO
+- (void)notificationMPMoviePlayerLoadStateDidChangeNotification:(NSNotification*)notif{
+#ifdef DEBUG
+    NSLog(@"Load state %li", (long)self.moviePlayer.loadState);
+#endif
+    if(self.moviePlayer.loadState & MPMovieLoadStatePlayable){
+        [self playerCustomUI];
+    }
+    MPMoviePlayerController* player = (MPMoviePlayerController*)notif.object;
+    if ( player.playbackState == MPMoviePlaybackStatePlaying) {
+        if(!playbackDurationSet){
+            [self.moviePlayer setCurrentPlaybackTime:initialProgress];
+            playbackDurationSet=YES;
+        }
+    }
+}
+
+- (void)notificaitonMPMoviePlayerDidExitFullscreenNotification:(NSNotification*)notif{
+    if([self.delegate respondsToSelector:@selector(moviePlayerDidExitFullscreen)]){
+        [self.delegate moviePlayerDidExitFullscreen];
+    }
+}
+
+- (void)notificationMPMoviePlayerPlaybackDidFinishNotification:(NSNotification*)notif{
+    [self.progressTimer invalidate];
+    int reason = MPMovieFinishReasonUserExited;
+    if([notif.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey]){
+        reason = [[notif.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] intValue];
+    }
+    bool playbackCameToCompletion = self.moviePlayer.currentPlaybackTime == self.moviePlayer.duration;
+    //MPMovieFinishReasonPlaybackEnded will be callend after MPMovieFinishReasonUserExited so we prevent reset the progress when an MPMovieFinishReasonUserExited occured
+    if (reason == MPMovieFinishReasonPlaybackEnded && ! userEndedPlay) {
+        //movie finished playin
+        NSLog(@"Stopped at end");
+        if([self displayAlerts]){
+            if(!self.progressAlert){
+                self.progressAlert = [[UIAlertView alloc] initWithTitle:@"Connection en cours ..." message:@"Mise à jour de la progression de la lecture..." delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+                [self.progressAlert show];
+            }
+        }
+        [[NLTAPI sharedInstance] setResumePlay:0 forShow:self.currentShow withResultBlock:^(id result, NSError *error) {
+            [self.progressAlert dismissWithClickedButtonIndex:0 animated:YES];
+            [self progressChanged:0];
+        } withKey:self];
+        [self.moviePlayer stop];
+    }else if (reason == MPMovieFinishReasonUserExited) {
+        //user hit the done button
+        if(self.moviePlayer.currentPlaybackTime > 0 && self.moviePlayer.currentPlaybackTime < self.moviePlayer.duration){
+            userEndedPlay = TRUE;
+            NSLog(@"Stopped before end - %f / %f",self.moviePlayer.currentPlaybackTime, self.moviePlayer.duration);
+            [self progressChanged:self.moviePlayer.currentPlaybackTime];
+            if([self displayAlerts]){
+                if(!self.progressAlert){
+                    self.progressAlert = [[UIAlertView alloc] initWithTitle:@"Connection en cours ..." message:@"Mise à jour de la progression de la lecture..." delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+                    [self.progressAlert show];
+                }
+            }
+            float progressToSave = self.moviePlayer.currentPlaybackTime;
+            [[NLTAPI sharedInstance] setResumePlay:1000*progressToSave forShow:self.currentShow withResultBlock:^(id result, NSError *error) {
+                [self.progressAlert dismissWithClickedButtonIndex:0 animated:YES];
+            } withKey:self];
+        }
+        [self.moviePlayer stop];
+    }else if (reason == MPMovieFinishReasonPlaybackError) {
+        //error
+        NSLog(@"Stoped due to error");
+        [self.moviePlayer stop];
+#warning Add emssage, fix fullscreen exit problems
+        if([self displayAlerts]){
+            [[[UIAlertView alloc] initWithTitle:@"Lecture impossible" message:@"Impossible de lire cette émission" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
+        }
+    }
+    
+    [self.moviePlayer setFullscreen:NO animated:YES];
+    [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = [NSMutableDictionary dictionary];
+    
+    
+    if(playbackCameToCompletion){
+        //self.currentShow = nil;
+#ifdef DEBUG
+        NSLog(@"Skipping next show (playback came to completion)");
+#endif
+        NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
+        [settings removeObjectForKey:@"InterruptedShow" ];
+        [settings synchronize];
+        
+        [self switchToNextShow];
+    }else{
+        //User stopped playback before end
+        NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
+        NSData* cacheData = [NSKeyedArchiver archivedDataWithRootObject:self.currentShow.rawShow];
+        
+        [settings setObject:cacheData forKey:@"InterruptedShow" ];
+        [settings synchronize];
+        [self removeCustomUI];
+        [self.moviePlayer.view removeFromSuperview];
+    }
+}
+
+- (void)notificationMPMoviePlayerNowPlayingMovieDidChangeNotification:(NSNotification*)notif{
+    [self.delegate endedLookingForMovieUrl];
+    if([self.delegate respondsToSelector:@selector(moviePlayerNowPlayingMovieDidChange)]){
+        [self.delegate moviePlayerNowPlayingMovieDidChange];
+    }
+}
+#endif
+
+
+
 
 #pragma mark Memory management
 
