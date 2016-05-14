@@ -18,6 +18,7 @@
 		4F2175C7196CACB10005EB14 /* avatar-round.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2175C6196CACB10005EB14 /* avatar-round.png */; };
 		4F2175C9196CAFD60005EB14 /* fond02.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2175C8196CAFD60005EB14 /* fond02.png */; };
 		4F2175CC196D3D890005EB14 /* oss.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F2175CB196D3D890005EB14 /* oss.html */; };
+		4F2BE1331CD16AA80067CC41 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F2BE1321CD16AA80067CC41 /* LaunchScreen.xib */; };
 		4F37F368196612FE00D0AACC /* FavoriteProgramManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F37F367196612FE00D0AACC /* FavoriteProgramManager.m */; };
 		4F37F36B19675CD500D0AACC /* WatchListHeaderReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F37F36A19675CD500D0AACC /* WatchListHeaderReusableView.m */; };
 		4F37F36E1969E3EE00D0AACC /* heart_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F37F36C1969E3EE00D0AACC /* heart_off.png */; };
@@ -205,6 +206,7 @@
 		4F2175C6196CACB10005EB14 /* avatar-round.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-round.png"; sourceTree = "<group>"; };
 		4F2175C8196CAFD60005EB14 /* fond02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fond02.png; sourceTree = "<group>"; };
 		4F2175CB196D3D890005EB14 /* oss.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = oss.html; sourceTree = "<group>"; };
+		4F2BE1321CD16AA80067CC41 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		4F37F366196612FE00D0AACC /* FavoriteProgramManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoriteProgramManager.h; sourceTree = "<group>"; };
 		4F37F367196612FE00D0AACC /* FavoriteProgramManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoriteProgramManager.m; sourceTree = "<group>"; };
 		4F37F36919675CD500D0AACC /* WatchListHeaderReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WatchListHeaderReusableView.h; sourceTree = "<group>"; };
@@ -718,6 +720,7 @@
 				4FEECD6D1949D683002514CE /* AppDelegate.m */,
 				4FEECD6F1949D683002514CE /* Main_iPhone.storyboard */,
 				4F927862198085F000DB138B /* Main_iPad.storyboard */,
+				4F2BE1321CD16AA80067CC41 /* LaunchScreen.xib */,
 				4FEECD7B1949D683002514CE /* Images.xcassets */,
 				4FEECD641949D683002514CE /* Supporting Files */,
 				4F2175CB196D3D890005EB14 /* oss.html */,
@@ -896,6 +899,7 @@
 				4F636AA81958CB19004C0A18 /* Unstar_icon.png in Resources */,
 				BD6670DF1B70A2D700487369 /* Octicons-playback-fast-forward.svg.png in Resources */,
 				4F37F36F1969E3EE00D0AACC /* heart_on.png in Resources */,
+				4F2BE1331CD16AA80067CC41 /* LaunchScreen.xib in Resources */,
 				4F459504196324BA0061381E /* iTunesArtwork.png in Resources */,
 				4F4594FA196324BA0061381E /* Icon-72.png in Resources */,
 				4FD084951978778800A99958 /* csa_16_black.png in Resources */,

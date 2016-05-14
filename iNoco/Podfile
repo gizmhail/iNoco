@@ -4,7 +4,7 @@
 
 source 'https://github.com/CocoaPods/Specs.git'
 target 'iNoco' do
-	pod 'GroupSettingsManager'
+    pod 'GroupSettingsManager'
     pod 'google-cast-sdk'
     pod 'Fabric'
     pod 'Crashlytics'
@@ -15,7 +15,7 @@ end
 #end
 
 target 'iNocoToday' do
-	pod 'GroupSettingsManager'
+    pod 'GroupSettingsManager'
     pod 'Fabric'
     pod 'Crashlytics'
 end

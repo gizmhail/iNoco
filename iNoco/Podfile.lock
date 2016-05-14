@@ -1,14 +1,13 @@
 PODS:
-  - Crashlytics (3.1.0)
-  - Fabric (1.2.8):
-    - Fabric/Base (= 1.2.8)
-  - Fabric/Base (1.2.8)
-  - google-cast-sdk (2.7.1):
-    - google-cast-sdk/Assets (= 2.7.1)
-    - google-cast-sdk/Core (= 2.7.1)
-  - google-cast-sdk/Assets (2.7.1):
+  - Crashlytics (3.7.0):
+    - Fabric (~> 1.6.3)
+  - Fabric (1.6.7)
+  - google-cast-sdk (2.10.4):
+    - google-cast-sdk/Assets (= 2.10.4)
+    - google-cast-sdk/Core (= 2.10.4)
+  - google-cast-sdk/Assets (2.10.4):
     - google-cast-sdk/Core
-  - google-cast-sdk/Core (2.7.1)
+  - google-cast-sdk/Core (2.10.4)
   - GroupSettingsManager (0.1.0)
 
 DEPENDENCIES:
@@ -18,9 +17,9 @@ DEPENDENCIES:
   - GroupSettingsManager
 
 SPEC CHECKSUMS:
-  Crashlytics: 93e2f86363d53c002c6366a9d87e41f2eaee87c3
-  Fabric: a9eabe53915e9f1db55a84dd2838737928675878
-  google-cast-sdk: 9c98a8fbe8277277ab01a3318ee965c9aef3d4c9
+  Crashlytics: c3a2333dea9e2733d2777f730910321fc9e25c0d
+  Fabric: caf7580c725e64db144f610ac65cd60956911dc7
+  google-cast-sdk: eb83ef6b875969e765011c457b254539c0978792
   GroupSettingsManager: 9307b3ebaf5212246077219964c381ecf0e94be4
 
 COCOAPODS: 0.39.0

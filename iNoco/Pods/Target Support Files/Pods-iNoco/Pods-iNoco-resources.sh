@@ -58,9 +58,11 @@ install_resource()
   esac
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_resource "google-cast-sdk/GoogleCastSDK-2.10.4-Release/GoogleCast.framework/GoogleCastResources.bundle"
   install_resource "${BUILT_PRODUCTS_DIR}/CastFrameworkAssets.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_resource "google-cast-sdk/GoogleCastSDK-2.10.4-Release/GoogleCast.framework/GoogleCastResources.bundle"
   install_resource "${BUILT_PRODUCTS_DIR}/CastFrameworkAssets.bundle"
 fi
 

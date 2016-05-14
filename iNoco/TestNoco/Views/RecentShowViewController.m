@@ -43,6 +43,7 @@
     [self resetResult];
     [self refreshControlSetup];
     self.watchSegmentedControl.selectedSegmentIndex = [self memorizedSegmentedControl];
+    
 }
 
 - (void)toggleFilterView:(BOOL)enable{
@@ -211,6 +212,17 @@
 
 #pragma mark ConnectionViewControllerDelegate
 
+
+- (void)connectedToNoco{
+    [self loadResultAtIndex:0];
+}
+
+- (void)noNetwordForAuth{
+    self.noNetworkForAuth = TRUE;
+}
+
+# pragma mark Refresh control
+
 - (void) stopRefreshControl{
     [self.refreshControl endRefreshing];
     /*
@@ -274,13 +286,7 @@
     emptyPageFound = FALSE;
 }
 
-- (void)connectedToNoco{
-    [self loadResultAtIndex:0];
-}
-
-- (void)noNetwordForAuth{
-    self.noNetworkForAuth = TRUE;
-}
+#pragma mark Shows index in pages
 
 - (long)greatestFetchedPage{
     return [[[self.resultByPage allKeys] valueForKeyPath:@"@max.intValue"] integerValue];
