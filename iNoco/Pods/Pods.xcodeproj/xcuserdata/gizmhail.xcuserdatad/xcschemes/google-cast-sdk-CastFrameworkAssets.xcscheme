@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'E12A8C67CEFC0F597D1E4703'
+               BlueprintIdentifier = 'A9B342173725FE9A6CE08E63'
                BlueprintName = 'google-cast-sdk-CastFrameworkAssets'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'CastFrameworkAssets.bundle'>

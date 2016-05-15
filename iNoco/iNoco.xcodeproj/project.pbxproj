@@ -53,6 +53,7 @@
 		4F45950F196328C60061381E /* Octicons-search.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F45950B196328C60061381E /* Octicons-search.png */; };
 		4F459510196328C60061381E /* Octicons-search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F45950C196328C60061381E /* Octicons-search@2x.png */; };
 		4F459513196330020061381E /* NLTFamily.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F459512196330020061381E /* NLTFamily.m */; };
+		4F5108111CE8AEE2008B3A76 /* fond03.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F5108101CE8AEE2008B3A76 /* fond03.png */; };
 		4F57E2F519D9E0D700269473 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4F57E2F419D9E0D700269473 /* Settings.bundle */; };
 		4F636A471952F0DA004C0A18 /* NLTAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F636A461952F0DA004C0A18 /* NLTAPI.m */; };
 		4F636A4B1955C5F5004C0A18 /* EL_S14s25_1085838.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F636A4A1955C5F5004C0A18 /* EL_S14s25_1085838.jpg */; };
@@ -251,6 +252,7 @@
 		4F45950C196328C60061381E /* Octicons-search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octicons-search@2x.png"; sourceTree = "<group>"; };
 		4F459511196330020061381E /* NLTFamily.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLTFamily.h; sourceTree = "<group>"; };
 		4F459512196330020061381E /* NLTFamily.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLTFamily.m; sourceTree = "<group>"; };
+		4F5108101CE8AEE2008B3A76 /* fond03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fond03.png; sourceTree = "<group>"; };
 		4F57E2F419D9E0D700269473 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		4F636A451952F0DA004C0A18 /* NLTAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLTAPI.h; sourceTree = "<group>"; };
 		4F636A461952F0DA004C0A18 /* NLTAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLTAPI.m; sourceTree = "<group>"; };
@@ -555,6 +557,7 @@
 				4F37F36D1969E3EE00D0AACC /* heart_on.png */,
 				4F2175C6196CACB10005EB14 /* avatar-round.png */,
 				4F2175C8196CAFD60005EB14 /* fond02.png */,
+				4F5108101CE8AEE2008B3A76 /* fond03.png */,
 				4FEB0C6C1972D50700A84A39 /* download.png */,
 				4FEB0C6D1972D50700A84A39 /* downloadPending.png */,
 				4FEB0C6E1972D50700A84A39 /* ok.png */,
@@ -916,6 +919,7 @@
 				4F2BE1331CD16AA80067CC41 /* LaunchScreen.xib in Resources */,
 				4F459504196324BA0061381E /* iTunesArtwork.png in Resources */,
 				4F4594FA196324BA0061381E /* Icon-72.png in Resources */,
+				4F5108111CE8AEE2008B3A76 /* fond03.png in Resources */,
 				4FD084951978778800A99958 /* csa_16_black.png in Resources */,
 				4FEB0C6F1972D50700A84A39 /* download.png in Resources */,
 				4F3DE0A3196CA47C00D2A0B7 /* nolife.png in Resources */,

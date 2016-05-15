@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '206C56027521C2D7F437A6FC'
+               BlueprintIdentifier = '298303086BA17A0D7A729E4D'
                BlueprintName = 'GroupSettingsManager'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libGroupSettingsManager.a'>

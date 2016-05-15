@@ -91,6 +91,7 @@
     self.title.text = @"Chargement ...";
     self.subtitle.text = @"";
     self.time.text = @"";
+    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.imageView.image = [UIImage imageNamed:@"noco.png"];
     self.imageView.backgroundColor = [UIColor whiteColor];
     
@@ -157,7 +158,10 @@
         }
         if(show.screenshot_512x288){
 #warning Find alternative screenshot when not available
-            [self.imageView sd_setImageWithURL:[NSURL URLWithString:show.screenshot_512x288] placeholderImage:[UIImage imageNamed:@"noco.png"]];
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:show.screenshot_512x288] placeholderImage:[UIImage imageNamed:@"noco.png"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                self.imageView.contentMode = UIViewContentModeScaleAspectFill;
+                [self.imageView.superview sendSubviewToBack:self.imageView];
+            }];
         }
     }
 }
