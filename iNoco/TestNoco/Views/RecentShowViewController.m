@@ -44,6 +44,12 @@
     [self refreshControlSetup];
     self.watchSegmentedControl.selectedSegmentIndex = [self memorizedSegmentedControl];
     
+    if(IS_IPAD){
+        [self.collectionView registerNib:[UINib nibWithNibName:@"IPadShowCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:@"ShowsCell"];
+    }else{
+        [self.collectionView registerNib:[UINib nibWithNibName:@"ShowCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:@"ShowsCell"];
+    }
+    
 }
 
 - (void)toggleFilterView:(BOOL)enable{
@@ -745,19 +751,45 @@
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
-    UIEdgeInsets edgeInset = UIEdgeInsetsMake(0,0,0,0);
     BOOL displayFilter = self.family != nil;
     displayFilter = displayFilter || (ALWAYS_DISPLAY_READFILTER_IN_RECENT_SHOWS && [self isMemberOfClass:[RecentShowViewController class]]);
-    //displayFilter = displayFilter || ([self memorizedSegmentedControl] != 0 && [self isMemberOfClass:[RecentShowViewController class]]);
     displayFilter = displayFilter || (self.filterView.hidden == FALSE && [self isMemberOfClass:[RecentShowViewController class]]);
+    
+    float topMargin = 0;
     if(displayFilter ){
-        edgeInset = UIEdgeInsetsMake(self.filterView.frame.size.height,0,0,0);
+        topMargin = self.filterView.frame.size.height;
     }
+    UIEdgeInsets edgeInset = UIEdgeInsetsMake(topMargin,0,0,0);
+
     return edgeInset;
 }
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout  *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    CGSize cellSize = CGSizeMake(156., 159.);;
+    //Adjust cell size for device size
+    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ){
+        // iPad
+        cellSize = CGSizeMake(245., 280.);
+    }else{
+        float spacing = ((UICollectionViewFlowLayout*)self.collectionView.collectionViewLayout).minimumInteritemSpacing;
+        float cellWidth = (self.collectionView.frame.size.width - spacing)/2;
+        // Adjust cell size for orientation
+        if (UIDeviceOrientationIsLandscape( [[UIDevice currentDevice] orientation])) {
+            cellWidth = (self.collectionView.frame.size.width - 3*spacing)/4;
+        }
+        // Below 156 for height, it will be difficult to properly display everything
+        cellWidth = MAX(cellWidth, 156);
+        cellSize = CGSizeMake(cellWidth, cellWidth);
+    }
+    
+    return cellSize;
+}
+#pragma mark - Rotation
+
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
     [self fixNavigationBarRelativePosition];
+    // To force update to cells size
+    [self.collectionView performBatchUpdates:nil completion:nil];
 }
 
 - (void)fixNavigationBarRelativePosition{
@@ -779,6 +811,8 @@
 - (BOOL)prefersStatusBarHidden {
     return NO;
 }
+
+#pragma mark - Cleanup
 
 -(void)dealloc{
     [[NLTAPI sharedInstance] cancelCallsWithKey:self];
