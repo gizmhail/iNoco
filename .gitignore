@@ -21,3 +21,6 @@ iNoco/Crashlytics.framework/Versions/Current
 
 iNoco/TestNoco/crashlytics.sh
 iNoco/build
+*.xcuserstate
+iNoco/Pods/google-cast-sdk/GoogleCastSDK-2.10.4-Release/GoogleCast.framework/Versions/A/GoogleCast
+iNoco/Pods/google-cast-sdk
