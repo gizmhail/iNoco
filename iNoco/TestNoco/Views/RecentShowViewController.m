@@ -544,7 +544,7 @@
 
 - (void)filterShowsAtPage:(long)page{
     if(self.filter){
-        NSArray* shows = [self.resultByPage objectForKey:[NSNumber numberWithInt:page]];
+        NSArray* shows = [self.resultByPage objectForKey:[NSNumber numberWithLong:page]];
         if(shows){
             NSMutableArray* filteredShows = [NSMutableArray array];
             for (NLTShow* show in shows) {

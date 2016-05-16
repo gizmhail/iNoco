@@ -26,12 +26,12 @@
                   moduleName = "iNoco"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/gizmhail/Documents/iOS/Noco/git/iNoco/iNoco/TestNoco/Core/ShowPlayerManager.m"
-                  timestampString = "485094449.233553"
+                  timestampString = "485096117.575575"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "325"
                   endingLineNumber = "325"
-                  offsetFromSymbolStart = "427">
+                  offsetFromSymbolStart = "484">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -41,12 +41,12 @@
                   moduleName = "iNoco"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/gizmhail/Documents/iOS/Noco/git/iNoco/iNoco/TestNoco/Core/ShowPlayerManager.m"
-                  timestampString = "485094449.233672"
+                  timestampString = "485096117.575687"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "325"
                   endingLineNumber = "325"
-                  offsetFromSymbolStart = "83">
+                  offsetFromSymbolStart = "88">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -112,6 +112,22 @@
             startingLineNumber = "303"
             endingLineNumber = "303"
             landmarkName = "-notificationMPMoviePlayerPlaybackDidFinishNotification:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TestNoco/AppDelegate.m"
+            timestampString = "485095930.365978"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "370"
+            endingLineNumber = "370"
+            landmarkName = "-application:performActionForShortcutItem:completionHandler:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

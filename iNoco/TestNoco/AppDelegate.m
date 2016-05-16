@@ -379,7 +379,7 @@ void uncaughtExceptionHandler(NSException *exception) {
                 if([shortcutItem.type isEqualToString:@"name.poivre.iNoco.started"]){
                     watchListSection = [watchListViewController resumePlaySection];
                 }
-                if(watchListSection > 0){
+                if(watchListSection >= 0){
                     tabbarController.selectedViewController = navController;
                     [navController popToRootViewControllerAnimated:NO];
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
