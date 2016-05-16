@@ -377,22 +377,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "TestNoco/Core/ShowPlayerManager.m"
-            timestampString = "450125790.538849"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "204"
-            endingLineNumber = "204"
-            landmarkName = "-notificationMPMoviePlayerPlaybackDidFinishNotification:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "TestNoco/Core/NocoDownloadsManager.m"
             timestampString = "449612733.364162"
             startingColumnNumber = "9223372036854775807"
@@ -496,22 +480,6 @@
             startingLineNumber = "87"
             endingLineNumber = "87"
             landmarkName = "-addSkipBackupAttributeToItemAtURL:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TestNoco/Views/ShowViewController.m"
-            timestampString = "450301376.754166"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "731"
-            endingLineNumber = "731"
-            landmarkName = "-updateInterctiveUI"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

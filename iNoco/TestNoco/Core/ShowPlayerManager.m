@@ -185,21 +185,39 @@
                                              selector:@selector(notificationMPMoviePlayerLoadStateDidChangeNotification:)
                                                  name:MPMoviePlayerLoadStateDidChangeNotification
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(notificationMPMoviePlayerPlaybackStateDidChangeNotification:)
+                                                 name:MPMoviePlayerPlaybackStateDidChangeNotification
+                                               object:nil];
+    
+    
+    
 }
 
-- (void)notificationMPMoviePlayerLoadStateDidChangeNotification:(NSNotification*)notif{
-#ifdef DEBUG
-    NSLog(@"Load state %li", (long)self.moviePlayer.loadState);
-#endif
-    if(self.moviePlayer.loadState & MPMovieLoadStatePlayable){
-        [self playerCustomUI];
-    }
+- (void)notificationMPMoviePlayerPlaybackStateDidChangeNotification:(NSNotification*)notif{
     MPMoviePlayerController* player = (MPMoviePlayerController*)notif.object;
+#ifdef DEBUG
+    NSLog(@"Load state %li / Playback state: %li",
+          (long)self.moviePlayer.loadState,
+          (long)player.playbackState);
+#endif
     if ( player.playbackState == MPMoviePlaybackStatePlaying) {
         if(!playbackDurationSet){
             [self.moviePlayer setCurrentPlaybackTime:initialProgress];
             playbackDurationSet=YES;
         }
+    }
+}
+
+- (void)notificationMPMoviePlayerLoadStateDidChangeNotification:(NSNotification*)notif{
+    MPMoviePlayerController* player = (MPMoviePlayerController*)notif.object;
+#ifdef DEBUG
+    NSLog(@" -> Load state %li / Playback state: %li",
+          (long)self.moviePlayer.loadState,
+          (long)player.playbackState);
+#endif
+    if(self.moviePlayer.loadState & MPMovieLoadStatePlayable){
+        [self playerCustomUI];
     }
 }
 
@@ -296,6 +314,7 @@
 - (void)progressUpdate{
     if(self.moviePlayer && self.moviePlayer.playbackState == MPMoviePlaybackStatePlaying && self.currentShow){
         [[NLTAPI sharedInstance] setResumePlay:1000*self.moviePlayer.currentPlaybackTime forShow:self.currentShow withResultBlock:^(id result, NSError *error) {
+            
         } withKey:self];
     }
 }
@@ -496,6 +515,7 @@
 }
 
 - (void)playerCustomUI{
+    // Change the behavior of previous and next buttons
     NSArray *windows = [[UIApplication sharedApplication] windows];
     for (UIWindow*window in windows) {
         NSMutableArray* playerButtons = [NSMutableArray array];
