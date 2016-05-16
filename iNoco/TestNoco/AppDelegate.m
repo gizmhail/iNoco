@@ -16,6 +16,8 @@
 #import "RecentShowViewController.h"
 #import "GroupSettingsManager.h"
 #import "NolifeEPGViewControllerTableViewController.h"
+#import "ShowViewController.h"
+#import "WatchListViewController.h"
 
 void uncaughtExceptionHandler(NSException *exception) {
     NSLog(@"CRASH: %@", exception);
@@ -147,22 +149,20 @@ void uncaughtExceptionHandler(NSException *exception) {
     }
     
     if(interruptedShow && interruptedShow.id_show){
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            NSString* title = @"";
-            if(interruptedShow.family_TT){
-                title = interruptedShow.family_TT;
-                if(interruptedShow.episode_number && interruptedShow.episode_number != 0){
-                    if(interruptedShow.season_number > 1){
-                        title = [title stringByAppendingFormat:@" - S%02iE%02i", interruptedShow.season_number,interruptedShow.episode_number];
-                    }else{
-                        title = [title stringByAppendingFormat:@" - %i", interruptedShow.episode_number];
-                    }
+        // We check that we are not already playing this show
+        UITabBarController* tabbarController = (UITabBarController*)self.window.rootViewController;
+        if([tabbarController.selectedViewController isKindOfClass:[UINavigationController class]]){
+            UINavigationController* currentTab = (UINavigationController*)tabbarController.selectedViewController;
+            if([currentTab.topViewController isKindOfClass:[ShowViewController class]]){
+                ShowViewController* currentViewController = (ShowViewController*)currentTab.topViewController;
+                if(currentViewController.show.id_show == interruptedShow.id_show){
+                    // We are already playing this show, no need to display the popup
+                    return;
                 }
             }
-            if(interruptedShow.show_TT){
-                title = [title stringByAppendingFormat:@" - %@", interruptedShow.show_TT];
-                
-            }
+        }
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSString* title = [interruptedShow showFullTitle];
             self.interruptedAlertview = [[UIAlertView alloc] initWithTitle:@"Continuer la lecture ?" message:[NSString stringWithFormat:@"Voulez-vous reprendre la lecture de la dernière émission interrompue (%@) ?",title] delegate:self cancelButtonTitle:@"Non" otherButtonTitles:@"Oui", nil];
             [self.interruptedAlertview show];
         });
@@ -356,5 +356,46 @@ void uncaughtExceptionHandler(NSException *exception) {
     }
 }
 
+#pragma mark - 3D Touch
+
+- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler{
+    long watchListSection = -1;
+    
+    UITabBarController* tabbarController = (UITabBarController*)self.window.rootViewController;
+    for (UINavigationController* navController in tabbarController.viewControllers) {
+        if([navController isKindOfClass:[UINavigationController class]]){
+            if([[navController.viewControllers firstObject] isKindOfClass:[WatchListViewController class]]){
+                WatchListViewController* watchListViewController = (WatchListViewController*)[navController.viewControllers firstObject];
+                
+                if([shortcutItem.type isEqualToString:@"name.poivre.iNoco.watchlist"]){
+                    watchListSection = [watchListViewController watchListSection];
+                }
+                if([shortcutItem.type isEqualToString:@"name.poivre.iNoco.downloads"]){
+                    watchListSection = [watchListViewController downloadsSection];
+                }
+                if([shortcutItem.type isEqualToString:@"name.poivre.iNoco.favorites"]){
+                    watchListSection = [watchListViewController favoriteFamilySection];
+                }
+                if([shortcutItem.type isEqualToString:@"name.poivre.iNoco.started"]){
+                    watchListSection = [watchListViewController resumePlaySection];
+                }
+                if(watchListSection > 0){
+                    tabbarController.selectedViewController = navController;
+                    [navController popToRootViewControllerAnimated:NO];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [watchListViewController.collectionView.collectionViewLayout prepareLayout];
+                        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:0 inSection:watchListSection];
+                        
+                        CGFloat offsetY = [watchListViewController.collectionView layoutAttributesForSupplementaryElementOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath].frame.origin.y;
+                        CGFloat sectionInsetY = ((UICollectionViewFlowLayout *)watchListViewController.collectionView.collectionViewLayout).sectionInset.top;
+                        [watchListViewController.collectionView setContentOffset:CGPointMake(watchListViewController.collectionView.contentOffset.x, offsetY - sectionInsetY) animated:YES];                        
+                    });
+                }
+
+            }
+        }
+    }
+
+}
 
 @end

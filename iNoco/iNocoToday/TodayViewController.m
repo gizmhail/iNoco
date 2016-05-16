@@ -325,7 +325,6 @@
             timeLabel.text = [formater stringFromDate:show.broadcastDate];
         }
         if(show.screenshot_512x288){
-#warning Find alternative screenshot when not available
             [imageView sd_setImageWithURL:[NSURL URLWithString:show.screenshot_512x288] placeholderImage:[UIImage imageNamed:@"noco.png"]];
         }
     }

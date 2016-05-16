@@ -288,6 +288,7 @@
 #endif
         NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
         [settings removeObjectForKey:@"InterruptedShow" ];
+        [UIApplication sharedApplication].shortcutItems = @[];
         [settings synchronize];
 
         [self switchToNextShow];
@@ -297,6 +298,12 @@
         NSData* cacheData = [NSKeyedArchiver archivedDataWithRootObject:self.currentShow.rawShow];
 
         [settings setObject:cacheData forKey:@"InterruptedShow" ];
+        /**
+         TODO: Add later when iOS support when than 4 quick actions
+        [UIApplication sharedApplication].shortcutItems = @[
+            [[UIApplicationShortcutItem alloc]initWithType:@"name.poivre.iNoco.InterruptedShow" localizedTitle:[self.currentShow showFullTitle] localizedSubtitle:nil icon:nil userInfo:nil]
+        ];
+         */
         [settings synchronize];
         [self removeCustomUI];
         [self.moviePlayer.view removeFromSuperview];

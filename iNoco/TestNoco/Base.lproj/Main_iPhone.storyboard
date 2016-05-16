@@ -1345,7 +1345,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="EPGCell" rowHeight="80" id="fgZ-FH-ibJ" customClass="EPGTableViewCell">
-                                <rect key="frame" x="0.0" y="22" width="320" height="80"/>
+                                <rect key="frame" x="0.0" y="86" width="320" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fgZ-FH-ibJ" id="zv1-A2-HUg">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
@@ -1769,8 +1769,8 @@ Les geeks ont une vie. Même s'ils ne bougent pas beaucoup.</string>
         <image name="noco.png" width="460" height="160"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="etX-5O-isD"/>
-        <segue reference="SK6-5m-Pcy"/>
-        <segue reference="NRb-n4-HGn"/>
+        <segue reference="WbY-uH-vXB"/>
+        <segue reference="Zd2-bH-dfy"/>
+        <segue reference="j4N-YV-D3C"/>
     </inferredMetricsTieBreakers>
 </document>

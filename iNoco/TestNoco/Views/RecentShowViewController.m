@@ -49,6 +49,7 @@
     }else{
         [self.collectionView registerNib:[UINib nibWithNibName:@"ShowCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:@"ShowsCell"];
     }
+    [self.collectionView registerNib:[UINib nibWithNibName:@"FamilyCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:@"FamilllyCell"];
     
 }
 

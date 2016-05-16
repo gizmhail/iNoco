@@ -12,4 +12,10 @@
 @interface WatchListViewController : RecentShowViewController
 @property (weak, nonatomic) IBOutlet UILabel *emptyMessageLabel;
 
+
+- (long)downloadsSection;
+- (long)watchListSection;
+- (long)favoriteFamilySection;
+- (long)resumePlaySection;
+
 @end

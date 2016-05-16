@@ -112,5 +112,6 @@
 - (NSString*)durationString;
 + (NSString*)durationString:(int)durationMS;
 + (NSString*)detailedDurationString:(int)durationMS;
+- (NSString*)showFullTitle;
 
 @end

@@ -103,6 +103,16 @@
 		4FA802FC1962017900E820B9 /* WatchListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA802FB1962017900E820B9 /* WatchListViewController.m */; };
 		4FA802FE19621E7000E820B9 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FA802FD19621E7000E820B9 /* AVFoundation.framework */; };
 		4FA8125A19ED39D600548794 /* noco.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F636A881957878E004C0A18 /* noco.png */; };
+		4FC218251CE9E10A008E5D2C /* downloadShorcut.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC218211CE9E10A008E5D2C /* downloadShorcut.png */; };
+		4FC218261CE9E10A008E5D2C /* favoriteShortcut.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC218221CE9E10A008E5D2C /* favoriteShortcut.png */; };
+		4FC218271CE9E10A008E5D2C /* startedShortcut.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC218231CE9E10A008E5D2C /* startedShortcut.png */; };
+		4FC218281CE9E10A008E5D2C /* watchListShortcut.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC218241CE9E10A008E5D2C /* watchListShortcut.png */; };
+		4FC2182D1CE9E268008E5D2C /* downloadShorcut@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC218291CE9E268008E5D2C /* downloadShorcut@2x.png */; };
+		4FC2182E1CE9E268008E5D2C /* favoriteShortcut@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC2182A1CE9E268008E5D2C /* favoriteShortcut@2x.png */; };
+		4FC2182F1CE9E268008E5D2C /* startedShortcut@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC2182B1CE9E268008E5D2C /* startedShortcut@2x.png */; };
+		4FC218301CE9E268008E5D2C /* watchListShortcut@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC2182C1CE9E268008E5D2C /* watchListShortcut@2x.png */; };
+		4FC218321CE9EC07008E5D2C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FC218311CE9EC07008E5D2C /* Images.xcassets */; };
+		4FC218341CE9F270008E5D2C /* FamilyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FC218331CE9F270008E5D2C /* FamilyCell.xib */; };
 		4FC35B7B19E477090069C0DD /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FC35B7A19E477090069C0DD /* NotificationCenter.framework */; };
 		4FC35B8119E477090069C0DD /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC35B8019E477090069C0DD /* TodayViewController.m */; };
 		4FC35B8319E477090069C0DD /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FC35B8219E477090069C0DD /* MainInterface.storyboard */; };
@@ -329,6 +339,16 @@
 		4FA802FB1962017900E820B9 /* WatchListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WatchListViewController.m; sourceTree = "<group>"; };
 		4FA802FD19621E7000E820B9 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4FBD2B50196E72A40012A2E6 /* credentials.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = credentials.h; sourceTree = "<group>"; };
+		4FC218211CE9E10A008E5D2C /* downloadShorcut.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downloadShorcut.png; sourceTree = "<group>"; };
+		4FC218221CE9E10A008E5D2C /* favoriteShortcut.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favoriteShortcut.png; sourceTree = "<group>"; };
+		4FC218231CE9E10A008E5D2C /* startedShortcut.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = startedShortcut.png; sourceTree = "<group>"; };
+		4FC218241CE9E10A008E5D2C /* watchListShortcut.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = watchListShortcut.png; sourceTree = "<group>"; };
+		4FC218291CE9E268008E5D2C /* downloadShorcut@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "downloadShorcut@2x.png"; sourceTree = "<group>"; };
+		4FC2182A1CE9E268008E5D2C /* favoriteShortcut@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favoriteShortcut@2x.png"; sourceTree = "<group>"; };
+		4FC2182B1CE9E268008E5D2C /* startedShortcut@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "startedShortcut@2x.png"; sourceTree = "<group>"; };
+		4FC2182C1CE9E268008E5D2C /* watchListShortcut@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "watchListShortcut@2x.png"; sourceTree = "<group>"; };
+		4FC218311CE9EC07008E5D2C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = iNoco/Images.xcassets; sourceTree = "<group>"; };
+		4FC218331CE9F270008E5D2C /* FamilyCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FamilyCell.xib; sourceTree = "<group>"; };
 		4FC35B7419E473AE0069C0DD /* iNoco.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = iNoco.entitlements; sourceTree = "<group>"; };
 		4FC35B7919E477090069C0DD /* iNocoToday.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = iNocoToday.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FC35B7A19E477090069C0DD /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
@@ -533,6 +553,7 @@
 		4F636A491955C5E0004C0A18 /* img */ = {
 			isa = PBXGroup;
 			children = (
+				4FC218201CE9E0EF008E5D2C /* 3DTouch */,
 				4F3DE09B196C9A4900D2A0B7 /* splashscreen */,
 				4F4594E5196324BA0061381E /* icon */,
 				4F636A4A1955C5F5004C0A18 /* EL_S14s25_1085838.jpg */,
@@ -654,6 +675,21 @@
 			path = Cast;
 			sourceTree = "<group>";
 		};
+		4FC218201CE9E0EF008E5D2C /* 3DTouch */ = {
+			isa = PBXGroup;
+			children = (
+				4FC218291CE9E268008E5D2C /* downloadShorcut@2x.png */,
+				4FC2182A1CE9E268008E5D2C /* favoriteShortcut@2x.png */,
+				4FC2182B1CE9E268008E5D2C /* startedShortcut@2x.png */,
+				4FC2182C1CE9E268008E5D2C /* watchListShortcut@2x.png */,
+				4FC218211CE9E10A008E5D2C /* downloadShorcut.png */,
+				4FC218221CE9E10A008E5D2C /* favoriteShortcut.png */,
+				4FC218231CE9E10A008E5D2C /* startedShortcut.png */,
+				4FC218241CE9E10A008E5D2C /* watchListShortcut.png */,
+			);
+			path = 3DTouch;
+			sourceTree = "<group>";
+		};
 		4FC35B7C19E477090069C0DD /* iNocoToday */ = {
 			isa = PBXGroup;
 			children = (
@@ -677,6 +713,7 @@
 		4FEECD511949D683002514CE = {
 			isa = PBXGroup;
 			children = (
+				4FC218311CE9EC07008E5D2C /* Images.xcassets */,
 				4FC35B7419E473AE0069C0DD /* iNoco.entitlements */,
 				4F9278571980449800DB138B /* iPad */,
 				4FEECD631949D683002514CE /* TestNoco */,
@@ -774,6 +811,7 @@
 				4F92784F197E56AD00DB138B /* ShowCollectionViewCell.h */,
 				4F927850197E56AD00DB138B /* ShowCollectionViewCell.m */,
 				4FF22C711CE868CE002A0E53 /* IPadShowCell.xib */,
+				4FC218331CE9F270008E5D2C /* FamilyCell.xib */,
 			);
 			path = ShowCell;
 			sourceTree = "<group>";
@@ -917,6 +955,7 @@
 				BD6670DF1B70A2D700487369 /* Octicons-playback-fast-forward.svg.png in Resources */,
 				4F37F36F1969E3EE00D0AACC /* heart_on.png in Resources */,
 				4F2BE1331CD16AA80067CC41 /* LaunchScreen.xib in Resources */,
+				4FC218321CE9EC07008E5D2C /* Images.xcassets in Resources */,
 				4F459504196324BA0061381E /* iTunesArtwork.png in Resources */,
 				4F4594FA196324BA0061381E /* Icon-72.png in Resources */,
 				4F5108111CE8AEE2008B3A76 /* fond03.png in Resources */,
@@ -928,13 +967,17 @@
 				4F636A991958BBD6004C0A18 /* Octicons-info.png in Resources */,
 				BD15CE0E1B738D930023309A /* Octicons-jump-left.svg.png in Resources */,
 				4F3DE09F196C9A6600D2A0B7 /* Default-568h@2x.png in Resources */,
+				4FC218271CE9E10A008E5D2C /* startedShortcut.png in Resources */,
 				4F636AA21958C56A004C0A18 /* Octicons-bookmark@2x.png in Resources */,
 				4F4594F8196324BA0061381E /* Icon-60.png in Resources */,
 				4F636AA11958C56A004C0A18 /* Octicons-bookmark.png in Resources */,
 				4F45950E196328C60061381E /* Octicons-clock@2x.png in Resources */,
 				4F636A951958BB83004C0A18 /* Octicons-calendar.png in Resources */,
+				4FC2182D1CE9E268008E5D2C /* downloadShorcut@2x.png in Resources */,
+				4FC2182F1CE9E268008E5D2C /* startedShortcut@2x.png in Resources */,
 				4FD0848E19756AA100A99958 /* noco-app-logo.png in Resources */,
 				4F636A4B1955C5F5004C0A18 /* EL_S14s25_1085838.jpg in Resources */,
+				4FC218251CE9E10A008E5D2C /* downloadShorcut.png in Resources */,
 				4F37F36E1969E3EE00D0AACC /* heart_off.png in Resources */,
 				4F3DE0A1196C9A6600D2A0B7 /* Default@2x.png in Resources */,
 				4FEB0C711972D50700A84A39 /* ok.png in Resources */,
@@ -942,14 +985,17 @@
 				4F459502196324BA0061381E /* Icon.png in Resources */,
 				4F4594FE196324BA0061381E /* Icon-Small-50.png in Resources */,
 				4FF22C721CE868CE002A0E53 /* IPadShowCell.xib in Resources */,
+				4FC218261CE9E10A008E5D2C /* favoriteShortcut.png in Resources */,
 				4F4594F7196324BA0061381E /* Icon-40@2x.png in Resources */,
 				4F3DE0A0196C9A6600D2A0B7 /* Default.png in Resources */,
 				4F459503196324BA0061381E /* Icon@2x.png in Resources */,
 				4F636A961958BB83004C0A18 /* Octicons-calendar@2x.png in Resources */,
 				4F636AA41958C60A004C0A18 /* Octicons-playback-play.png in Resources */,
 				4F2175C7196CACB10005EB14 /* avatar-round.png in Resources */,
+				4FC218281CE9E10A008E5D2C /* watchListShortcut.png in Resources */,
 				4F92785D19807EC800DB138B /* Default768x1024@2x.png in Resources */,
 				4F459505196324BA0061381E /* iTunesArtwork@2x.png in Resources */,
+				4FC218341CE9F270008E5D2C /* FamilyCell.xib in Resources */,
 				4FD084931978778800A99958 /* csa_10_black.png in Resources */,
 				4F4594FD196324BA0061381E /* Icon-76@2x.png in Resources */,
 				BD6670E41B70A6F100487369 /* Octicons-playback-play_cropped.png in Resources */,
@@ -959,6 +1005,7 @@
 				4FF22C701CE8582D002A0E53 /* ShowCell.xib in Resources */,
 				4F636A9A1958BBD6004C0A18 /* Octicons-info@2x.png in Resources */,
 				4F459500196324BA0061381E /* Icon-Small.png in Resources */,
+				4FC2182E1CE9E268008E5D2C /* favoriteShortcut@2x.png in Resources */,
 				4F1254BE1951F597003FEEA5 /* README.md in Resources */,
 				4F636AB4195E9F3A004C0A18 /* eye_btn.png in Resources */,
 				4F92785E19807EC800DB138B /* Default1024x768.png in Resources */,
@@ -973,6 +1020,7 @@
 				4F4594F6196324BA0061381E /* Icon-40.png in Resources */,
 				4F92785C19807EC800DB138B /* Default768x1024.png in Resources */,
 				4FD084961978778800A99958 /* csa_18_black.png in Resources */,
+				4FC218301CE9E268008E5D2C /* watchListShortcut@2x.png in Resources */,
 				4F2175C3196CA7290005EB14 /* fond01.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1340,6 +1388,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A40A6AAA3125511B37DD89C3 /* Pods-iNoco.debug.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CODE_SIGN_ENTITLEMENTS = iNoco.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1365,6 +1415,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9414F5B298449A2ADB5F19E8 /* Pods-iNoco.release.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CODE_SIGN_ENTITLEMENTS = iNoco.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";

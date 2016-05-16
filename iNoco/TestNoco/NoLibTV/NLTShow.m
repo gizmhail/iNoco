@@ -128,4 +128,22 @@
 #endif
 }
 
+- (NSString*)showFullTitle{
+    NSString* title = @"";
+    if(self.family_TT){
+        title = self.family_TT;
+        if(self.episode_number && self.episode_number != 0){
+            if(self.season_number > 1){
+                title = [title stringByAppendingFormat:@" - S%02iE%02i", self.season_number,self.episode_number];
+            }else{
+                title = [title stringByAppendingFormat:@" - %i", self.episode_number];
+            }
+        }
+    }
+    if(self.show_TT){
+        title = [title stringByAppendingFormat:@" - %@", self.show_TT];
+        
+    }
+    return title;
+}
 @end
