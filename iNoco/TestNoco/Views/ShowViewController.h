@@ -51,6 +51,7 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *castActivity;
 @property (weak, nonatomic) IBOutlet UIView *castTimeView;
 @property (weak, nonatomic) IBOutlet UIView *castChapterView;
+@property (weak, nonatomic) IBOutlet UIView *progressionView;
 
 - (IBAction)castClick:(id)sender;
 - (IBAction)play:(id)sender;

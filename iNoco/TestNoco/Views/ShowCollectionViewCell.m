@@ -12,7 +12,7 @@
 
 @implementation ShowCollectionViewCell
 
-//Lazy may to bind views ;)
+//Lazy way to bind views ;)
 - (void)loadOutletWithTags{
     self.imageView = (UIImageView*)[self viewWithTag:100];
     self.title = (UILabel*)[self viewWithTag:110];

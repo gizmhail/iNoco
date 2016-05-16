@@ -223,6 +223,7 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         if(progressNumber){
             progress = ((float)[progressNumber integerValue])/1000.0;
             [self updateCastPlayerView];//For default position for progress
+            [self updateProgressView];
         }
     } withKey:self];
 
@@ -433,6 +434,7 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
         progress = lastKnownProgress;
     }
     [self updateCastPlayerView];
+    [self updateProgressView];
 }
 
 - (void)updateFromCastFinished{
@@ -652,6 +654,7 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
 #pragma mark ShowPlayerManagerDelegate
 - (void)progressChanged:(float)p{
     progress = p;
+    [self updateProgressView];
 }
 
 - (void)moviePlayerDidExitFullscreen{
@@ -718,6 +721,20 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
 
 #pragma mark Update UI
 
+
+- (void)updateProgressView{
+    float width = 42.0;
+    if(progress > 0){
+        self.durationLabel.text = [NSString stringWithFormat:@"%@/%@",
+                                   [NLTShow durationString:progress*1000],
+                                   [self.show durationString]
+                                   ];
+        width *= 2;
+    }
+    float position = self.progressionView.superview.frame.size.width - 5 - width;
+    self.progressionView.frame = CGRectMake(position, self.progressionView.frame.origin.y, width, self.progressionView.frame.size.height);
+}
+
 - (void)updateInterctiveUI{
     if(self.readImageButton.selected){
         self.readImageButton.backgroundColor = SELECTED_VALID_COLOR;
@@ -743,14 +760,12 @@ static NSString * const playListNewerToOlder  = @"de la + récente à la + ancie
             self.downloadedVersionLabel.hidden = FALSE;
             self.downloadedVersionBackground.hidden = FALSE;
         }
-#warning TODO
     }else{
             if([[NocoDownloadsManager sharedInstance] isDownloadPending:self.show]){
                 [self.downloadTextButton setTitle:@"téléchargement en cours..." forState:UIControlStateNormal];
                 [self.downloadImageButton setImage:[UIImage imageNamed:@"downloadPending.png"] forState:UIControlStateNormal];
                 self.downloadImageButton.frame = CGRectMake(self.downloadView.frame.size.width - 20, 5, 16, 20);
                 self.downloadProgress.hidden = FALSE;
-#warning TODO
             }else{
                 [self.downloadTextButton setTitle:@"télécharger" forState:UIControlStateNormal];
                 [self.downloadImageButton setImage:[UIImage imageNamed:@"download.png"] forState:UIControlStateNormal];

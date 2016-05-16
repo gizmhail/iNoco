@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="8YX-ce-x5E">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="8YX-ce-x5E">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
         <!--récents-->
@@ -565,7 +565,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                                     </view>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="210" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1h40" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eUF-Pq-aXe">
                                                         <rect key="frame" x="0.0" y="0.0" width="42" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
@@ -998,6 +998,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                         <outlet property="imageView" destination="3TQ-T4-a7P" id="2fQ-ed-ksh"/>
                         <outlet property="infoBackground" destination="vGZ-EY-OvS" id="8eC-cZ-TqI"/>
                         <outlet property="partnerImageView" destination="pv5-bF-IOu" id="yAX-g2-Kmo"/>
+                        <outlet property="progressionView" destination="D9l-iN-Mdu" id="NfH-d8-tgr"/>
                         <outlet property="readBackground" destination="L7t-67-GIf" id="6WH-4n-zRK"/>
                         <outlet property="readButton" destination="HXu-2A-yCR" id="Zgh-IG-q1h"/>
                         <outlet property="readImageButton" destination="8bq-DA-lff" id="8bd-tJ-5je"/>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15E65" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="zsp-ER-5aI">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="zsp-ER-5aI">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
         <!--récents-->
@@ -534,6 +534,143 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                         </subviews>
                                         <color key="backgroundColor" white="0.92894616789999995" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
+                                    <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="1aM-WK-zTJ">
+                                        <rect key="frame" x="0.0" y="517" width="768" height="280"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="30" minimumInteritemSpacing="3" id="WoW-Gs-EoV">
+                                            <size key="itemSize" width="245" height="280"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ShowsCell" id="Urw-n6-jgg" customClass="ShowCollectionViewCell">
+                                                <rect key="frame" x="10" y="0.0" width="245" height="280"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                                    <rect key="frame" x="0.0" y="0.0" width="245" height="280"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="100" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="EL_S14s25_1085838.jpg" id="8xn-hb-amE">
+                                                            <rect key="frame" x="4" y="4" width="241" height="138"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        </imageView>
+                                                        <view tag="300" contentMode="scaleToFill" id="Lph-9g-dLg">
+                                                            <rect key="frame" x="8" y="122" width="10" height="10"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <subviews>
+                                                                <view alpha="0.64999997615814209" tag="305" contentMode="scaleToFill" id="ck1-r0-MGA">
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                                </view>
+                                                                <button opaque="NO" tag="310" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ZUX-La-vuS">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="10" height="10"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                    <color key="backgroundColor" red="0.086274512110000007" green="0.53333336109999996" blue="0.80000007149999997" alpha="1" colorSpace="deviceRGB"/>
+                                                                    <accessibility key="accessibilityConfiguration">
+                                                                        <bool key="isElement" value="NO"/>
+                                                                    </accessibility>
+                                                                    <state key="normal" image="eye_btn.png">
+                                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
+                                                                    <connections>
+                                                                        <action selector="watchListClick:" destination="JAW-94-Ybq" eventType="touchUpInside" id="a25-I4-bfY"/>
+                                                                    </connections>
+                                                                </button>
+                                                            </subviews>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        </view>
+                                                        <view tag="400" contentMode="scaleToFill" id="9df-SZ-pKG">
+                                                            <rect key="frame" x="226" y="122" width="10" height="10"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                            <subviews>
+                                                                <view alpha="0.64999997615814209" tag="405" contentMode="scaleToFill" id="Uzn-XB-tId">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="10" height="10"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                                </view>
+                                                                <button opaque="NO" tag="410" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="OJw-3W-aET">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="10" height="10"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                    <color key="backgroundColor" red="0.086274512110000007" green="0.53333336109999996" blue="0.80000007149999997" alpha="1" colorSpace="deviceRGB"/>
+                                                                    <accessibility key="accessibilityConfiguration">
+                                                                        <bool key="isElement" value="NO"/>
+                                                                    </accessibility>
+                                                                    <state key="normal" image="mark-read.png">
+                                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
+                                                                </button>
+                                                            </subviews>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        </view>
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="110" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Extra Life Extra Extra Life Extra Extra Life Extra Life Extra Life - 155" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="72Z-ya-CFP">
+                                                            <rect key="frame" x="5" y="169" width="240" height="51"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="120" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kawiteros, grand prix du jury du concours NovaPlay" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ZMP-5j-yT2">
+                                                            <rect key="frame" x="5" y="223" width="240" height="40"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="130" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="21 juin 2014 13h00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gwz-XU-rrk">
+                                                            <rect key="frame" x="5" y="145" width="240" height="30"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <view tag="200" contentMode="scaleToFill" id="HQ8-da-Zd6">
+                                                            <rect key="frame" x="198" y="5" width="42" height="21"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <subviews>
+                                                                <view alpha="0.64999997615814209" tag="205" contentMode="scaleToFill" id="vYv-N5-MlA">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="42" height="21"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                                </view>
+                                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="210" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1h40" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Qo7-WV-KBf">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="42" height="21"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        </view>
+                                                        <imageView userInteractionEnabled="NO" tag="600" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="dTJ-a3-a9I">
+                                                            <rect key="frame" x="4" y="6" width="32" height="16"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        </imageView>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                </view>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </collectionViewCell>
+                                        </cells>
+                                        <connections>
+                                            <outlet property="dataSource" destination="JAW-94-Ybq" id="ksl-NA-ayq"/>
+                                            <outlet property="delegate" destination="JAW-94-Ybq" id="RLD-yz-WsI"/>
+                                        </connections>
+                                    </collectionView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Chapitres" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oza-CO-F7k">
+                                        <rect key="frame" x="12" y="496" width="196" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" id="XRx-Qx-Rdg">
+                                        <rect key="frame" x="351" y="336" width="37" height="37"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="color" red="0.086274512110000007" green="0.53333336109999996" blue="0.80000007149999997" alpha="1" colorSpace="deviceRGB"/>
+                                    </activityIndicatorView>
                                     <view contentMode="scaleToFill" id="2E4-B4-3IA">
                                         <rect key="frame" x="114" y="0.0" width="550" height="310"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -565,7 +702,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                                     </view>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="210" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1h40" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="S2E-sS-Kfs">
                                                         <rect key="frame" x="0.0" y="0.0" width="42" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
@@ -823,143 +960,6 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                     </view>
-                                    <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="1aM-WK-zTJ">
-                                        <rect key="frame" x="0.0" y="517" width="768" height="280"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="30" minimumInteritemSpacing="3" id="WoW-Gs-EoV">
-                                            <size key="itemSize" width="245" height="280"/>
-                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                            <inset key="sectionInset" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        </collectionViewFlowLayout>
-                                        <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ShowsCell" id="Urw-n6-jgg" customClass="ShowCollectionViewCell">
-                                                <rect key="frame" x="10" y="0.0" width="245" height="280"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                    <rect key="frame" x="0.0" y="0.0" width="245" height="280"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="100" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="EL_S14s25_1085838.jpg" id="8xn-hb-amE">
-                                                            <rect key="frame" x="4" y="4" width="241" height="138"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                        </imageView>
-                                                        <view tag="300" contentMode="scaleToFill" id="Lph-9g-dLg">
-                                                            <rect key="frame" x="8" y="122" width="10" height="10"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <subviews>
-                                                                <view alpha="0.64999997615814209" tag="305" contentMode="scaleToFill" id="ck1-r0-MGA">
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                                                </view>
-                                                                <button opaque="NO" tag="310" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ZUX-La-vuS">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="10" height="10"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                    <color key="backgroundColor" red="0.086274512110000007" green="0.53333336109999996" blue="0.80000007149999997" alpha="1" colorSpace="deviceRGB"/>
-                                                                    <accessibility key="accessibilityConfiguration">
-                                                                        <bool key="isElement" value="NO"/>
-                                                                    </accessibility>
-                                                                    <state key="normal" image="eye_btn.png">
-                                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    </state>
-                                                                    <connections>
-                                                                        <action selector="watchListClick:" destination="JAW-94-Ybq" eventType="touchUpInside" id="a25-I4-bfY"/>
-                                                                    </connections>
-                                                                </button>
-                                                            </subviews>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        </view>
-                                                        <view tag="400" contentMode="scaleToFill" id="9df-SZ-pKG">
-                                                            <rect key="frame" x="226" y="122" width="10" height="10"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                            <subviews>
-                                                                <view alpha="0.64999997615814209" tag="405" contentMode="scaleToFill" id="Uzn-XB-tId">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="10" height="10"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                                                </view>
-                                                                <button opaque="NO" tag="410" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="OJw-3W-aET">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="10" height="10"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                    <color key="backgroundColor" red="0.086274512110000007" green="0.53333336109999996" blue="0.80000007149999997" alpha="1" colorSpace="deviceRGB"/>
-                                                                    <accessibility key="accessibilityConfiguration">
-                                                                        <bool key="isElement" value="NO"/>
-                                                                    </accessibility>
-                                                                    <state key="normal" image="mark-read.png">
-                                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    </state>
-                                                                </button>
-                                                            </subviews>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        </view>
-                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="110" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Extra Life Extra Extra Life Extra Extra Life Extra Life Extra Life - 155" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="72Z-ya-CFP">
-                                                            <rect key="frame" x="5" y="169" width="240" height="51"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="120" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kawiteros, grand prix du jury du concours NovaPlay" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ZMP-5j-yT2">
-                                                            <rect key="frame" x="5" y="223" width="240" height="40"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="130" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="21 juin 2014 13h00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gwz-XU-rrk">
-                                                            <rect key="frame" x="5" y="145" width="240" height="30"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <view tag="200" contentMode="scaleToFill" id="HQ8-da-Zd6">
-                                                            <rect key="frame" x="198" y="5" width="42" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <subviews>
-                                                                <view alpha="0.64999997615814209" tag="205" contentMode="scaleToFill" id="vYv-N5-MlA">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="42" height="21"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                                                </view>
-                                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="210" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1h40" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Qo7-WV-KBf">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="42" height="21"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                            </subviews>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        </view>
-                                                        <imageView userInteractionEnabled="NO" tag="600" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="dTJ-a3-a9I">
-                                                            <rect key="frame" x="4" y="6" width="32" height="16"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        </imageView>
-                                                    </subviews>
-                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                </view>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            </collectionViewCell>
-                                        </cells>
-                                        <connections>
-                                            <outlet property="dataSource" destination="JAW-94-Ybq" id="ksl-NA-ayq"/>
-                                            <outlet property="delegate" destination="JAW-94-Ybq" id="RLD-yz-WsI"/>
-                                        </connections>
-                                    </collectionView>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Chapitres" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oza-CO-F7k">
-                                        <rect key="frame" x="12" y="496" width="196" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" id="XRx-Qx-Rdg">
-                                        <rect key="frame" x="351" y="336" width="37" height="37"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="color" red="0.086274512110000007" green="0.53333336109999996" blue="0.80000007149999997" alpha="1" colorSpace="deviceRGB"/>
-                                    </activityIndicatorView>
                                 </subviews>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="size" keyPath="contentSize">
@@ -998,6 +998,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                         <outlet property="imageView" destination="sid-HC-NUM" id="I4R-5U-ktK"/>
                         <outlet property="infoBackground" destination="K79-EW-Tz3" id="i1R-ID-a4v"/>
                         <outlet property="partnerImageView" destination="DUd-KL-Fhl" id="6VN-Z0-hqH"/>
+                        <outlet property="progressionView" destination="aiE-zw-Zgy" id="9DB-1y-l8e"/>
                         <outlet property="readBackground" destination="aaq-0b-2gY" id="elJ-Cf-dAu"/>
                         <outlet property="readButton" destination="bZa-8k-fEh" id="duj-aP-1AI"/>
                         <outlet property="readImageButton" destination="sSI-KD-Ndy" id="bI1-Ux-vCu"/>
@@ -1344,7 +1345,7 @@ Kawiteros, grand prix du jury du concours NovaPlay</string>
                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="EPGCell" rowHeight="130" id="30b-It-ABd" customClass="EPGTableViewCell">
-                                <rect key="frame" x="0.0" y="86" width="768" height="130"/>
+                                <rect key="frame" x="0.0" y="22" width="768" height="130"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="30b-It-ABd" id="GCT-8q-erc">
                                     <rect key="frame" x="0.0" y="0.0" width="768" height="130"/>
@@ -1769,8 +1770,8 @@ Les geeks ont une vie. Même s'ils ne bougent pas beaucoup.</string>
         <image name="noco.png" width="460" height="160"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="4Qe-0V-q8F"/>
-        <segue reference="UgH-2G-9fT"/>
         <segue reference="DwT-Xq-8De"/>
+        <segue reference="4Qe-0V-q8F"/>
+        <segue reference="Uld-fo-urg"/>
     </inferredMetricsTieBreakers>
 </document>
