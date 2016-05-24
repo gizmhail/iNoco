@@ -95,16 +95,7 @@
         self.searchBar.hidden = TRUE;
     }
     
-    BOOL displayFilter = self.family != nil;
-    displayFilter = displayFilter || (ALWAYS_DISPLAY_READFILTER_IN_RECENT_SHOWS && [self isMemberOfClass:[RecentShowViewController class]]);
-    displayFilter = displayFilter || ([self memorizedSegmentedControl] != 0 && [self isMemberOfClass:[RecentShowViewController class]]);
-    
-    if(displayFilter ){
-        //We force display of filter viewx in family mode
-        if(self.filterView.hidden){
-            [self toggleFilterView:TRUE];
-        }
-    }
+    [self updateSearchBarResultIcon];
     
     if(self.family){
         self.title = self.family.family_TT;
@@ -195,6 +186,7 @@
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
         [self searchBarSearchButtonClicked:self.searchBar];
+        [self updateSearchBarResultIcon];
     }
 }
 
@@ -204,6 +196,63 @@
         segment = [[NSUserDefaults standardUserDefaults] integerForKey:@"RecentShowFilter"];
     }
     return segment;
+}
+
+#pragma mark Search bar decoration
+
+- (BOOL)shouldDisplayFilter{
+    BOOL displayFilter = self.family != nil;
+    displayFilter = displayFilter || (ALWAYS_DISPLAY_READFILTER_IN_RECENT_SHOWS && [self isMemberOfClass:[RecentShowViewController class]]);
+    displayFilter = displayFilter || ([self memorizedSegmentedControl] != 0 && [self isMemberOfClass:[RecentShowViewController class]]);
+    return displayFilter;
+}
+
+- (void)updateSearchBarResultIcon{
+    NSString* searchText = nil;
+    if(self.watchSegmentedControl.selectedSegmentIndex == 1){
+        searchText = @"Lus";
+    }
+    if(self.watchSegmentedControl.selectedSegmentIndex == 2){
+        searchText = @"Non lus";
+    }
+    NSString* maxSizeText = @"Non lus";
+    
+    if(searchText){
+        UIFont *font = [UIFont systemFontOfSize:13.0 ];
+        UIColor* color = [UIColor colorWithRed:0 green:122.0/255.0 blue:1 alpha:1];
+        NSDictionary* attributes = @{
+                                     NSFontAttributeName:font,
+                                     NSForegroundColorAttributeName:color };
+        CGSize size  = [maxSizeText sizeWithAttributes:attributes];
+        size = CGSizeMake(size.width+12, size.height+6);
+        CGSize realSize  = [searchText sizeWithAttributes:attributes];
+        CGFloat fillColor[4] = {255,255,255,1};
+        
+        UIGraphicsBeginImageContextWithOptions(size,NO,0.0);
+        CGContextSetFillColor(UIGraphicsGetCurrentContext(), fillColor);
+        CGContextSetStrokeColorWithColor(UIGraphicsGetCurrentContext(), color.CGColor);
+        CGRect drawRect = CGRectMake(0, 0, size.width, size.height);
+        drawRect = CGRectInset(drawRect, 1, 1);
+        UIBezierPath* roundedBorder = [UIBezierPath bezierPathWithRoundedRect:drawRect
+                                                                 cornerRadius:5.0];
+        [roundedBorder fill];
+        roundedBorder.lineWidth = 1.5;
+        [roundedBorder stroke];
+        
+        CGPoint drawPosition = CGPointMake(
+                    (size.width - realSize.width) /2,
+                    (size.height - realSize.height) /2);
+        [searchText drawAtPoint:drawPosition withAttributes:attributes];
+        UIImage* searchImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        [self.searchBar setImage:searchImage forSearchBarIcon:UISearchBarIconResultsList state:UIControlStateNormal];
+        [self.searchBar setShowsSearchResultsButton:TRUE];
+    }else{
+        [self.searchBar setShowsSearchResultsButton:false];
+    }
+    
+    
+    
 }
 
 #pragma mark Activity
@@ -622,20 +671,17 @@
     [searchBar resignFirstResponder];
     [[UISegmentedControl appearanceWhenContainedIn:[UISearchBar class], nil] setTintColor:searchBar.tintColor];
     
-    
-    BOOL displayFilter = self.family != nil;
-    displayFilter = displayFilter || (ALWAYS_DISPLAY_READFILTER_IN_RECENT_SHOWS && [self isMemberOfClass:[RecentShowViewController class]]);
-    displayFilter = displayFilter || ([self memorizedSegmentedControl] != 0 && [self isMemberOfClass:[RecentShowViewController class]]);
-    
-    if( ! displayFilter ){
-        [self toggleFilterView:FALSE];
-    }
+    [self toggleFilterView:FALSE];
 }
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
     [self toggleFilterView:TRUE];
     [self.collectionView.collectionViewLayout invalidateLayout];
     return YES;
+}
+
+-(void)searchBarResultsListButtonClicked:(UISearchBar *)searchBar{
+    [searchBar becomeFirstResponder];
 }
 
 /*
@@ -752,12 +798,9 @@
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
-    BOOL displayFilter = self.family != nil;
-    displayFilter = displayFilter || (ALWAYS_DISPLAY_READFILTER_IN_RECENT_SHOWS && [self isMemberOfClass:[RecentShowViewController class]]);
-    displayFilter = displayFilter || (self.filterView.hidden == FALSE && [self isMemberOfClass:[RecentShowViewController class]]);
     
     float topMargin = 0;
-    if(displayFilter ){
+    if(self.filterView.hidden == FALSE){
         topMargin = self.filterView.frame.size.height;
     }
     UIEdgeInsets edgeInset = UIEdgeInsetsMake(topMargin,0,0,0);
@@ -791,6 +834,7 @@
     [self fixNavigationBarRelativePosition];
     // To force update to cells size
     [self.collectionView performBatchUpdates:nil completion:nil];
+    
 }
 
 - (void)fixNavigationBarRelativePosition{

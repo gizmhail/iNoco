@@ -840,6 +840,7 @@
 				4FC35B7719E477090069C0DD /* Resources */,
 				57F05774350B303E4DA0C9E0 /* Copy Pods Resources */,
 				724D55013102CC291323D640 /* Embed Pods Frameworks */,
+				4FC218351CEA0134008E5D2C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1055,6 +1056,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = /Users/gizmhail/Documents/iOS/Noco/git/iNoco/iNoco/TestNoco/crashlytics.sh;
+		};
+		4FC218351CEA0134008E5D2C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# CocoaPod bug\ncd \"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\"\nif [[ -d \"Frameworks\" ]]; then\n    rm -fr Frameworks\nfi";
 		};
 		57F05774350B303E4DA0C9E0 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;

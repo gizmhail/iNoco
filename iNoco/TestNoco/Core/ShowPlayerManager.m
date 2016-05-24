@@ -288,7 +288,6 @@
 #endif
         NSUserDefaults* settings = [NSUserDefaults standardUserDefaults];
         [settings removeObjectForKey:@"InterruptedShow" ];
-        [UIApplication sharedApplication].shortcutItems = @[];
         [settings synchronize];
 
         [self switchToNextShow];
