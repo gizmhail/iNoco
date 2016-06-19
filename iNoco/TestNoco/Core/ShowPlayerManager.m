@@ -488,6 +488,9 @@
     if(image){
         [info setObject:[[MPMediaItemArtwork alloc] initWithImage:image] forKey:MPMediaItemPropertyArtwork];
     }
+    if(self.currentShow.duration_ms){
+        info[MPMediaItemPropertyPlaybackDuration] = [NSNumber numberWithInt:self.currentShow.duration_ms/1000];
+    }
     infoCenter.nowPlayingInfo = info;}
 
 #pragma mark Custom UI

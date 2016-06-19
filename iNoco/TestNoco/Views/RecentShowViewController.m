@@ -653,9 +653,7 @@
     self.filteredResultByPage = nil;
     [self.collectionView reloadData];
     UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, @"Filtrage");
-    if([self memorizedSegmentedControl] == 0){
-        [self toggleFilterView:FALSE];
-    }
+    [self toggleFilterView:FALSE];
 }
 
 
